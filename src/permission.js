@@ -9,6 +9,7 @@ import useUserStore from '@/store/modules/user'
 import useLockStore from '@/store/modules/lock'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
+import i18n from '@/lang'
 
 NProgress.configure({ showSpinner: false })
 
@@ -21,7 +22,7 @@ const isWhiteList = (path) => {
 router.beforeEach(async (to, from) => {
   NProgress.start()
   if (getToken()) {
-    to.meta.title && useSettingsStore().setTitle(to.meta.title)
+    to.meta.title && useSettingsStore().setTitle(i18n.global.t('menu.' + to.meta.title))
     const isLock = useLockStore().isLock
     if (to.path === '/login') {
       NProgress.done()

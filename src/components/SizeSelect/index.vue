@@ -17,24 +17,26 @@
 
 <script setup>
 import useAppStore from "@/store/modules/app"
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const appStore = useAppStore()
 const size = computed(() => appStore.size)
 const { proxy } = getCurrentInstance()
-const sizeOptions = ref([
-  { label: "较大", value: "large" },
-  { label: "默认", value: "default" },
-  { label: "稍小", value: "small" },
+const sizeOptions = computed(() => [
+  { label: t('navbar.sizeLarge'), value: "large" },
+  { label: t('navbar.sizeDefault'), value: "default" },
+  { label: t('navbar.sizeSmall'), value: "small" },
 ])
 
 function handleSetSize(size) {
-  proxy.$modal.loading("正在设置布局大小，请稍候...")
+  proxy.$modal.loading(t('navbar.sizeSetting'))
   appStore.setSize(size)
   setTimeout("window.location.reload()", 1000)
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 .size-icon--style {
   font-size: 18px;
   line-height: 50px;

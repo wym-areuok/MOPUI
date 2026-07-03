@@ -5,7 +5,8 @@ import Cookies from 'js-cookie'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import 'element-plus/theme-chalk/dark/css-vars.css'
-import locale from 'element-plus/es/locale/lang/zh-cn'
+// 移除硬编码的 locale，改为由 i18n 动态管理
+// import locale from 'element-plus/es/locale/lang/zh-cn'
 
 import '@/assets/styles/index.scss' // global css
 
@@ -13,6 +14,9 @@ import App from './App'
 import store from './store'
 import router from './router'
 import directive from './directive' // directive
+
+// 国际化
+import i18n, { elementLocaleMap } from './lang'
 
 // 注册指令
 import plugins from './plugins' // plugins
@@ -68,6 +72,7 @@ app.component('Editor', Editor)
 
 app.use(router)
 app.use(store)
+app.use(i18n)
 app.use(plugins)
 app.use(elementIcons)
 app.component('svg-icon', SvgIcon)
@@ -76,8 +81,7 @@ directive(app)
 
 // 使用element-plus 并且设置全局的大小
 app.use(ElementPlus, {
-  locale: locale,
-  // 支持 large、default、small
+  locale: elementLocaleMap[Cookies.get('language') || 'zh-CN'],
   size: Cookies.get('size') || 'default'
 })
 
