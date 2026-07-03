@@ -1,38 +1,38 @@
 <template>
    <!-- 授权用户 -->
-   <el-dialog title="选择用户" v-model="visible" width="800px" top="5vh" append-to-body>
+   <el-dialog :title="$t('page.选择用户')" v-model="visible" width="800px" top="5vh" append-to-body>
       <el-form :model="queryParams" ref="queryRef" :inline="true">
-         <el-form-item label="用户名称" prop="userName">
+         <el-form-item :label="$t('page.用户名称')" prop="userName">
             <el-input
                v-model="queryParams.userName"
-               placeholder="请输入用户名称"
+               :placeholder="$t('page.请输入用户名称')"
                clearable
                style="width: 180px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="手机号码" prop="phonenumber">
+         <el-form-item :label="$t('page.手机号码')" prop="phonenumber">
             <el-input
                v-model="queryParams.phonenumber"
-               placeholder="请输入手机号码"
+               :placeholder="$t('page.请输入手机号码')"
                clearable
                style="width: 180px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}<//el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}<//el-button>
          </el-form-item>
       </el-form>
       <el-row>
          <el-table @row-click="clickRow" ref="refTable" :data="userList" @selection-change="handleSelectionChange" height="260px">
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column label="用户名称" prop="userName" :show-overflow-tooltip="true" />
-            <el-table-column label="用户昵称" prop="nickName" :show-overflow-tooltip="true" />
-            <el-table-column label="邮箱" prop="email" :show-overflow-tooltip="true" />
-            <el-table-column label="手机" prop="phonenumber" :show-overflow-tooltip="true" />
-            <el-table-column label="状态" align="center" prop="status">
+            <el-table-column :label="$t('page.用户名称')" prop="userName" :show-overflow-tooltip="true" />
+            <el-table-column :label="$t('page.用户昵称')" prop="nickName" :show-overflow-tooltip="true" />
+            <el-table-column :label="$t('page.邮箱')" prop="email" :show-overflow-tooltip="true" />
+            <el-table-column :label="$t('page.手机')" prop="phonenumber" :show-overflow-tooltip="true" />
+            <el-table-column :label="$t('page.状态')" align="center" prop="status">
                <template #default="scope">
                   <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
                </template>

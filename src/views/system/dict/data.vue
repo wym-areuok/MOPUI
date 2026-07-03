@@ -1,7 +1,7 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="字典名称" prop="dictType">
+         <el-form-item :label="$t('page.字典名称')" prop="dictType">
             <el-select v-model="queryParams.dictType" style="width: 200px">
                <el-option
                   v-for="item in typeOptions"
@@ -11,17 +11,17 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="字典标签" prop="dictLabel">
+         <el-form-item :label="$t('page.字典标签')" prop="dictLabel">
             <el-input
                v-model="queryParams.dictLabel"
-               placeholder="请输入字典标签"
+               :placeholder="$t('page.请输入字典标签')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="状态" prop="status">
-            <el-select v-model="queryParams.status" placeholder="数据状态" clearable style="width: 200px">
+         <el-form-item :label="$t('page.状态')" prop="status">
+            <el-select v-model="queryParams.status" :placeholder="$t('page.数据状态')" clearable style="width: 200px">
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -31,8 +31,8 @@
             </el-select>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}<//el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}<//el-button>
          </el-form-item>
       </el-form>
 
@@ -44,7 +44,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:dict:add']"
-            >新增</el-button>
+            >{{ $t('page.新增') }}<//el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -54,7 +54,7 @@
                :disabled="single"
                @click="handleUpdate"
                v-hasPermi="['system:dict:edit']"
-            >修改</el-button>
+            >{{ $t('page.修改') }}<//el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -64,7 +64,7 @@
                :disabled="multiple"
                @click="handleDelete"
                v-hasPermi="['system:dict:remove']"
-            >删除</el-button>
+            >{{ $t('page.删除') }}<//el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -73,7 +73,7 @@
                icon="Download"
                @click="handleExport"
                v-hasPermi="['system:dict:export']"
-            >导出</el-button>
+            >{{ $t('page.导出') }}<//el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -81,15 +81,15 @@
                plain
                icon="Close"
                @click="handleClose"
-            >关闭</el-button>
+            >{{ $t('page.关闭') }}<//el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table v-loading="loading" :data="dataList" @selection-change="handleSelectionChange">
          <el-table-column type="selection" width="55" align="center" />
-         <el-table-column label="字典编码" align="center" prop="dictCode" />
-         <el-table-column label="字典标签" align="center" prop="dictLabel">
+         <el-table-column :label="$t('page.字典编码')" align="center" prop="dictCode" />
+         <el-table-column :label="$t('page.字典标签')" align="center" prop="dictLabel">
             <template #default="scope">
                <span v-if="(scope.row.listClass == '' || scope.row.listClass == 'default') && (scope.row.cssClass == '' || scope.row.cssClass == null)">{{ scope.row.dictLabel }}</span>
                <el-tag v-else :type="scope.row.listClass == 'primary' ? '' : scope.row.listClass" :class="scope.row.cssClass">{{ scope.row.dictLabel }}</el-tag>

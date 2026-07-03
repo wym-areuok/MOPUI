@@ -1,27 +1,27 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true">
-         <el-form-item label="登录地址" prop="ipaddr">
+         <el-form-item :label="$t('page.登录地址')" prop="ipaddr">
             <el-input
                v-model="queryParams.ipaddr"
-               placeholder="请输入登录地址"
+               :placeholder="$t('page.请输入登录地址')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="用户名称" prop="userName">
+         <el-form-item :label="$t('page.用户名称')" prop="userName">
             <el-input
                v-model="queryParams.userName"
-               placeholder="请输入用户名称"
+               :placeholder="$t('page.请输入用户名称')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}</el-button>
          </el-form-item>
       </el-form>
       <el-table
@@ -29,7 +29,7 @@
          :data="onlineList.slice((pageNum - 1) * pageSize, pageNum * pageSize)"
          style="width: 100%;"
       >
-         <el-table-column label="序号" width="50" type="index" align="center">
+         <el-table-column :label="$t('page.序号')" width="50" type="index" align="center">
             <template #default="scope">
                <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
             </template>

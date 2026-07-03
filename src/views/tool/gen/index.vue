@@ -1,37 +1,37 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-      <el-form-item label="表名称" prop="tableName">
+      <el-form-item :label="$t('page.表名称')" prop="tableName">
         <el-input
           v-model="queryParams.tableName"
-          placeholder="请输入表名称"
+          :placeholder="$t('page.请输入表名称')"
           clearable
           style="width: 200px"
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="表描述" prop="tableComment">
+      <el-form-item :label="$t('page.表描述')" prop="tableComment">
         <el-input
           v-model="queryParams.tableComment"
-          placeholder="请输入表描述"
+          :placeholder="$t('page.请输入表描述')"
           clearable
           style="width: 200px"
           @keyup.enter="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="创建时间" style="width: 308px">
+      <el-form-item :label="$t('page.创建时间')" style="width: 308px">
         <el-date-picker
           v-model="dateRange"
           value-format="YYYY-MM-DD"
           type="daterange"
           range-separator="-"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          :start-placeholder="$t('page.开始日期')"
+          :end-placeholder="$t('page.结束日期')"
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-        <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}</el-button>
+        <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -44,7 +44,7 @@
           :disabled="multiple"
           @click="handleGenTable"
           v-hasPermi="['tool:gen:code']"
-        >生成</el-button>
+        >{{ $t('page.生成') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -53,7 +53,7 @@
           icon="Plus"
           @click="openCreateTable"
           v-hasRole="['admin']"
-        >创建</el-button>
+        >{{ $t('page.创建') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -62,7 +62,7 @@
           icon="Upload"
           @click="openImportTable"
           v-hasPermi="['tool:gen:import']"
-        >导入</el-button>
+        >{{ $t('page.导入') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -72,7 +72,7 @@
           :disabled="single"
           @click="handleEditTable"
           v-hasPermi="['tool:gen:edit']"
-        >修改</el-button>
+        >{{ $t('page.修改') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -82,14 +82,14 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['tool:gen:remove']"
-        >删除</el-button>
+        >{{ $t('page.删除') }}</el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table ref="genRef" v-loading="loading" :data="tableList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
       <el-table-column type="selection" align="center" width="55"></el-table-column>
-      <el-table-column label="序号" type="index" width="50" align="center">
+      <el-table-column :label="$t('page.序号')" type="index" width="50" align="center">
         <template #default="scope">
           <span>{{(queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1}}</span>
         </template>

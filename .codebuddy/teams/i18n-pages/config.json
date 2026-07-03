@@ -1,0 +1,18 @@
+{
+  "name": "i18n-pages",
+  "leadAgentId": "807c4fc280b8428baa9b22007dd8769f",
+  "workspacePath": "d:/java_project/MOPUI",
+  "createdAt": "2026-07-03T10:11:23.520Z",
+  "options": {
+    "workspacePath": "d:/java_project/MOPUI",
+    "isAutoTeam": false
+  },
+  "members": [
+    {
+      "memberId": "team-lead@i18n-pages",
+      "name": "team-lead",
+      "role": "Team Lead - coordinates the team and interacts with the user"
+    }
+  ],
+  "isAutoTeam": false
+}

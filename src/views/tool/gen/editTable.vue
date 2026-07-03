@@ -1,14 +1,14 @@
 <template>
   <el-card>
     <el-tabs v-model="activeName">
-      <el-tab-pane label="基本信息" name="basic">
+      <el-tab-pane :label="$t('page.基本信息')" name="basic">
         <basic-info-form ref="basicInfo" :info="info" />
       </el-tab-pane>
-      <el-tab-pane label="字段信息" name="columnInfo">
+      <el-tab-pane :label="$t('page.字段信息')" name="columnInfo">
         <el-table ref="dragTable" :data="columns" row-key="columnId" :max-height="tableHeight">
-          <el-table-column label="序号" type="index" min-width="5%" class-name="allowDrag"/>
-          <el-table-column label="字段列名" prop="columnName" min-width="10%" :show-overflow-tooltip="true" class-name="allowDrag"/>
-          <el-table-column label="字段描述" min-width="10%">
+          <el-table-column :label="$t('page.序号')" type="index" min-width="5%" class-name="allowDrag"/>
+          <el-table-column :label="$t('page.字段列名')" prop="columnName" min-width="10%" :show-overflow-tooltip="true" class-name="allowDrag"/>
+          <el-table-column :label="$t('page.字段描述')" min-width="10%">
             <template #default="scope">
               <el-input v-model="scope.row.columnComment"></el-input>
             </template>

@@ -1,17 +1,17 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-         <el-form-item label="部门名称" prop="deptName">
+         <el-form-item :label="$t('page.部门名称')" prop="deptName">
             <el-input
                v-model="queryParams.deptName"
-               placeholder="请输入部门名称"
+               :placeholder="$t('page.请输入部门名称')"
                clearable
                style="width: 200px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="状态" prop="status">
-            <el-select v-model="queryParams.status" placeholder="部门状态" clearable style="width: 200px">
+         <el-form-item :label="$t('page.状态')" prop="status">
+            <el-select v-model="queryParams.status" :placeholder="$t('page.部门状态')" clearable style="width: 200px">
                <el-option
                   v-for="dict in sys_normal_disable"
                   :key="dict.value"
@@ -21,8 +21,8 @@
             </el-select>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -34,7 +34,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:dept:add']"
-            >新增</el-button>
+            >{{ $t('page.新增') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -43,7 +43,7 @@
                icon="Check"
                @click="handleSaveSort"
                v-hasPermi="['system:dept:edit']"
-            >保存排序</el-button>
+            >{{ $t('page.保存排序') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -51,7 +51,7 @@
                plain
                icon="Sort"
                @click="toggleExpandAll"
-            >展开/折叠</el-button>
+            >{{ $t('page.展开/折叠') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
@@ -64,27 +64,27 @@
          :default-expand-all="isExpandAll"
          :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
       >
-         <el-table-column prop="deptName" label="部门名称" width="260"></el-table-column>
-         <el-table-column prop="orderNum" label="排序" width="200">
+         <el-table-column prop="deptName" :label="$t('page.部门名称')" width="260"></el-table-column>
+         <el-table-column prop="orderNum" :label="$t('page.排序')" width="200">
             <template #default="scope">
                <el-input-number v-model="scope.row.orderNum" controls-position="right" :min="0" style="width: 88px" />
             </template>
          </el-table-column>
-         <el-table-column prop="status" label="状态" width="100">
+         <el-table-column prop="status" :label="$t('page.状态')" width="100">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="创建时间" align="center" prop="createTime" width="200">
+         <el-table-column :label="$t('page.创建时间')" align="center" prop="createTime" width="200">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('page.操作')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dept:edit']">修改</el-button>
-               <el-button link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:dept:add']">新增</el-button>
-               <el-button v-if="scope.row.parentId != 0" link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dept:remove']">删除</el-button>
+               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dept:edit']">{{ $t('page.修改') }}</el-button>
+               <el-button link type="primary" icon="Plus" @click="handleAdd(scope.row)" v-hasPermi="['system:dept:add']">{{ $t('page.新增') }}</el-button>
+               <el-button v-if="scope.row.parentId != 0" link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dept:remove']">{{ $t('page.删除') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -94,44 +94,44 @@
          <el-form ref="deptRef" :model="form" :rules="rules" label-width="80px">
             <el-row>
                <el-col :span="24" v-if="form.parentId !== 0">
-                  <el-form-item label="上级部门" prop="parentId">
+                  <el-form-item :label="$t('page.上级部门')" prop="parentId">
                      <el-tree-select
                         v-model="form.parentId"
                         :data="deptOptions"
                         :props="{ value: 'deptId', label: 'deptName', children: 'children' }"
                         value-key="deptId"
-                        placeholder="选择上级部门"
+                        :placeholder="$t('page.选择上级部门')"
                         check-strictly
                      />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="部门名称" prop="deptName">
-                     <el-input v-model="form.deptName" placeholder="请输入部门名称" />
+                  <el-form-item :label="$t('page.部门名称')" prop="deptName">
+                     <el-input v-model="form.deptName" :placeholder="$t('page.请输入部门名称')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="显示排序" prop="orderNum">
+                  <el-form-item :label="$t('page.显示排序')" prop="orderNum">
                      <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="负责人" prop="leader">
-                     <el-input v-model="form.leader" placeholder="请输入负责人" maxlength="20" />
+                  <el-form-item :label="$t('page.负责人')" prop="leader">
+                     <el-input v-model="form.leader" :placeholder="$t('page.请输入负责人')" maxlength="20" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="联系电话" prop="phone">
-                     <el-input v-model="form.phone" placeholder="请输入联系电话" maxlength="11" />
+                  <el-form-item :label="$t('page.联系电话')" prop="phone">
+                     <el-input v-model="form.phone" :placeholder="$t('page.请输入联系电话')" maxlength="11" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="邮箱" prop="email">
-                     <el-input v-model="form.email" placeholder="请输入邮箱" maxlength="50" />
+                  <el-form-item :label="$t('page.邮箱')" prop="email">
+                     <el-input v-model="form.email" :placeholder="$t('page.请输入邮箱')" maxlength="50" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="部门状态">
+                  <el-form-item :label="$t('page.部门状态')">
                      <el-radio-group v-model="form.status">
                         <el-radio
                            v-for="dict in sys_normal_disable"
@@ -145,8 +145,8 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('page.确 定') }}</el-button>
+               <el-button @click="cancel">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
       </el-dialog>

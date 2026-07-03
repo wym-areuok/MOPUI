@@ -1,37 +1,37 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch" label-width="68px">
-         <el-form-item label="操作地址" prop="operIp">
+         <el-form-item :label="$t('page.操作地址')" prop="operIp">
             <el-input
                v-model="queryParams.operIp"
-               placeholder="请输入操作地址"
+               :placeholder="$t('page.请输入操作地址')"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="系统模块" prop="title">
+         <el-form-item :label="$t('page.系统模块')" prop="title">
             <el-input
                v-model="queryParams.title"
-               placeholder="请输入系统模块"
+               :placeholder="$t('page.请输入系统模块')"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="操作人员" prop="operName">
+         <el-form-item :label="$t('page.操作人员')" prop="operName">
             <el-input
                v-model="queryParams.operName"
-               placeholder="请输入操作人员"
+               :placeholder="$t('page.请输入操作人员')"
                clearable
                style="width: 240px;"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="类型" prop="businessType">
+         <el-form-item :label="$t('page.类型')" prop="businessType">
             <el-select
                v-model="queryParams.businessType"
-               placeholder="操作类型"
+               :placeholder="$t('page.操作类型')"
                clearable
                style="width: 240px"
             >
@@ -43,10 +43,10 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="状态" prop="status">
+         <el-form-item :label="$t('page.状态')" prop="status">
             <el-select
                v-model="queryParams.status"
-               placeholder="操作状态"
+               :placeholder="$t('page.操作状态')"
                clearable
                style="width: 240px"
             >
@@ -58,20 +58,20 @@
                />
             </el-select>
          </el-form-item>
-         <el-form-item label="操作时间" style="width: 308px">
+         <el-form-item :label="$t('page.操作时间')" style="width: 308px">
             <el-date-picker
                v-model="dateRange"
                value-format="YYYY-MM-DD HH:mm:ss"
                type="daterange"
                range-separator="-"
-               start-placeholder="开始日期"
-               end-placeholder="结束日期"
+               :start-placeholder="$t('page.开始日期')"
+               :end-placeholder="$t('page.结束日期')"
                :default-time="[new Date(2000, 1, 1, 0, 0, 0), new Date(2000, 1, 1, 23, 59, 59)]"
             ></el-date-picker>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">搜索</el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -84,7 +84,7 @@
                :disabled="multiple"
                @click="handleDelete"
                v-hasPermi="['monitor:operlog:remove']"
-            >删除</el-button>
+            >{{ $t('page.删除') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -93,7 +93,7 @@
                icon="Delete"
                @click="handleClean"
                v-hasPermi="['monitor:operlog:remove']"
-            >清空</el-button>
+            >{{ $t('page.清空') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -102,16 +102,16 @@
                icon="Download"
                @click="handleExport"
                v-hasPermi="['monitor:operlog:export']"
-            >导出</el-button>
+            >{{ $t('page.导出') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
 
       <el-table ref="operlogRef" v-loading="loading" :data="operlogList" @selection-change="handleSelectionChange" :default-sort="defaultSort" @sort-change="handleSortChange">
          <el-table-column type="selection" width="50" align="center" />
-         <el-table-column label="日志编号" align="center" prop="operId" />
-         <el-table-column label="系统模块" align="center" prop="title" :show-overflow-tooltip="true" />
-         <el-table-column label="操作类型" align="center" prop="businessType">
+         <el-table-column :label="$t('page.日志编号')" align="center" prop="operId" />
+         <el-table-column :label="$t('page.系统模块')" align="center" prop="title" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.操作类型')" align="center" prop="businessType">
             <template #default="scope">
                <dict-tag :options="sys_oper_type" :value="scope.row.businessType" />
             </template>

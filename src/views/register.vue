@@ -8,7 +8,7 @@
           type="text" 
           size="large" 
           auto-complete="off" 
-          placeholder="账号"
+          :placeholder="$t('page.账号')"
         >
           <template #prefix><svg-icon icon-class="user" class="el-input__icon input-icon" /></template>
         </el-input>
