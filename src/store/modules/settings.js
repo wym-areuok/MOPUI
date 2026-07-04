@@ -1,3 +1,4 @@
+import { nextTick } from 'vue'
 import defaultSettings from '@/settings'
 import { useDark, useToggle } from '@vueuse/core'
 import { useDynamicTitle } from '@/utils/dynamicTitle'
@@ -8,7 +9,7 @@ const toggleDark = useToggle(isDark)
 
 const { sideTheme, showSettings, navType, tagsView, tagsViewPersist, tagsIcon, tagsViewStyle, fixedHeader, sidebarLogo, dynamicTitle, footerVisible, footerContent } = defaultSettings
 
-const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
+const storageSetting = (() => { try { return JSON.parse(localStorage.getItem('layout-setting')) || {} } catch (e) { return {} } })()
 
 const useSettingsStore = defineStore(
   'settings',

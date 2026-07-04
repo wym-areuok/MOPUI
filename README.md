@@ -35,25 +35,50 @@ RuoYi-Vue 前端项目的三个主要演进版本，方便你直观对比其技�
 | **核心特点**   | 1. 技术栈经典稳定<br>2. 社区资料丰富<br>3. 当前维护重心已转移            | 1. 现代前端技术栈<br>2. 开发体验与性能更优<br>3. 官方主推的活跃版本                 | 1. 类型加持，减少沟通成本<br>2. 开发时有提示，效率更高<br>3. 多人协作企业级开发项目                                    |
 | **仓库地址**   | [RuoYi-Vue](https://gitee.com/y_project/RuoYi-Vue) | [RuoYi-Vue3](https://gitcode.com/yangzongzhuan/RuoYi-Vue3) | [RuoYi-Vue3-TypeScript](https://gitcode.com/yangzongzhuan/RuoYi-Vue3/tree/typescript) |
 
+## 环境说明
+
+本项目仅包含 **开发环境（dev）** 和 **生产环境（prod）** 两套环境。
+
 ## 前端运行
 
+### 环境要求
+
+- Node.js >= 18
+- Yarn（推荐）或 npm
+
+### 安装与启动
+
 ```bash
-# 克隆项目
-git clone https://github.com/yangzongzhuan/RuoYi-Vue3.git
-
 # 进入项目目录
-cd RuoYi-Vue3
+cd MOPUI
 
-# 安装依赖
+# 安装依赖（也可双击 bin/package.bat）
 yarn --registry=https://registry.npmmirror.com
 
-# 启动服务
+# 启动开发服务器（也可双击 bin/run-web.bat）
 yarn dev
 
-# 构建测试环境 yarn build:stage
-# 构建生产环境 yarn build:prod
+# 构建生产环境（也可双击 bin/build.bat）
+yarn build:prod
+
 # 前端访问地址 http://localhost:80
 ```
+
+### bin/ 脚本说明
+
+| 脚本 | 用途 | 等价命令 |
+|------|------|----------|
+| `bin/package.bat` | 安装依赖（生成 node_modules） | `yarn --registry=https://registry.npmmirror.com` |
+| `bin/run-web.bat` | 启动开发服务器 | `yarn dev` |
+| `bin/build.bat` | 构建生产环境（生成 dist 目录） | `yarn build:prod` |
+
+### npm scripts 速查
+
+| 命令 | 说明 |
+|------|------|
+| `yarn dev` | 启动开发服务器（加载 .env.development） |
+| `yarn build:prod` | 构建生产环境（加载 .env.production） |
+| `yarn preview` | 预览生产构建结果 |
 
 ## 内置功能
 

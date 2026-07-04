@@ -158,59 +158,44 @@ const useTagsViewStore = defineStore(
         })
       },
       updateVisitedView(view) {
-        for (let v of this.visitedViews) {
-          if (v.path === view.path) {
-            v = Object.assign(v, view)
+        for (let i = 0; i < this.visitedViews.length; i++) {
+          if (this.visitedViews[i].path === view.path) {
+            Object.assign(this.visitedViews[i], view)
             break
           }
         }
       },
-      delRightTags(view) {
-        return new Promise(resolve => {
-          const index = this.visitedViews.findIndex(v => v.path === view.path)
-          if (index === -1) {
-            return
+      _delTagsBySide(view, keepRight) {
+        const index = this.visitedViews.findIndex(v => v.path === view.path)
+        if (index === -1) return this.visitedViews
+        this.visitedViews = this.visitedViews.filter((item, idx) => {
+          const shouldKeep = keepRight ? (idx >= index) : (idx <= index)
+          if (shouldKeep || (item.meta && item.meta.affix)) {
+            return true
           }
-          this.visitedViews = this.visitedViews.filter((item, idx) => {
-            if (idx <= index || (item.meta && item.meta.affix)) {
-              return true
-            }
-            const i = this.cachedViews.indexOf(item.name)
-            if (i > -1) {
-              this.cachedViews.splice(i, 1)
-            }
-            if(item.meta.link) {
-              const fi = this.iframeViews.findIndex(v => v.path === item.path)
+          const ci = this.cachedViews.indexOf(item.name)
+          if (ci > -1) {
+            this.cachedViews.splice(ci, 1)
+          }
+          if (item.meta.link) {
+            const fi = this.iframeViews.findIndex(v => v.path === item.path)
+            if (fi > -1) {
               this.iframeViews.splice(fi, 1)
             }
-            return false
-          })
-          saveVisitedViews(this.visitedViews)
-          resolve([...this.visitedViews])
+          }
+          return false
+        })
+        saveVisitedViews(this.visitedViews)
+        return [...this.visitedViews]
+      },
+      delRightTags(view) {
+        return new Promise(resolve => {
+          resolve(this._delTagsBySide(view, false))
         })
       },
       delLeftTags(view) {
         return new Promise(resolve => {
-          const index = this.visitedViews.findIndex(v => v.path === view.path)
-          if (index === -1) {
-            return
-          }
-          this.visitedViews = this.visitedViews.filter((item, idx) => {
-            if (idx >= index || (item.meta && item.meta.affix)) {
-              return true
-            }
-            const i = this.cachedViews.indexOf(item.name)
-            if (i > -1) {
-              this.cachedViews.splice(i, 1)
-            }
-            if(item.meta.link) {
-              const fi = this.iframeViews.findIndex(v => v.path === item.path)
-              this.iframeViews.splice(fi, 1)
-            }
-            return false
-          })
-          saveVisitedViews(this.visitedViews)
-          resolve([...this.visitedViews])
+          resolve(this._delTagsBySide(view, true))
         })
       },
       // 恢复持久化的 tags

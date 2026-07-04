@@ -19,12 +19,16 @@
 </template>
 
 <script setup>
-import { useLocaleStore } from '@/store/modules/locale'
+import { useI18n } from 'vue-i18n'
+import { storeToRefs } from 'pinia'
+import useLocaleStore from '@/store/modules/locale'
 
+const { locale } = useI18n()
 const localeStore = useLocaleStore()
-const { currentLocale, localeOptions } = localeStore
+const { currentLocale, localeOptions } = storeToRefs(localeStore)
 
 function handleSetLanguage(lang) {
+  locale.value = lang
   localeStore.setLocale(lang)
   // 切换语言后刷新页面确保所有组件更新
   window.location.reload()

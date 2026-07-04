@@ -20,27 +20,36 @@ export default {
   }
 }
 
-function copyTextToClipboard(input, { target = document.body } = {}) {
-  const element = document.createElement('textarea')
+async function copyTextToClipboard(input) {
   const previouslyFocusedElement = document.activeElement
 
+  try {
+    // 优先使用现代 Clipboard API
+    await navigator.clipboard.writeText(input)
+    if (previouslyFocusedElement) {
+      previouslyFocusedElement.focus()
+    }
+    return true
+  } catch {
+    // 降级方案：使用 textarea + execCommand（兼容旧浏览器和非 HTTPS 环境）
+    return fallbackCopy(input, previouslyFocusedElement)
+  }
+}
+
+function fallbackCopy(input, previouslyFocusedElement) {
+  const element = document.createElement('textarea')
   element.value = input
-
-  // Prevent keyboard from showing on mobile
   element.setAttribute('readonly', '')
-
   element.style.contain = 'strict'
   element.style.position = 'absolute'
   element.style.left = '-9999px'
-  element.style.fontSize = '12pt' // Prevent zooming on iOS
+  element.style.fontSize = '12pt'
 
   const selection = document.getSelection()
   const originalRange = selection.rangeCount > 0 && selection.getRangeAt(0)
 
-  target.append(element)
+  document.body.append(element)
   element.select()
-
-  // Explicit selection workaround for iOS
   element.selectionStart = 0
   element.selectionEnd = input.length
 
@@ -56,7 +65,6 @@ function copyTextToClipboard(input, { target = document.body } = {}) {
     selection.addRange(originalRange)
   }
 
-  // Get the focus back on the previously focused element, if any
   if (previouslyFocusedElement) {
     previouslyFocusedElement.focus()
   }

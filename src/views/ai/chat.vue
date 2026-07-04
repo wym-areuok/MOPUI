@@ -11,17 +11,17 @@
           @click="handleNewConversation"
         >
           <el-icon v-if="!creatingConv"><EditPen /></el-icon>
-          新对话
+          {{ $t('page.新对话') }}
         </el-button>
       </div>
 
       <div
         v-loading="loadingConvs"
-        element-loading-text="加载中..."
+        :element-loading-text="$t('common.loading')"
         class="conv-list"
       >
         <div v-if="!loadingConvs && conversations.length === 0" class="conv-empty">
-          暂无对话记录
+          {{ $t('common.noData') }}
         </div>
 
         <TransitionGroup name="conv-fade" tag="div">
@@ -35,7 +35,7 @@
             <el-icon class="conv-icon"><ChatDotRound /></el-icon>
             <span class="conv-title">{{ conv.title }}</span>
             <div class="conv-actions" @click.stop>
-              <el-tooltip content="重命名" placement="top" :show-after="300">
+              <el-tooltip :content="$t('page.重命名会话')" placement="top" :show-after="300">
                 <el-button
                   text
                   class="conv-action-btn"
@@ -44,7 +44,7 @@
                   <el-icon><Edit /></el-icon>
                 </el-button>
               </el-tooltip>
-              <el-tooltip content="删除" placement="top" :show-after="300">
+              <el-tooltip :content="$t('common.delete')" placement="top" :show-after="300">
                 <el-button
                   text
                   class="conv-action-btn danger"
@@ -67,20 +67,20 @@
         <div v-if="!currentConvId" class="welcome-screen">
           <div class="welcome-glow"></div>
           <div class="welcome-avatar">✦</div>
-          <h2 class="welcome-title">你好，我是 AI 助手</h2>
-          <p class="welcome-subtitle">选择左侧会话或点击「新对话」开始</p>
+          <h2 class="welcome-title">{{ $t('page.你好，我是 AI 助手') }}</h2>
+          <p class="welcome-subtitle">{{ $t('page.选择左侧会话或点击新对话开始') }}</p>
           <div class="welcome-tips">
             <div class="tip-card" @click="handleNewConversation">
               <el-icon><MagicStick /></el-icon>
-              <span>开始一段对话</span>
+              <span>{{ $t('page.开始一段对话') }}</span>
             </div>
             <div class="tip-card" @click="handleNewConversation">
               <el-icon><Cpu /></el-icon>
-              <span>探索 AI 能力</span>
+              <span>{{ $t('page.探索 AI 能力') }}</span>
             </div>
             <div class="tip-card" @click="handleNewConversation">
               <el-icon><DocumentChecked /></el-icon>
-              <span>解决实际问题</span>
+              <span>{{ $t('page.解决实际问题') }}</span>
             </div>
           </div>
         </div>
@@ -90,7 +90,7 @@
       <div v-show="currentConvId" class="messages-area" ref="messagesAreaRef">
         <div v-if="loadingMessages" class="messages-loading">
           <el-icon class="is-loading"><Loading /></el-icon>
-          <span>加载消息中...</span>
+          <span>{{ $t('page.加载消息中') }}</span>
         </div>
 
         <template v-else>
@@ -130,7 +130,7 @@
               </div>
 
               <!-- 用户头像 -->
-              <div v-if="msg.role === 'user'" class="avatar user-av">我</div>
+              <div v-if="msg.role === 'user'" class="avatar user-av">{{ $t('page.我') }}</div>
             </div>
           </TransitionGroup>
         </template>
@@ -143,7 +143,7 @@
             v-model="inputText"
             type="textarea"
             :autosize="{ minRows: 1, maxRows: 5 }"
-            placeholder="输入消息，Enter 发送，Shift+Enter 换行"
+            :placeholder="$t('page.输入消息提示')"
             resize="none"
             :disabled="isStreaming"
             @keydown="handleKeyDown"
@@ -161,14 +161,14 @@
             </svg>
           </el-button>
         </div>
-        <p class="input-hint">AI 生成内容仅供参考，请注意甄别</p>
+        <p class="input-hint">{{ $t('page.AI 生成内容仅供参考，请注意甄别') }}</p>
       </div>
     </main>
 
     <!-- ========== 重命名弹窗 ========== -->
     <el-dialog
       v-model="renameDialogVisible"
-      title="重命名会话"
+      :title="$t('page.重命名会话')"
       width="400px"
       :close-on-click-modal="false"
       draggable
@@ -179,16 +179,16 @@
         v-model="renameTitle"
         maxlength="50"
         show-word-limit
-        placeholder="请输入新名称"
+        :placeholder="$t('page.请输入新名称')"
         @keyup.enter="submitRename"
       />
       <template #footer>
-        <el-button @click="renameDialogVisible = false">取 消</el-button>
+        <el-button @click="renameDialogVisible = false">{{ $t('page.取 消') }}</el-button>
         <el-button
           type="primary"
           :disabled="!renameTitle.trim()"
           @click="submitRename"
-        >确 认</el-button>
+        >{{ $t('page.确 定') }}</el-button>
       </template>
     </el-dialog>
 
@@ -197,6 +197,7 @@
 
 <script setup>
 import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
   EditPen, ChatDotRound, Edit, Delete, Loading,
@@ -210,6 +211,8 @@ import {
   deleteConversation,
   listMessages
 } from '@/api/ai/chat'
+
+const { t } = useI18n()
 
 // ──────────────────────────────────────────
 // 响应式状态
@@ -256,7 +259,7 @@ async function loadConvList(autoSelect = false) {
       }
     }
   } catch {
-    ElMessage.error('加载会话列表失败')
+    ElMessage.error(t('page.加载会话列表失败'))
   } finally {
     loadingConvs.value = false
   }
@@ -273,10 +276,10 @@ async function handleNewConversation() {
       await loadConvList()
       nextTick(() => focusInput())
     } else {
-      ElMessage.error('新建失败：' + (res.msg || res.code))
+      ElMessage.error(t('page.新建失败：') + (res.msg || res.code))
     }
   } catch {
-    ElMessage.error('新建失败，请重试')
+    ElMessage.error(t('page.新建失败，请重试'))
   } finally {
     creatingConv.value = false
   }
@@ -308,7 +311,7 @@ async function loadMessageList(convId) {
       nextTick(() => { scrollToBottom(); focusInput() })
     }
   } catch {
-    ElMessage.error('加载消息失败')
+    ElMessage.error(t('page.加载消息失败'))
   } finally {
     loadingMessages.value = false
   }
@@ -328,20 +331,20 @@ async function submitRename() {
     if (res.code === 200) {
       renameDialogVisible.value = false
       await loadConvList()
-      ElMessage.success('重命名成功')
+      ElMessage.success(t('page.重命名成功'))
     } else {
-      ElMessage.error('重命名失败：' + (res.msg || res.code))
+      ElMessage.error(t('page.重命名失败：') + (res.msg || res.code))
     }
   } catch {
-    ElMessage.error('重命名失败，请重试')
+    ElMessage.error(t('page.重命名失败，请重试'))
   }
 }
 
 async function handleDeleteConversation(id) {
   try {
-    await ElMessageBox.confirm('确认删除该对话及所有消息？', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    await ElMessageBox.confirm(t('page.确认删除该对话及所有消息？'), t('page.系统提示'), {
+      confirmButtonText: t('page.确定'),
+      cancelButtonText: t('page.取消'),
       type: 'warning'
     })
   } catch {
@@ -355,12 +358,12 @@ async function handleDeleteConversation(id) {
         messages.value = []
       }
       await loadConvList()
-      ElMessage.success('删除成功')
+      ElMessage.success(t('page.删除成功'))
     } else {
-      ElMessage.error('删除失败：' + (res.msg || res.code))
+      ElMessage.error(t('page.删除失败：') + (res.msg || res.code))
     }
   } catch {
-    ElMessage.error('删除失败，请重试')
+    ElMessage.error(t('page.删除失败，请重试'))
   }
 }
 
@@ -368,7 +371,7 @@ async function handleDeleteConversation(id) {
 // 发送消息 —— Fetch SSE（携带 JWT）
 // ──────────────────────────────────────────
 function handleKeyDown(e) {
-  if (e.key === 'Enter' && !e.shiftKey) {
+  if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) {
     e.preventDefault()
     handleSendMessage()
   }
@@ -455,7 +458,7 @@ async function handleSendMessage() {
     messages.value[aiIndex] = {
       role: 'assistant', content: '', loading: false, streaming: false, error: errMsg
     }
-    ElMessage.error('AI 响应失败：' + errMsg)
+    ElMessage.error(t('page.AI 响应失败：') + errMsg)
   } finally {
     isStreaming.value = false
     currentReader = null

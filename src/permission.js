@@ -1,5 +1,5 @@
 import router from './router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { getToken } from '@/utils/auth'
@@ -43,8 +43,20 @@ router.beforeEach(async (to, from) => {
       isRelogin.show = true
       try {
         // 拉取user_info信息
-        await useUserStore().getInfo()
+        const userInfo = await useUserStore().getInfo()
         isRelogin.show = false
+        /* 初始密码提示 */
+        if(userInfo.isDefaultModifyPwd) {
+          ElMessageBox.confirm('您的密码还是初始密码，请修改密码！',  '安全提示', {  confirmButtonText: '确定',  cancelButtonText: '取消',  type: 'warning' }).then(() => {
+            router.push({ name: 'Profile', params: { activeTab: 'resetPwd' } })
+          }).catch(() => {})
+        }
+        /* 过期密码提示 */
+        if(!userInfo.isDefaultModifyPwd && userInfo.isPasswordExpired) {
+          ElMessageBox.confirm('您的密码已过期，请尽快修改密码！',  '安全提示', {  confirmButtonText: '确定',  cancelButtonText: '取消',  type: 'warning' }).then(() => {
+            router.push({ name: 'Profile', params: { activeTab: 'resetPwd' } })
+          }).catch(() => {})
+        }
         // 根据roles权限生成可访问的路由
         const accessRoutes = await usePermissionStore().generateRoutes()
         accessRoutes.forEach(route => {

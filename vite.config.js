@@ -42,7 +42,7 @@ export default defineConfig(({ mode, command }) => {
     },
     // vite 相关配置
     server: {
-      port: 80,
+      port: 80, // Windows 下如遇权限问题可改为 5173，或使用管理员权限运行
       host: true,
       open: true,
       proxy: {

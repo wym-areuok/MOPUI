@@ -42,7 +42,7 @@
         </div>
 
         <div class="notice-body">
-          <div v-if="hasContent" class="notice-content" v-html="detail.noticeContent" />
+          <div v-if="hasContent" class="notice-content" v-html="sanitizedContent" />
           <div v-else class="notice-empty notice-empty--inner">
             <el-icon><Document /></el-icon> 暂无内容
           </div>
@@ -67,6 +67,13 @@ const isStatusNormal = computed(() => {
 const hasContent = computed(() => {
   const content = detail.value && detail.value.noticeContent
   return content != null && String(content).trim() !== ''
+})
+
+// XSS 过滤：移除危险标签和事件处理器，保留安全的富文本标签
+const sanitizedContent = computed(() => {
+  const content = detail.value && detail.value.noticeContent
+  if (!content) return ''
+  return sanitizeHtml(String(content))
 })
 
 function open(payload) {
@@ -104,6 +111,24 @@ function handleClose() {
   visible.value = false
   detail.value = null
   loading.value = false
+}
+
+/**
+ * 简单的 HTML XSS 过滤
+ * 移除 script/iframe/object/embed 标签、on* 事件属性、javascript: 伪协议
+ */
+function sanitizeHtml(html) {
+  // 移除危险标签及其内容
+  html = html.replace(/<script[\s\S]*?<\/script>/gi, '')
+  html = html.replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
+  html = html.replace(/<object[\s\S]*?<\/object>/gi, '')
+  html = html.replace(/<embed[\s\S]*?>/gi, '')
+  // 移除事件处理器属性
+  html = html.replace(/\son\w+\s*=\s*["'][^"']*["']/gi, '')
+  html = html.replace(/\son\w+\s*=\s*[^\s>]*/gi, '')
+  // 移除 javascript: 伪协议
+  html = html.replace(/javascript\s*:/gi, '')
+  return html
 }
 
 defineExpose({

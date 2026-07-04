@@ -68,8 +68,8 @@ service.interceptors.request.use(config => {
   }
   return config
 }, error => {
-    console.log(error)
-    Promise.reject(error)
+    console.error('[Request Error]', error)
+    return Promise.reject(error)
 })
 
 // 响应拦截器
@@ -93,7 +93,7 @@ service.interceptors.response.use(res => {
       }).catch(() => {
         isRelogin.show = false
       })
-    }
+      }
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
     } else if (code === 500) {
       ElMessage({ message: msg, type: 'error' })
@@ -109,7 +109,7 @@ service.interceptors.response.use(res => {
     }
   },
   error => {
-    console.log('err' + error)
+    console.error('[Response Error]', error)
     let { message } = error
     if (message == "Network Error") {
       message = "后端接口连接异常"
