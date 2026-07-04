@@ -189,7 +189,7 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">{{ $t('page.确 定') }}</el-button>
+               <el-button type="primary" :loading="submitting" @click="submitForm">{{ $t('page.确 定') }}</el-button>
                <el-button @click="cancel">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
@@ -233,7 +233,7 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitDataScope">{{ $t('page.确 定') }}</el-button>
+               <el-button type="primary" :loading="submitting" @click="submitDataScope">{{ $t('page.确 定') }}</el-button>
                <el-button @click="cancelDataScope">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
@@ -268,6 +268,7 @@ const deptOptions = ref([])
 const openDataScope = ref(false)
 const menuRef = ref(null)
 const deptRef = ref(null)
+const submitting = ref(false)
 
 /** 数据范围选项*/
 const dataScopeOptions = ref([
@@ -511,12 +512,15 @@ function getMenuAllCheckedKeys() {
 function submitForm() {
   proxy.$refs["roleRef"].validate(valid => {
     if (valid) {
+      submitting.value = true
       if (form.value.roleId != undefined) {
         form.value.menuIds = getMenuAllCheckedKeys()
         updateRole(form.value).then(() => {
           proxy.$modal.msgSuccess("修改成功")
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       } else {
         form.value.menuIds = getMenuAllCheckedKeys()
@@ -524,6 +528,8 @@ function submitForm() {
           proxy.$modal.msgSuccess("新增成功")
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       }
     }
@@ -566,11 +572,14 @@ function handleDataScope(row) {
 /** 提交按钮（数据权限） */
 function submitDataScope() {
   if (form.value.roleId != undefined) {
+    submitting.value = true
     form.value.deptIds = getDeptAllCheckedKeys()
     dataScope(form.value).then(() => {
       proxy.$modal.msgSuccess("修改成功")
       openDataScope.value = false
       getList()
+    }).finally(() => {
+      submitting.value = false
     })
   }
 }

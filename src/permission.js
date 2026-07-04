@@ -49,13 +49,17 @@ router.beforeEach(async (to, from) => {
         if(userInfo.isDefaultModifyPwd) {
           ElMessageBox.confirm('您的密码还是初始密码，请修改密码！',  '安全提示', {  confirmButtonText: '确定',  cancelButtonText: '取消',  type: 'warning' }).then(() => {
             router.push({ name: 'Profile', params: { activeTab: 'resetPwd' } })
-          }).catch(() => {})
+          }).catch(() => {
+            ElMessage.warning('请尽快修改初始密码以确保账户安全')
+          })
         }
         /* 过期密码提示 */
         if(!userInfo.isDefaultModifyPwd && userInfo.isPasswordExpired) {
           ElMessageBox.confirm('您的密码已过期，请尽快修改密码！',  '安全提示', {  confirmButtonText: '确定',  cancelButtonText: '取消',  type: 'warning' }).then(() => {
             router.push({ name: 'Profile', params: { activeTab: 'resetPwd' } })
-          }).catch(() => {})
+          }).catch(() => {
+            ElMessage.warning('请尽快修改过期密码以确保账户安全')
+          })
         }
         // 根据roles权限生成可访问的路由
         const accessRoutes = await usePermissionStore().generateRoutes()

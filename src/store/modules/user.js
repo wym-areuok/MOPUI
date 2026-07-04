@@ -42,7 +42,8 @@ const useUserStore = defineStore(
             this.roles = res.roles
             this.permissions = res.permissions
           } else {
-            this.roles = ['ROLE_DEFAULT']
+            this.roles = []
+            this.permissions = []
           }
           this.id = user.userId
           this.name = user.userName
