@@ -68,6 +68,7 @@ import userInfo from "./userInfo"
 import resetPwd from "./resetPwd"
 import { getUserProfile } from "@/api/system/user"
 
+const { proxy } = getCurrentInstance()
 const route = useRoute()
 const selectedTab = ref("userinfo")
 const state = reactive({
@@ -81,6 +82,8 @@ function getUser() {
     state.user = response.data
     state.roleGroup = response.roleGroup
     state.postGroup = response.postGroup
+  }).catch(() => {
+    proxy.$modal.msgError("获取用户信息失败")
   })
 }
 

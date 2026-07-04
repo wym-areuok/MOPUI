@@ -127,6 +127,9 @@
 
 <script setup>
 import { getUser } from '@/api/system/user'
+import { getCurrentInstance } from 'vue'
+
+const { proxy } = getCurrentInstance()
 
 const visible = ref(false)
 const loading = ref(false)
@@ -159,7 +162,7 @@ const open = async (userId) => {
     info.postIds = res.postIds || []
     info.roleIds = res.roleIds || []
   } catch (error) {
-    console.error('获取用户信息失败:', error)
+    proxy.$modal.msgError('获取用户信息失败')
   } finally {
     loading.value = false
   }

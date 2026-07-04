@@ -116,13 +116,18 @@ function changeScale(num) {
 function beforeUpload(file) {
   if (file.type.indexOf("image/") == -1) {
     proxy.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
-  } else {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => {
-      options.img = reader.result
-      options.filename = file.name
-    }
+    return false
+  }
+  const maxSize = 10 * 1024 * 1024
+  if (file.size > maxSize) {
+    proxy.$modal.msgError("上传头像图片大小不能超过10MB")
+    return false
+  }
+  const reader = new FileReader()
+  reader.readAsDataURL(file)
+  reader.onload = () => {
+    options.img = reader.result
+    options.filename = file.name
   }
 }
 
@@ -132,11 +137,17 @@ function uploadImg() {
     let formData = new FormData()
     formData.append("avatarfile", data, options.filename)
     uploadAvatar(formData).then(response => {
-      open.value = false
-      options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl
-      userStore.avatar = options.img
-      proxy.$modal.msgSuccess("修改成功")
-      visible.value = false
+      if (response.imgUrl) {
+        open.value = false
+        options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl
+        userStore.avatar = options.img
+        proxy.$modal.msgSuccess("修改成功")
+        visible.value = false
+      } else {
+        proxy.$modal.msgError("上传失败，未获取到图片地址")
+      }
+    }).catch(() => {
+      proxy.$modal.msgError("上传头像失败")
     })
   })
 }
@@ -149,7 +160,7 @@ function realTime(data) {
 /** 关闭窗口 */
 function closeDialog() {
   options.img = userStore.avatar
-  options.visible = false
+  visible.value = false
 }
 </script>
 

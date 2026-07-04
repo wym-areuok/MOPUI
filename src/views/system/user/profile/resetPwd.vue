@@ -10,7 +10,7 @@
       <el-input v-model="user.confirmPassword" :placeholder="$t('page.请确认新密码')" type="password" show-password />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submit">{{ $t('page.保存') }}</el-button>
+      <el-button type="primary" :loading="submitting" @click="submit">{{ $t('page.保存') }}</el-button>
       <el-button type="danger" @click="close">{{ $t('page.关闭') }}</el-button>
     </el-form-item>
   </el-form>
@@ -22,6 +22,9 @@ import { updateUserPwd } from "@/api/system/user"
 
 const { proxy } = getCurrentInstance()
 const { infoPwdValidator } = usePasswordRule()
+
+const submitting = ref(false)
+const pwdRef = ref(null)
 
 const user = reactive({
   oldPassword: undefined,
@@ -46,8 +49,18 @@ const rules = ref({
 function submit() {
   proxy.$refs.pwdRef.validate(valid => {
     if (valid) {
+      submitting.value = true
       updateUserPwd(user.oldPassword, user.newPassword).then(() => {
         proxy.$modal.msgSuccess("修改成功")
+        // 清除表单数据
+        user.oldPassword = undefined
+        user.newPassword = undefined
+        user.confirmPassword = undefined
+        proxy.$refs.pwdRef.resetFields()
+      }).catch(() => {
+        proxy.$modal.msgError("修改密码失败")
+      }).finally(() => {
+        submitting.value = false
       })
     }
   })
