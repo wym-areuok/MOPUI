@@ -224,6 +224,7 @@ function getList() {
   listType(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
     typeList.value = response.rows
     total.value = response.total
+  }).finally(() => {
     loading.value = false
   })
 }

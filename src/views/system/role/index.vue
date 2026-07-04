@@ -302,6 +302,7 @@ function getList() {
   listRole(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
     roleList.value = response.rows
     total.value = response.total
+  }).finally(() => {
     loading.value = false
   })
 }

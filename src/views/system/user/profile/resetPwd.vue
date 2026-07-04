@@ -10,8 +10,8 @@
       <el-input v-model="user.confirmPassword" :placeholder="$t('page.请确认新密码')" type="password" show-password />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="submit">{{ $t('page.保存') }}<//el-button>
-      <el-button type="danger" @click="close">{{ $t('page.关闭') }}<//el-button>
+      <el-button type="primary" @click="submit">{{ $t('page.保存') }}</el-button>
+      <el-button type="danger" @click="close">{{ $t('page.关闭') }}</el-button>
     </el-form-item>
   </el-form>
 </template>

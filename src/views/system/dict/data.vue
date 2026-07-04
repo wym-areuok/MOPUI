@@ -31,8 +31,8 @@
             </el-select>
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}<//el-button>
-            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}<//el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -44,7 +44,7 @@
                icon="Plus"
                @click="handleAdd"
                v-hasPermi="['system:dict:add']"
-            >{{ $t('page.新增') }}<//el-button>
+            >{{ $t('page.新增') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -54,7 +54,7 @@
                :disabled="single"
                @click="handleUpdate"
                v-hasPermi="['system:dict:edit']"
-            >{{ $t('page.修改') }}<//el-button>
+            >{{ $t('page.修改') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -64,7 +64,7 @@
                :disabled="multiple"
                @click="handleDelete"
                v-hasPermi="['system:dict:remove']"
-            >{{ $t('page.删除') }}<//el-button>
+            >{{ $t('page.删除') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -73,7 +73,7 @@
                icon="Download"
                @click="handleExport"
                v-hasPermi="['system:dict:export']"
-            >{{ $t('page.导出') }}<//el-button>
+            >{{ $t('page.导出') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -81,7 +81,7 @@
                plain
                icon="Close"
                @click="handleClose"
-            >{{ $t('page.关闭') }}<//el-button>
+            >{{ $t('page.关闭') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
@@ -245,6 +245,7 @@ function getList() {
   listData(queryParams.value).then(response => {
     dataList.value = response.rows
     total.value = response.total
+  }).finally(() => {
     loading.value = false
   })
 }

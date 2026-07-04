@@ -21,8 +21,8 @@
             />
          </el-form-item>
          <el-form-item>
-            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}<//el-button>
-            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}<//el-button>
+            <el-button type="primary" icon="Search" @click="handleQuery">{{ $t('page.搜索') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('page.重置') }}</el-button>
          </el-form-item>
       </el-form>
 
@@ -34,7 +34,7 @@
                icon="Plus"
                @click="openSelectUser"
                v-hasPermi="['system:role:add']"
-            >{{ $t('page.添加用户') }}<//el-button>
+            >{{ $t('page.添加用户') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button
@@ -44,7 +44,7 @@
                :disabled="multiple"
                @click="cancelAuthUserAll"
                v-hasPermi="['system:role:remove']"
-            >{{ $t('page.批量取消授权') }}<//el-button>
+            >{{ $t('page.批量取消授权') }}</el-button>
          </el-col>
          <el-col :span="1.5">
             <el-button 
@@ -52,7 +52,7 @@
                plain 
                icon="Close"
                @click="handleClose"
-            >{{ $t('page.关闭') }}<//el-button>
+            >{{ $t('page.关闭') }}</el-button>
          </el-col>
          <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
       </el-row>
@@ -120,6 +120,7 @@ function getList() {
   allocatedUserList(queryParams).then(response => {
     userList.value = response.rows
     total.value = response.total
+  }).finally(() => {
     loading.value = false
   })
 }

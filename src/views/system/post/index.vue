@@ -184,6 +184,7 @@ function getList() {
   listPost(queryParams.value).then(response => {
     postList.value = response.rows
     total.value = response.total
+  }).finally(() => {
     loading.value = false
   })
 }

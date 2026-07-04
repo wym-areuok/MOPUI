@@ -345,6 +345,7 @@ function getList() {
   listMenu(queryParams.value).then(response => {
     menuList.value = proxy.handleTree(response.data, "menuId")
     recordOriginalOrders(menuList.value)
+  }).finally(() => {
     loading.value = false
   })
 }

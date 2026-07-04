@@ -5,7 +5,7 @@
             <el-card class="box-card">
                <template v-slot:header>
                  <div class="clearfix">
-                   <span>{{ $t('page.个人信息') }}<//span>
+                   <span>{{ $t('page.个人信息') }}</span>
                  </div>
                </template>
                <div>

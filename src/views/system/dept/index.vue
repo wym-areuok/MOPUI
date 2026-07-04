@@ -192,6 +192,7 @@ function getList() {
   listDept(queryParams.value).then(response => {
     deptList.value = proxy.handleTree(response.data, "deptId")
     recordOriginalOrders(deptList.value)
+  }).finally(() => {
     loading.value = false
   })
 }
