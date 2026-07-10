@@ -94,12 +94,12 @@
           <span>{{(queryParams.pageNum - 1) * queryParams.pageSize + scope.$index + 1}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="表名称" align="center" prop="tableName" :show-overflow-tooltip="true" />
-      <el-table-column label="表描述" align="center" prop="tableComment" :show-overflow-tooltip="true" />
-      <el-table-column label="实体" align="center" prop="className" :show-overflow-tooltip="true" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="160" sortable="custom" :sort-orders="['descending', 'ascending']" />
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="160" sortable="custom" :sort-orders="['descending', 'ascending']" />
-      <el-table-column label="操作" align="center" width="330" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('page.表名称')" align="center" prop="tableName" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('page.表描述')" align="center" prop="tableComment" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('page.实体')" align="center" prop="className" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('page.创建时间')" align="center" prop="createTime" width="160" sortable="custom" :sort-orders="['descending', 'ascending']" />
+      <el-table-column :label="$t('page.更新时间')" align="center" prop="updateTime" width="160" sortable="custom" :sort-orders="['descending', 'ascending']" />
+      <el-table-column :label="$t('page.操作')" align="center" width="330" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-tooltip content="预览" placement="top">
             <el-button link type="primary" icon="View" @click="handlePreview(scope.row)" v-hasPermi="['tool:gen:preview']"></el-button>
@@ -224,7 +224,7 @@ function handleGenTable(row) {
       proxy.$modal.msgSuccess("成功生成到自定义路径：" + row.genPath)
     })
   } else {
-    const zipName = Array.isArray(tbNames) ? "ruoyi.zip" : tbNames + ".zip"
+    const zipName = Array.isArray(tbNames) ? "mop.zip" : tbNames + ".zip"
     proxy.$download.zip("/tool/gen/batchGenCode?tables=" + tbNames, zipName)
   }
 }

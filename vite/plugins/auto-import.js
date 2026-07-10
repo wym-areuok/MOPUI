@@ -8,7 +8,7 @@ export default function createAutoImport() {
       'pinia',
       {
         '@/utils/dict': ['useDict'],
-        '@/utils/ruoyi': ['selectDictLabel']
+        '@/utils/mop': ['selectDictLabel']
       }
     ],
     dts: false

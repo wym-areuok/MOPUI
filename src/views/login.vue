@@ -19,7 +19,7 @@
           type="password"
           size="large"
           auto-complete="off"
-          placeholder="密码"
+          :placeholder="$t('page.密码')"
           @keyup.enter="handleLogin"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
@@ -30,7 +30,7 @@
           v-model="loginForm.code"
           size="large"
           auto-complete="off"
-          placeholder="验证码"
+          :placeholder="$t('page.验证码')"
           style="width: 63%"
           @keyup.enter="handleLogin"
         >
@@ -40,7 +40,7 @@
           <img :src="codeUrl" @click="getCode" class="login-code-img"/>
         </div>
       </el-form-item>
-      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">记住密码</el-checkbox>
+      <el-checkbox v-model="loginForm.rememberMe" style="margin:0px 0px 25px 0px;">{{ $t('page.记住密码') }}</el-checkbox>
       <el-form-item style="width:100%;">
         <el-button
           :loading="loading"
@@ -49,11 +49,11 @@
           style="width:100%;"
           @click.prevent="handleLogin"
         >
-          <span v-if="!loading">登 录</span>
-          <span v-else>登 录 中...</span>
+          <span v-if="!loading">{{ $t('page.登 录') }}</span>
+          <span v-else>{{ $t('page.登 录 中…') }}</span>
         </el-button>
         <div style="float: right;" v-if="register">
-          <router-link class="link-type" :to="'/register'">立即注册</router-link>
+          <router-link class="link-type" :to="'/register'">{{ $t('page.立即注册') }}</router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -87,9 +87,9 @@ const loginForm = ref({
 })
 
 const loginRules = {
-  username: [{ required: true, trigger: "blur", message: "请输入您的账号" }],
-  password: [{ required: true, trigger: "blur", message: "请输入您的密码" }],
-  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+  username: [{ required: true, trigger: "blur", message: () => proxy.$t('page.请输入您的账号') }],
+  password: [{ required: true, trigger: "blur", message: () => proxy.$t('page.请输入您的密码') }],
+  code: [{ required: true, trigger: "change", message: () => proxy.$t('page.验证码') }]
 }
 
 const codeUrl = ref("")

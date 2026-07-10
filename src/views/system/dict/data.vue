@@ -95,23 +95,23 @@
                <el-tag v-else :type="scope.row.listClass == 'primary' ? '' : scope.row.listClass" :class="scope.row.cssClass">{{ scope.row.dictLabel }}</el-tag>
             </template>
          </el-table-column>
-         <el-table-column label="字典键值" align="center" prop="dictValue" />
-         <el-table-column label="字典排序" align="center" prop="dictSort" />
-         <el-table-column label="状态" align="center" prop="status">
+         <el-table-column :label="$t('page.字典键值')" align="center" prop="dictValue" />
+         <el-table-column :label="$t('page.字典排序')" align="center" prop="dictSort" />
+         <el-table-column :label="$t('page.状态')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="备注" align="center" prop="remark" :show-overflow-tooltip="true" />
-         <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+         <el-table-column :label="$t('page.备注')" align="center" prop="remark" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.创建时间')" align="center" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('page.操作')" align="center" width="160" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dict:edit']">修改</el-button>
-               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dict:remove']">删除</el-button>
+               <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['system:dict:edit']">{{ $t('page.修改') }}</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['system:dict:remove']">{{ $t('page.删除') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -127,22 +127,22 @@
       <!-- 添加或修改参数配置对话框 -->
       <el-dialog :title="title" v-model="open" width="500px" append-to-body>
          <el-form ref="dataRef" :model="form" :rules="rules" label-width="80px">
-            <el-form-item label="字典类型">
+            <el-form-item :label="$t('page.字典类型')">
                <el-input v-model="form.dictType" :disabled="true" />
             </el-form-item>
-            <el-form-item label="数据标签" prop="dictLabel">
-               <el-input v-model="form.dictLabel" placeholder="请输入数据标签" />
+            <el-form-item :label="$t('page.数据标签')" prop="dictLabel">
+               <el-input v-model="form.dictLabel" :placeholder="$t('page.请输入数据标签')" />
             </el-form-item>
-            <el-form-item label="数据键值" prop="dictValue">
-               <el-input v-model="form.dictValue" placeholder="请输入数据键值" />
+            <el-form-item :label="$t('page.数据键值')" prop="dictValue">
+               <el-input v-model="form.dictValue" :placeholder="$t('page.请输入数据键值')" />
             </el-form-item>
-            <el-form-item label="样式属性" prop="cssClass">
-               <el-input v-model="form.cssClass" placeholder="请输入样式属性" />
+            <el-form-item :label="$t('page.样式属性')" prop="cssClass">
+               <el-input v-model="form.cssClass" :placeholder="$t('page.请输入样式属性')" />
             </el-form-item>
-            <el-form-item label="显示排序" prop="dictSort">
+            <el-form-item :label="$t('page.显示排序')" prop="dictSort">
                <el-input-number v-model="form.dictSort" controls-position="right" :min="0" />
             </el-form-item>
-            <el-form-item label="回显样式" prop="listClass">
+            <el-form-item :label="$t('page.回显样式')" prop="listClass">
                <el-select v-model="form.listClass">
                   <el-option
                      v-for="item in listClassOptions"
@@ -152,7 +152,7 @@
                   ></el-option>
                </el-select>
             </el-form-item>
-            <el-form-item label="状态" prop="status">
+            <el-form-item :label="$t('page.状态')" prop="status">
                <el-radio-group v-model="form.status">
                   <el-radio
                      v-for="dict in sys_normal_disable"
@@ -161,14 +161,14 @@
                   >{{ dict.label }}</el-radio>
                </el-radio-group>
             </el-form-item>
-            <el-form-item label="备注" prop="remark">
-               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
+            <el-form-item :label="$t('page.备注')" prop="remark">
+               <el-input v-model="form.remark" type="textarea" :placeholder="$t('page.请输入内容')"></el-input>
             </el-form-item>
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('page.确 定') }}</el-button>
+               <el-button @click="cancel">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
       </el-dialog>
@@ -215,9 +215,9 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    dictLabel: [{ required: true, message: "数据标签不能为空", trigger: "blur" }],
-    dictValue: [{ required: true, message: "数据键值不能为空", trigger: "blur" }],
-    dictSort: [{ required: true, message: "数据顺序不能为空", trigger: "blur" }]
+    dictLabel: [{ required: true, message: proxy.$t("page.数据标签不能为空"), trigger: "blur" }],
+    dictValue: [{ required: true, message: proxy.$t("page.数据键值不能为空"), trigger: "blur" }],
+    dictSort: [{ required: true, message: proxy.$t("page.数据顺序不能为空"), trigger: "blur" }]
   }
 })
 
@@ -294,7 +294,7 @@ function resetQuery() {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加字典数据"
+  title.value = proxy.$t("page.添加字典数据")
   form.value.dictType = queryParams.value.dictType
 }
 
@@ -312,7 +312,7 @@ function handleUpdate(row) {
   getData(dictCode).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改字典数据"
+    title.value = proxy.$t("page.修改字典数据")
   })
 }
 
@@ -323,14 +323,14 @@ function submitForm() {
       if (form.value.dictCode != undefined) {
         updateData(form.value).then(response => {
           useDictStore().removeDict(queryParams.value.dictType)
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         })
       } else {
         addData(form.value).then(response => {
           useDictStore().removeDict(queryParams.value.dictType)
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         })
@@ -342,11 +342,11 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const dictCodes = row.dictCode || ids.value
-  proxy.$modal.confirm('是否确认删除字典编码为"' + dictCodes + '"的数据项？').then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除字典编码为“”{0}“”的数据项？', [dictCodes])).then(function() {
     return delData(dictCodes)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
     useDictStore().removeDict(queryParams.value.dictType)
   }).catch(() => {})
 }

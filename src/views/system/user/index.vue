@@ -214,13 +214,13 @@ const roleOptions = ref([])
 const submitting = ref(false)
 // 列显隐信息
 const columns = ref({
-  userId: { label: '用户编号', visible: true },
-  userName: { label: '用户名称', visible: true },
-  nickName: { label: '用户昵称', visible: true },
-  deptName: { label: '部门', visible: true },
-  phonenumber: { label: '手机号码', visible: true },
-  status: { label: '状态', visible: true },
-  createTime: { label: '创建时间', visible: true }
+  userId: { label: proxy.$t('page.用户编号'), visible: true },
+  userName: { label: proxy.$t('page.用户名称'), visible: true },
+  nickName: { label: proxy.$t('page.用户昵称'), visible: true },
+  deptName: { label: proxy.$t('page.部门'), visible: true },
+  phonenumber: { label: proxy.$t('page.手机号码'), visible: true },
+  status: { label: proxy.$t('page.状态'), visible: true },
+  createTime: { label: proxy.$t('page.创建时间'), visible: true }
 })
 
 const data = reactive({
@@ -234,10 +234,10 @@ const data = reactive({
     deptId: undefined
   },
   rules: {
-    userName: [{ required: true, message: "用户名称不能为空", trigger: "blur" }, { min: 2, max: 20, message: "用户名称长度必须介于 2 和 20 之间", trigger: "blur" }],
-    nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phonenumber: [{ pattern: /^1[3-9]\d{9}$/, message: "请输入正确的手机号码", trigger: "blur" }]
+    userName: [{ required: true, message: proxy.$t("page.用户名称不能为空"), trigger: "blur" }, { min: 2, max: 20, message: proxy.$t("page.用户名称长度必须介于 2 和 20 之间"), trigger: "blur" }],
+    nickName: [{ required: true, message: proxy.$t("page.用户昵称不能为空"), trigger: "blur" }],
+    email: [{ type: "email", message: proxy.$t("page.请输入正确的邮箱地址"), trigger: ["blur", "change"] }],
+    phonenumber: [{ pattern: /^1[3-9]\d{9}$/, message: proxy.$t("page.请输入正确的手机号码"), trigger: "blur" }]
   }
 })
 
@@ -299,11 +299,11 @@ function resetQuery() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const userIds = row.userId || ids.value
-  proxy.$modal.confirm('是否确认删除用户编号为"' + userIds + '"的数据项？').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除用户编号为“”{0}“”的数据项？', [userIds])).then(function () {
     return delUser(userIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
@@ -316,11 +316,11 @@ function handleExport() {
 
 /** 用户状态修改  */
 function handleStatusChange(row) {
-  let text = row.status === "0" ? "启用" : "停用"
-  proxy.$modal.confirm('确认要"' + text + '""' + row.userName + '"用户吗?').then(function () {
+  let text = row.status === "0" ? proxy.$t("page.启用") : proxy.$t("page.停用")
+  proxy.$modal.confirm(proxy.$t('page.确认要“”{0}“”“”{1}“”用户吗?', [text, row.userName])).then(function () {
     return changeUserStatus(row.userId, row.status)
   }).then(() => {
-    proxy.$modal.msgSuccess(text + "成功")
+    proxy.$modal.msgSuccess(text + proxy.$t("page.成功"))
   }).catch(function () {
     row.status = row.status === "0" ? "1" : "0"
   })
@@ -348,14 +348,14 @@ function handleAuthRole(row) {
 
 /** 重置密码按钮操作 */
 function handleResetPwd(row) {
-  proxy.$prompt(`请输入「${row.userName}」的新密码`, "重置密码", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
+  proxy.$prompt(proxy.$t('page.请输入「{0}」的新密码', [row.userName]), proxy.$t("page.重置密码"), {
+    confirmButtonText: proxy.$t("common.confirm"),
+    cancelButtonText: proxy.$t("common.cancel"),
     closeOnClickModal: false,
     inputValidator: pwdPromptValidator
   }).then(({ value }) => {
     resetUserPwd(row.userId, value).then(() => {
-      proxy.$modal.msgSuccess("修改成功，新密码是：" + value)
+      proxy.$modal.msgSuccess(proxy.$t('page.修改成功，新密码是：{0}', [value]))
     })
   }).catch(() => {})
 }
@@ -409,7 +409,7 @@ function handleAdd() {
     postOptions.value = response.posts
     roleOptions.value = response.roles
     open.value = true
-    title.value = "添加用户"
+    title.value = proxy.$t("page.添加用户")
     form.value.password = initPassword.value
   })
 }
@@ -425,7 +425,7 @@ function handleUpdate(row) {
     form.value.postIds = response.postIds
     form.value.roleIds = response.roleIds
     open.value = true
-    title.value = "修改用户"
+    title.value = proxy.$t("page.修改用户")
     form.value.password = ""
   })
 }
@@ -437,7 +437,7 @@ function submitForm() {
       submitting.value = true
       if (form.value.userId != undefined) {
         updateUser(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -445,7 +445,7 @@ function submitForm() {
         })
       } else {
         addUser(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         }).finally(() => {

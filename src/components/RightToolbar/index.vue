@@ -1,13 +1,13 @@
 <template>
   <div class="top-right-btn" :style="style">
     <el-row>
-      <el-tooltip class="item" effect="dark" :content="showSearch ? '隐藏搜索' : '显示搜索'" placement="top" v-if="search">
+      <el-tooltip class="item" effect="dark" :content="showSearch ? $t('page.隐藏搜索') : $t('page.显示搜索')" placement="top" v-if="search">
         <el-button circle icon="Search" @click="toggleSearch()" />
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="刷新" placement="top">
+      <el-tooltip class="item" effect="dark" :content="$t('page.刷新')" placement="top">
         <el-button circle icon="Refresh" @click="refresh()" />
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="显隐列" placement="top" v-if="Object.keys(columns).length > 0">
+      <el-tooltip class="item" effect="dark" :content="$t('page.显隐列')" placement="top" v-if="Object.keys(columns).length > 0">
         <el-button circle icon="Menu" @click="showColumn()" v-if="showColumnsType == 'transfer'"/>
         <el-dropdown trigger="click" :hide-on-click="false" style="padding-left: 12px" v-if="showColumnsType == 'checkbox'">
           <el-button circle icon="Menu" />
@@ -15,7 +15,7 @@
             <el-dropdown-menu>
               <!-- 全选/反选 按钮 -->
               <el-dropdown-item>
-                <el-checkbox :indeterminate="isIndeterminate" v-model="isChecked" @change="toggleCheckAll"> 列展示 </el-checkbox>
+                <el-checkbox :indeterminate="isIndeterminate" v-model="isChecked" @change="toggleCheckAll"> {{ $t('page.列展示') }} </el-checkbox>
               </el-dropdown-item>
               <div class="check-line"></div>
               <template v-for="(item, key) in columns" :key="item.key">
@@ -30,7 +30,7 @@
     </el-row>
     <el-dialog :title="title" v-model="open" append-to-body>
       <el-transfer
-        :titles="['显示', '隐藏']"
+        :titles="[proxy.$t('page.显示'), proxy.$t('page.隐藏')]"
         v-model="value"
         :data="transferData"
         @change="dataChange"
@@ -77,10 +77,12 @@ const props = defineProps({
 
 const emits = defineEmits(['update:showSearch', 'queryTable'])
 
+const { proxy } = getCurrentInstance()
+
 // 显隐数据
 const value = ref([])
 // 弹出层标题
-const title = ref("显示/隐藏")
+const title = ref(proxy.$t("page.显示/隐藏"))
 // 是否显示弹出层
 const open = ref(false)
 
@@ -101,7 +103,6 @@ const isIndeterminate = computed(() => Array.isArray(props.columns) ? props.colu
 const transferData = computed(() => Array.isArray(props.columns) ? props.columns.map((item, index) => ({ key: index, label: item.label })) : Object.keys(props.columns).map((key, index) => ({ key: index, label: props.columns[key].label })))
 
 // 搜索
-const { proxy } = getCurrentInstance()
 function toggleSearch() {
   let el = proxy.$el
   let formEl = null

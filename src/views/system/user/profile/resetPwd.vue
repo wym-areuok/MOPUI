@@ -34,15 +34,15 @@ const user = reactive({
 
 const equalToPassword = (rule, value, callback) => {
   if (user.newPassword !== value) {
-    callback(new Error("两次输入的密码不一致"))
+    callback(new Error(proxy.$t("page.两次输入的密码不一致")))
   } else {
     callback()
   }
 }
 
 const rules = ref({
-  oldPassword: [{ required: true, message: "旧密码不能为空", trigger: "blur" }],
-  confirmPassword: [{ required: true, message: "确认密码不能为空", trigger: "blur" }, { required: true, validator: equalToPassword, trigger: "blur" }]
+  oldPassword: [{ required: true, message: proxy.$t("page.旧密码不能为空"), trigger: "blur" }],
+  confirmPassword: [{ required: true, message: proxy.$t("page.确认密码不能为空"), trigger: "blur" }, { required: true, validator: equalToPassword, trigger: "blur" }]
 })
 
 /** 提交按钮 */

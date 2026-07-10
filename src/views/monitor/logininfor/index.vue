@@ -106,8 +106,8 @@
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="描述" align="center" prop="msg" :show-overflow-tooltip="true" />
-         <el-table-column label="访问时间" align="center" prop="loginTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
+         <el-table-column :label="$t('page.描述')" align="center" prop="msg" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.访问时间')" align="center" prop="loginTime" sortable="custom" :sort-orders="['descending', 'ascending']" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.loginTime) }}</span>
             </template>
@@ -194,31 +194,31 @@ function handleSortChange(column, prop, order) {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const infoIds = row.infoId || ids.value
-  proxy.$modal.confirm('是否确认删除访问编号为"' + infoIds + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除访问编号为“”{0}“”的数据项?', [infoIds])).then(function () {
     return delLogininfor(infoIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
 /** 清空按钮操作 */
 function handleClean() {
-  proxy.$modal.confirm("是否确认清空所有登录日志数据项?").then(function () {
+  proxy.$modal.confirm(proxy.$t("page.是否确认清空所有登录日志数据项?")).then(function () {
     return cleanLogininfor()
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("清空成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.清空成功"))
   }).catch(() => {})
 }
 
 /** 解锁按钮操作 */
 function handleUnlock() {
   const username = selectName.value
-  proxy.$modal.confirm('是否确认解锁用户"' + username + '"数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认解锁用户“”{0}“”数据项?', [username])).then(function () {
     return unlockLogininfor(username)
   }).then(() => {
-    proxy.$modal.msgSuccess("用户" + username + "解锁成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.用户{0}解锁成功", [username]))
   }).catch(() => {})
 }
 

@@ -218,7 +218,7 @@
                      <el-input v-model="form.perms" :placeholder="$t('page.请输入权限标识')" maxlength="100" />
                      <template #label>
                         <span>
-                           <el-tooltip content="控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasPermi('system:user:list')`)" placement="top">
+                           <el-tooltip :content="$t('page.菜单权限字符说明')" placement="top">
                               <el-icon><question-filled /></el-icon>
                            </el-tooltip>
                            {{ $t('page.权限字符') }}
@@ -332,9 +332,9 @@ const data = reactive({
     visible: undefined
   },
   rules: {
-    menuName: [{ required: true, message: "菜单名称不能为空", trigger: "blur" }],
-    orderNum: [{ required: true, message: "菜单顺序不能为空", trigger: "blur" }],
-    path: [{ required: true, message: "路由地址不能为空", trigger: "blur" }]
+    menuName: [{ required: true, message: proxy.$t("page.菜单名称不能为空"), trigger: "blur" }],
+    orderNum: [{ required: true, message: proxy.$t("page.菜单顺序不能为空"), trigger: "blur" }],
+    path: [{ required: true, message: proxy.$t("page.路由地址不能为空"), trigger: "blur" }]
   },
 })
 
@@ -415,7 +415,7 @@ function handleAdd(row) {
     form.value.parentId = 0
   }
   open.value = true
-  title.value = "添加菜单"
+  title.value = proxy.$t("page.添加菜单")
 }
 
 /** 展开/折叠操作 */
@@ -434,7 +434,7 @@ async function handleUpdate(row) {
   getMenu(row.menuId).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改菜单"
+    title.value = proxy.$t("page.修改菜单")
   })
 }
 
@@ -445,7 +445,7 @@ function submitForm() {
       submitting.value = true
       if (form.value.menuId != undefined) {
         updateMenu(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -453,7 +453,7 @@ function submitForm() {
         })
       } else {
         addMenu(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -492,22 +492,22 @@ function handleSaveSort() {
   }
   collectChanged(menuList.value)
   if (changedMenuIds.length === 0) {
-   proxy.$modal.msgWarning("未检测到排序修改")
+   proxy.$modal.msgWarning(proxy.$t("page.未检测到排序修改"))
     return
   }
   updateMenuSort({ menuIds: changedMenuIds.join(","), orderNums: changedOrderNums.join(",") }).then(() => {
-   proxy.$modal.msgSuccess("排序保存成功")
+   proxy.$modal.msgSuccess(proxy.$t("page.排序保存成功"))
     recordOriginalOrders(menuList.value)
   })
 }
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  proxy.$modal.confirm('是否确认删除名称为"' + row.menuName + '"的数据项?').then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除名称为“”{0}“”的数据项?', [row.menuName])).then(function() {
     return delMenu(row.menuId)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 

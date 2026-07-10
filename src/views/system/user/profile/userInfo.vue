@@ -36,9 +36,9 @@ const { proxy } = getCurrentInstance()
 const submitting = ref(false)
 const form = ref({})
 const rules = ref({
-  nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
-  email: [{ required: true, message: "邮箱地址不能为空", trigger: "blur" }, { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-  phonenumber: [{ required: true, message: "手机号码不能为空", trigger: "blur" }, { pattern: /^1[3-9][0-9]\d{8}$/, message: "请输入正确的手机号码", trigger: "blur" }],
+  nickName: [{ required: true, message: proxy.$t("page.用户昵称不能为空"), trigger: "blur" }],
+  email: [{ required: true, message: proxy.$t("page.邮箱地址不能为空"), trigger: "blur" }, { type: "email", message: proxy.$t("page.请输入正确的邮箱地址"), trigger: ["blur", "change"] }],
+  phonenumber: [{ required: true, message: proxy.$t("page.手机号码不能为空"), trigger: "blur" }, { pattern: /^1[3-9][0-9]\d{8}$/, message: proxy.$t("page.请输入正确的手机号码"), trigger: "blur" }],
 })
 
 /** 提交按钮 */

@@ -529,7 +529,7 @@ function focusInput() {
 /* ===== 整体布局 ===== */
 .ai-chat-wrapper {
   display: flex;
-  /* 适配 RuoYi-Vue3 的 layout：顶部 navbar 50px + tabs-nav 34px + 内边距 */
+  /* 顶部 navbar 50px + tabs-nav 34px + 内边距 */
   height: calc(100vh - 84px);
   background: #f5f7fa;
   overflow: hidden;

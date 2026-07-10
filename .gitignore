@@ -21,11 +21,5 @@ selenium-debug.log
 
 package-lock.json
 yarn.lock
-.codebuddy/memory/2026-07-03.md
-.codebuddy/memory/2026-07-04.md
-.codebuddy/memory/MEMORY.md
-.codebuddy/skills/doc-generator/SKILL.md
-.codebuddy/skills/project-review/SKILL.md
-.codebuddy/skills/vue-i18n-helper/SKILL.md
-.codebuddy/skills/vue3-element-plus-dev/SKILL.md
 .gitignore
+.codebuddy/

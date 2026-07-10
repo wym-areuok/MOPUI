@@ -19,7 +19,7 @@
           type="password"
           size="large" 
           auto-complete="off"
-          placeholder="密码"
+          :placeholder="$t('page.密码')"
           @keyup.enter="handleRegister"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
@@ -31,7 +31,7 @@
           type="password"
           size="large" 
           auto-complete="off"
-          placeholder="确认密码"
+          :placeholder="$t('page.确认密码')"
           @keyup.enter="handleRegister"
         >
           <template #prefix><svg-icon icon-class="password" class="el-input__icon input-icon" /></template>
@@ -42,7 +42,7 @@
           size="large" 
           v-model="registerForm.code"
           auto-complete="off"
-          placeholder="验证码"
+          :placeholder="$t('page.验证码')"
           style="width: 63%"
           @keyup.enter="handleRegister"
         >
@@ -60,11 +60,11 @@
           style="width:100%;"
           @click.prevent="handleRegister"
         >
-          <span v-if="!loading">注 册</span>
-          <span v-else>注 册 中...</span>
+          <span v-if="!loading">{{ $t('page.注 册') }}</span>
+          <span v-else>{{ $t('page.注 册 中…') }}</span>
         </el-button>
         <div style="float: right;">
-          <router-link class="link-type" :to="'/login'">使用已有账户登录</router-link>
+          <router-link class="link-type" :to="'/login'">{{ $t('page.使用已有账户登录') }}</router-link>
         </div>
       </el-form-item>
     </el-form>
@@ -97,7 +97,7 @@ const registerForm = ref({
 
 const equalToPassword = (rule, value, callback) => {
   if (registerForm.value.password !== value) {
-    callback(new Error("两次输入的密码不一致"))
+    callback(new Error(proxy.$t('page.两次输入的密码不一致')))
   } else {
     callback()
   }
@@ -105,14 +105,14 @@ const equalToPassword = (rule, value, callback) => {
 
 const registerRules = {
   username: [
-    { required: true, trigger: "blur", message: "请输入您的账号" },
-    { min: 2, max: 20, message: "用户账号长度必须介于 2 和 20 之间", trigger: "blur" }
+    { required: true, trigger: "blur", message: () => proxy.$t('page.请输入您的账号') },
+    { min: 2, max: 20, message: () => proxy.$t('page.用户账号长度必须介于 2 和 20 之间'), trigger: "blur" }
   ],
   confirmPassword: [
-    { required: true, trigger: "blur", message: "请再次输入您的密码" },
+    { required: true, trigger: "blur", message: () => proxy.$t('page.请再次输入您的密码') },
     { required: true, validator: equalToPassword, trigger: "blur" }
   ],
-  code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+  code: [{ required: true, trigger: "change", message: () => proxy.$t('page.验证码') }]
 }
 
 const codeUrl = ref("")
@@ -125,8 +125,7 @@ function handleRegister() {
       loading.value = true
       register(registerForm.value).then(res => {
         const username = registerForm.value.username
-        ElMessageBox.alert("<font color='red'>恭喜你，您的账号 " + username + " 注册成功！</font>", "系统提示", {
-          dangerouslyUseHTMLString: true,
+        ElMessageBox.alert(proxy.$t('page.注册成功提示', { username }), proxy.$t('page.系统提示'), {
           type: "success",
         }).then(() => {
           router.push("/login")

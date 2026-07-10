@@ -177,11 +177,11 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
-    deptName: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
-    orderNum: [{ required: true, message: "显示排序不能为空", trigger: "blur" }],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }],
-    phone: [{ pattern: /^1[3-9]\d{9}$/, message: "请输入正确的手机号码", trigger: "blur" }]
+    parentId: [{ required: true, message: proxy.$t("page.上级部门不能为空"), trigger: "blur" }],
+    deptName: [{ required: true, message: proxy.$t("page.部门名称不能为空"), trigger: "blur" }],
+    orderNum: [{ required: true, message: proxy.$t("page.显示排序不能为空"), trigger: "blur" }],
+    email: [{ type: "email", message: proxy.$t("page.请输入正确的邮箱地址"), trigger: ["blur", "change"] }],
+    phone: [{ pattern: /^1[3-9]\d{9}$/, message: proxy.$t("page.请输入正确的手机号码"), trigger: "blur" }]
   },
 })
 
@@ -240,7 +240,7 @@ function handleAdd(row) {
     form.value.parentId = row.deptId
   }
   open.value = true
-  title.value = "添加部门"
+  title.value = proxy.$t("page.添加部门")
 }
 
 /** 展开/折叠操作 */
@@ -261,7 +261,7 @@ function handleUpdate(row) {
   getDept(row.deptId).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改部门"
+    title.value = proxy.$t("page.修改部门")
   })
 }
 
@@ -272,7 +272,7 @@ function submitForm() {
       submitting.value = true
       if (form.value.deptId != undefined) {
         updateDept(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -280,7 +280,7 @@ function submitForm() {
         })
       } else {
         addDept(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -318,22 +318,22 @@ function handleSaveSort() {
   }
   collectChanged(deptList.value)
   if (changedDeptIds.length === 0) {
-   proxy.$modal.msgWarning("未检测到排序修改")
+   proxy.$modal.msgWarning(proxy.$t("page.未检测到排序修改"))
     return
   }
   updateDeptSort({ deptIds: changedDeptIds.join(","), orderNums: changedOrderNums.join(",") }).then(() => {
-   proxy.$modal.msgSuccess("排序保存成功")
+   proxy.$modal.msgSuccess(proxy.$t("page.排序保存成功"))
     recordOriginalOrders(deptList.value)
   })
 }
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  proxy.$modal.confirm('是否确认删除名称为"' + row.deptName + '"的数据项?').then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除名称为“”{0}“”的数据项?', [row.deptName])).then(function() {
     return delDept(row.deptId)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 

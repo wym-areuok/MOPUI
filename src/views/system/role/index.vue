@@ -148,7 +148,7 @@
             <el-form-item prop="roleKey">
                <template #label>
                   <span>
-                     <el-tooltip :content="$t('page.控制器中定义的权限字符，如：@PreAuthorize(`@ss.hasRole(\'admin\')`)')" placement="top">
+                     <el-tooltip :content="$t('page.角色权限字符说明')" placement="top">
                         <el-icon><question-filled /></el-icon>
                      </el-tooltip>
                      {{ $t('page.权限字符') }}
@@ -289,9 +289,9 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    roleName: [{ required: true, message: "角色名称不能为空", trigger: "blur" }],
-    roleKey: [{ required: true, message: "权限字符不能为空", trigger: "blur" }],
-    roleSort: [{ required: true, message: "角色顺序不能为空", trigger: "blur" }]
+    roleName: [{ required: true, message: proxy.$t("page.角色名称不能为空"), trigger: "blur" }],
+    roleKey: [{ required: true, message: proxy.$t("page.权限字符不能为空"), trigger: "blur" }],
+    roleSort: [{ required: true, message: proxy.$t("page.角色顺序不能为空"), trigger: "blur" }]
   },
 })
 
@@ -324,11 +324,11 @@ function resetQuery() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const roleIds = row.roleId || ids.value
-  proxy.$modal.confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除角色编号为“”{0}“”的数据项?', [roleIds])).then(function () {
     return delRole(roleIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
@@ -348,11 +348,11 @@ function handleSelectionChange(selection) {
 
 /** 角色状态修改 */
 function handleStatusChange(row) {
-  let text = row.status === "0" ? "启用" : "停用"
-  proxy.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗?').then(function () {
+  let text = row.status === "0" ? proxy.$t("page.启用") : proxy.$t("page.停用")
+  proxy.$modal.confirm(proxy.$t('page.确认要“”{0}“”“”{1}“”角色吗?', [text, row.roleName])).then(function () {
     return changeRoleStatus(row.roleId, row.status)
   }).then(() => {
-    proxy.$modal.msgSuccess(text + "成功")
+    proxy.$modal.msgSuccess(text + proxy.$t("page.成功"))
   }).catch(function () {
     row.status = row.status === "0" ? "1" : "0"
   })
@@ -423,7 +423,7 @@ function handleAdd() {
   reset()
   getMenuTreeselect()
   open.value = true
-  title.value = "添加角色"
+  title.value = proxy.$t("page.添加角色")
 }
 
 /** 修改角色 */
@@ -446,7 +446,7 @@ function handleUpdate(row) {
       })
     })
   })
-  title.value = "修改角色"
+  title.value = proxy.$t("page.修改角色")
 }
 
 /** 根据角色ID查询菜单树结构 */
@@ -516,7 +516,7 @@ function submitForm() {
       if (form.value.roleId != undefined) {
         form.value.menuIds = getMenuAllCheckedKeys()
         updateRole(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -525,7 +525,7 @@ function submitForm() {
       } else {
         form.value.menuIds = getMenuAllCheckedKeys()
         addRole(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -566,7 +566,7 @@ function handleDataScope(row) {
       })
     })
   })
-  title.value = "分配数据权限"
+  title.value = proxy.$t("page.分配数据权限")
 }
 
 /** 提交按钮（数据权限） */
@@ -575,7 +575,7 @@ function submitDataScope() {
     submitting.value = true
     form.value.deptIds = getDeptAllCheckedKeys()
     dataScope(form.value).then(() => {
-      proxy.$modal.msgSuccess("修改成功")
+      proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
       openDataScope.value = false
       getList()
     }).finally(() => {

@@ -95,14 +95,14 @@
                <a class="link-type" style="cursor:pointer" @click="handleView(scope.row)">{{ scope.row.jobName }}</a>
             </template>
          </el-table-column>
-         <el-table-column label="任务组名" align="center" prop="jobGroup">
+         <el-table-column :label="$t('page.任务组名')" align="center" prop="jobGroup">
             <template #default="scope">
                <dict-tag :options="sys_job_group" :value="scope.row.jobGroup" />
             </template>
          </el-table-column>
-         <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
-         <el-table-column label="cron执行表达式" align="center" prop="cronExpression" :show-overflow-tooltip="true" />
-         <el-table-column label="状态" align="center">
+         <el-table-column :label="$t('page.调用目标字符串')" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.cron执行表达式')" align="center" prop="cronExpression" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.状态')" align="center">
             <template #default="scope">
                <el-switch
                   v-model="scope.row.status"
@@ -112,18 +112,18 @@
                ></el-switch>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" width="200" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('page.操作')" align="center" width="200" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-tooltip content="修改" placement="top">
+               <el-tooltip :content="$t('page.修改')" placement="top">
                   <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['monitor:job:edit']"></el-button>
                </el-tooltip>
-               <el-tooltip content="删除" placement="top">
+               <el-tooltip :content="$t('page.删除')" placement="top">
                   <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['monitor:job:remove']"></el-button>
                </el-tooltip>
-               <el-tooltip content="执行一次" placement="top">
+               <el-tooltip :content="$t('page.执行一次')" placement="top">
                   <el-button link type="primary" icon="CaretRight" @click="handleRun(scope.row)" v-hasPermi="['monitor:job:changeStatus']"></el-button>
                </el-tooltip>
-               <el-tooltip content="调度日志" placement="top">
+               <el-tooltip :content="$t('menu.调度日志')" placement="top">
                   <el-button link type="primary" icon="Operation" @click="handleJobLog(scope.row)" v-hasPermi="['monitor:job:query']"></el-button>
                </el-tooltip>
             </template>
@@ -143,13 +143,13 @@
          <el-form ref="jobRef" :model="form" :rules="rules" label-width="120px">
             <el-row>
                <el-col :span="12">
-                  <el-form-item label="任务名称" prop="jobName">
-                     <el-input v-model="form.jobName" placeholder="请输入任务名称" />
+                  <el-form-item :label="$t('page.任务名称')" prop="jobName">
+                     <el-input v-model="form.jobName" :placeholder="$t('page.请输入任务名称')" />
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="任务分组" prop="jobGroup">
-                     <el-select v-model="form.jobGroup" placeholder="请选择">
+                  <el-form-item :label="$t('page.任务分组')" prop="jobGroup">
+                     <el-select v-model="form.jobGroup" :placeholder="$t('page.请选择')">
                         <el-option
                            v-for="dict in sys_job_group"
                            :key="dict.value"
@@ -163,12 +163,12 @@
                   <el-form-item prop="invokeTarget">
                      <template #label>
                         <span>
-                           调用方法
+                           {{ $t('page.调用方法') }}
                            <el-tooltip placement="top">
                               <template #content>
                                  <div>
-                                    Bean调用示例：ryTask.ryParams('ry')
-                                    <br />Class类调用示例：com.ruoyi.quartz.task.RyTask.ryParams('ry')
+                                    Bean调用示例：mopTask.mopParams('mop')
+                                    <br />Class类调用示例：com.mop.quartz.task.mopTask.mopParams('mop')
                                     <br />参数说明：支持字符串，布尔类型，长整型，浮点型，整型
                                  </div>
                               </template>
@@ -176,15 +176,15 @@
                            </el-tooltip>
                         </span>
                      </template>
-                     <el-input v-model="form.invokeTarget" placeholder="请输入调用目标字符串" />
+                     <el-input v-model="form.invokeTarget" :placeholder="$t('page.调用目标字符串')" />
                   </el-form-item>
                </el-col>
                <el-col :span="24">
-                  <el-form-item label="cron表达式" prop="cronExpression">
-                     <el-input v-model="form.cronExpression" placeholder="请输入cron执行表达式">
+                  <el-form-item :label="$t('page.cron执行表达式')" prop="cronExpression">
+                     <el-input v-model="form.cronExpression" :placeholder="$t('page.cron执行表达式')">
                         <template #append>
                            <el-button type="primary" @click="handleShowCron">
-                              生成表达式
+                              {{ $t('page.生成表达式') }}
                               <i class="el-icon-time el-icon--right"></i>
                            </el-button>
                         </template>
@@ -192,7 +192,7 @@
                   </el-form-item>
                </el-col>
                <el-col :span="24" v-if="form.jobId !== undefined">
-                  <el-form-item label="状态">
+                  <el-form-item :label="$t('page.状态')">
                      <el-radio-group v-model="form.status">
                         <el-radio
                            v-for="dict in sys_job_status"
@@ -203,19 +203,19 @@
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="执行策略" prop="misfirePolicy">
+                  <el-form-item :label="$t('page.执行策略')" prop="misfirePolicy">
                      <el-radio-group v-model="form.misfirePolicy">
-                        <el-radio-button value="1">立即执行</el-radio-button>
-                        <el-radio-button value="2">执行一次</el-radio-button>
-                        <el-radio-button value="3">放弃执行</el-radio-button>
+                        <el-radio-button value="1">{{ $t('page.立即执行') }}</el-radio-button>
+                        <el-radio-button value="2">{{ $t('page.执行一次') }}</el-radio-button>
+                        <el-radio-button value="3">{{ $t('page.放弃执行') }}</el-radio-button>
                      </el-radio-group>
                   </el-form-item>
                </el-col>
                <el-col :span="12">
-                  <el-form-item label="是否并发" prop="concurrent">
+                  <el-form-item :label="$t('page.是否并发')" prop="concurrent">
                      <el-radio-group v-model="form.concurrent">
-                        <el-radio-button value="0">允许</el-radio-button>
-                        <el-radio-button value="1">禁止</el-radio-button>
+                        <el-radio-button value="0">{{ $t('page.允许') }}</el-radio-button>
+                        <el-radio-button value="1">{{ $t('page.禁止') }}</el-radio-button>
                      </el-radio-group>
                   </el-form-item>
                </el-col>
@@ -223,13 +223,13 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">确 定</el-button>
-               <el-button @click="cancel">取 消</el-button>
+               <el-button type="primary" @click="submitForm">{{ $t('page.确 定') }}</el-button>
+               <el-button @click="cancel">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
       </el-dialog>
 
-     <el-dialog title="Cron表达式生成器" v-model="openCron" append-to-body destroy-on-close>
+     <el-dialog :title="$t('page.Cron表达式生成器')" v-model="openCron" append-to-body destroy-on-close>
        <crontab ref="crontabRef" @hide="openCron=false" @fill="crontabFill" :expression="expression"></crontab>
      </el-dialog>
 
@@ -270,9 +270,9 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    jobName: [{ required: true, message: "任务名称不能为空", trigger: "blur" }],
-    invokeTarget: [{ required: true, message: "调用目标字符串不能为空", trigger: "blur" }],
-    cronExpression: [{ required: true, message: "cron执行表达式不能为空", trigger: "change" }]
+    jobName: [{ required: true, message: proxy.$t("page.任务名称不能为空"), trigger: "blur" }],
+    invokeTarget: [{ required: true, message: proxy.$t("page.调用目标字符串不能为空"), trigger: "blur" }],
+    cronExpression: [{ required: true, message: proxy.$t("page.cron执行表达式不能为空"), trigger: "change" }]
   }
 })
 
@@ -330,11 +330,11 @@ function handleSelectionChange(selection) {
 
 // 任务状态修改
 function handleStatusChange(row) {
-  let text = row.status === "0" ? "启用" : "停用"
-  proxy.$modal.confirm('确认要"' + text + '""' + row.jobName + '"任务吗?').then(function () {
+  let text = row.status === "0" ? proxy.$t("page.启用") : proxy.$t("page.停用")
+  proxy.$modal.confirm(proxy.$t('page.确认要{0}“”{1}“”任务吗?', [text, row.jobName])).then(function () {
     return changeJobStatus(row.jobId, row.status)
   }).then(() => {
-    proxy.$modal.msgSuccess(text + "成功")
+    proxy.$modal.msgSuccess(text + proxy.$t("page.成功"))
   }).catch(function () {
     row.status = row.status === "0" ? "1" : "0"
   })
@@ -342,10 +342,10 @@ function handleStatusChange(row) {
 
 /* 立即执行一次 */
 function handleRun(row) {
-  proxy.$modal.confirm('确认要立即执行一次"' + row.jobName + '"任务吗?').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.确认要立即执行一次“”{0}“”任务吗?', [row.jobName])).then(function () {
     return runJob(row.jobId, row.jobGroup)
   }).then(() => {
-    proxy.$modal.msgSuccess("执行成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.执行成功"))
   }).catch(() => {})
 }
 
@@ -378,7 +378,7 @@ function handleJobLog(row) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加任务"
+  title.value = proxy.$t("page.添加任务")
 }
 
 /** 修改按钮操作 */
@@ -388,7 +388,7 @@ function handleUpdate(row) {
   getJob(jobId).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改任务"
+    title.value = proxy.$t("page.修改任务")
   })
 }
 
@@ -398,13 +398,13 @@ function submitForm() {
     if (valid) {
       if (form.value.jobId != undefined) {
         updateJob(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         })
       } else {
         addJob(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         })
@@ -416,11 +416,11 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const jobIds = row.jobId || ids.value
-  proxy.$modal.confirm('是否确认删除定时任务编号为"' + jobIds + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除定时任务编号为“”{0}“”的数据项?', [jobIds])).then(function () {
     return delJob(jobIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 

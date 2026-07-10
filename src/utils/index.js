@@ -1,4 +1,4 @@
-import { parseTime } from './ruoyi'
+import { parseTime } from './mop'
 
 /**
  * 表格时间格式化

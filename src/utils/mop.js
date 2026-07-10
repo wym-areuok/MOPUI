@@ -1,6 +1,6 @@
 /**
  * 通用js方法封装处理
- * Copyright (c) 2019 ruoyi
+ * Copyright (c) 2026 mop
  */
 
 // 日期格式化
@@ -111,8 +111,9 @@ export function selectDictLabels(datas, value, separator) {
 }
 
 // 字符串格式化(%s )
-export function sprintf(str) {
-  let flag = true, i = 1
+// 用法: sprintf("Hello %s, you have %s messages", "John", 5)
+export function sprintf(str, ...args) {
+  let flag = true, i = 0
   str = str.replace(/%s/g, function () {
     const arg = args[i++]
     if (typeof arg === 'undefined') {

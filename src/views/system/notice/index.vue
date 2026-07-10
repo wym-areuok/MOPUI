@@ -188,8 +188,8 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    noticeTitle: [{ required: true, message: "公告标题不能为空", trigger: "blur" }],
-    noticeType: [{ required: true, message: "公告类型不能为空", trigger: "change" }]
+    noticeTitle: [{ required: true, message: proxy.$t("page.公告标题不能为空"), trigger: "blur" }],
+    noticeType: [{ required: true, message: proxy.$t("page.公告类型不能为空"), trigger: "change" }]
   },
 })
 
@@ -247,7 +247,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加公告"
+  title.value = proxy.$t("page.添加公告")
 }
 
 /**修改按钮操作 */
@@ -257,7 +257,7 @@ function handleUpdate(row) {
   getNotice(noticeId).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改公告"
+    title.value = proxy.$t("page.修改公告")
   })
 }
 
@@ -267,13 +267,13 @@ function submitForm() {
     if (valid) {
       if (form.value.noticeId != undefined) {
         updateNotice(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         })
       } else {
         addNotice(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         })
@@ -295,11 +295,11 @@ function handleReadUsers(row) {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const noticeIds = row.noticeId || ids.value
-  proxy.$modal.confirm('是否确认删除公告编号为"' + noticeIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除公告编号为“”{0}“”的数据项？', [noticeIds])).then(function() {
     return delNotice(noticeIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 

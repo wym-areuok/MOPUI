@@ -211,8 +211,8 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    dictName: [{ required: true, message: "字典名称不能为空", trigger: "blur" }],
-    dictType: [{ required: true, message: "字典类型不能为空", trigger: "blur" }]
+    dictName: [{ required: true, message: proxy.$t("page.字典名称不能为空"), trigger: "blur" }],
+    dictType: [{ required: true, message: proxy.$t("page.字典类型不能为空"), trigger: "blur" }]
   },
 })
 
@@ -264,7 +264,7 @@ function resetQuery() {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加字典类型"
+  title.value = proxy.$t("page.添加字典类型")
 }
 
 /** 多选框选中数据 */
@@ -292,7 +292,7 @@ function handleUpdate(row) {
   getType(dictId).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改字典类型"
+    title.value = proxy.$t("page.修改字典类型")
   })
 }
 
@@ -302,13 +302,13 @@ function submitForm() {
     if (valid) {
       if (form.value.dictId != undefined) {
         updateType(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         })
       } else {
         addType(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         })
@@ -320,11 +320,11 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const dictIds = row.dictId || ids.value
-  proxy.$modal.confirm('是否确认删除字典编号为"' + dictIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除字典编号为“”{0}“”的数据项？', [dictIds])).then(function() {
     return delType(dictIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
@@ -338,7 +338,7 @@ function handleExport() {
 /** 刷新缓存按钮操作 */
 function handleRefreshCache() {
   refreshCache().then(() => {
-    proxy.$modal.msgSuccess("刷新成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.刷新成功"))
     useDictStore().cleanDict()
   })
 }

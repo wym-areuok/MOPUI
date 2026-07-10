@@ -116,26 +116,26 @@
                <dict-tag :options="sys_oper_type" :value="scope.row.businessType" />
             </template>
          </el-table-column>
-         <el-table-column label="操作人员" align="center" width="110" prop="operName" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
-         <el-table-column label="操作地址" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
-         <el-table-column label="操作状态" align="center" prop="status">
+         <el-table-column :label="$t('page.操作人员')" align="center" width="110" prop="operName" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']" />
+         <el-table-column :label="$t('page.操作地址')" align="center" prop="operIp" width="130" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.操作状态')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="操作日期" align="center" prop="operTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
+         <el-table-column :label="$t('page.操作日期')" align="center" prop="operTime" width="180" sortable="custom" :sort-orders="['descending', 'ascending']">
             <template #default="scope">
                <span>{{ parseTime(scope.row.operTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="消耗时间" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
+         <el-table-column :label="$t('page.消耗时间')" align="center" prop="costTime" width="110" :show-overflow-tooltip="true" sortable="custom" :sort-orders="['descending', 'ascending']">
             <template #default="scope">
-               <span>{{ scope.row.costTime }}毫秒</span>
+               <span>{{ scope.row.costTime }}{{ $t('page.毫秒') }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('page.操作')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="View" @click="handleDetail(scope.row, scope.index)" v-hasPermi="['monitor:operlog:query']">详细</el-button>
+               <el-button link type="primary" icon="View" @click="handleDetail(scope.row, scope.index)" v-hasPermi="['monitor:operlog:query']">{{ $t('page.详细') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -233,21 +233,21 @@ function handleDetail(row) {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const operIds = row.operId || ids.value
-  proxy.$modal.confirm('是否确认删除日志编号为"' + operIds + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除日志编号为“”{0}“”的数据项?', [operIds])).then(function () {
     return delOperlog(operIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
 /** 清空按钮操作 */
 function handleClean() {
-  proxy.$modal.confirm("是否确认清空所有操作日志数据项?").then(function () {
+  proxy.$modal.confirm(proxy.$t("page.是否确认清空所有操作日志数据项?")).then(function () {
     return cleanOperlog()
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("清空成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.清空成功"))
   }).catch(() => {})
 }
 

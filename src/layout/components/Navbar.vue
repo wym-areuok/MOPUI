@@ -13,11 +13,11 @@
         <header-search id="header-search" class="right-menu-item" />
 
         <el-tooltip :content="$t('navbar.sourceCode')" effect="dark" placement="bottom">
-          <ruo-yi-git id="ruoyi-git" class="right-menu-item hover-effect" />
+          <mop-git id="mop-git" class="right-menu-item hover-effect" />
         </el-tooltip>
 
         <el-tooltip :content="$t('navbar.document')" effect="dark" placement="bottom">
-          <ruo-yi-doc id="ruoyi-doc" class="right-menu-item hover-effect" />
+          <mop-doc id="mop-doc" class="right-menu-item hover-effect" />
         </el-tooltip>
 
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
@@ -80,8 +80,8 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import HeaderSearch from '@/components/HeaderSearch'
-import RuoYiGit from '@/components/RuoYi/Git'
-import RuoYiDoc from '@/components/RuoYi/Doc'
+import MopGit from '@/components/Mop/Git'
+import MopDoc from '@/components/Mop/Doc'
 import useAppStore from '@/store/modules/app'
 import useUserStore from '@/store/modules/user'
 import useLockStore from '@/store/modules/lock'

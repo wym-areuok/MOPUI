@@ -34,21 +34,21 @@
                <span>{{ (pageNum - 1) * pageSize + scope.$index + 1 }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="会话编号" align="center" prop="tokenId" :show-overflow-tooltip="true" />
-         <el-table-column label="登录名称" align="center" prop="userName" :show-overflow-tooltip="true" />
-         <el-table-column label="所属部门" align="center" prop="deptName" :show-overflow-tooltip="true" />
-         <el-table-column label="主机" align="center" prop="ipaddr" :show-overflow-tooltip="true" />
-         <el-table-column label="登录地点" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
-         <el-table-column label="操作系统" align="center" prop="os" :show-overflow-tooltip="true" />
-         <el-table-column label="浏览器" align="center" prop="browser" :show-overflow-tooltip="true" />
-         <el-table-column label="登录时间" align="center" prop="loginTime" width="180">
+         <el-table-column :label="$t('page.会话编号')" align="center" prop="tokenId" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.登录名称')" align="center" prop="userName" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.所属部门')" align="center" prop="deptName" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.主机')" align="center" prop="ipaddr" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.登录地点')" align="center" prop="loginLocation" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.操作系统')" align="center" prop="os" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.浏览器')" align="center" prop="browser" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.登录时间')" align="center" prop="loginTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.loginTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('page.操作')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="Delete" @click="handleForceLogout(scope.row)" v-hasPermi="['monitor:online:forceLogout']">强退</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleForceLogout(scope.row)" v-hasPermi="['monitor:online:forceLogout']">{{ $t('page.强退') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -97,11 +97,11 @@ function resetQuery() {
 
 /** 强退按钮操作 */
 function handleForceLogout(row) {
-  proxy.$modal.confirm('是否确认强退名称为"' + row.userName + '"的用户?').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认强退名称为“”{0}“”的用户?', [row.userName])).then(function () {
     return forceLogout(row.tokenId)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 

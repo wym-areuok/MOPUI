@@ -191,9 +191,9 @@ const data = reactive({
     configType: undefined
   },
   rules: {
-    configName: [{ required: true, message: "参数名称不能为空", trigger: "blur" }],
-    configKey: [{ required: true, message: "参数键名不能为空", trigger: "blur" }],
-    configValue: [{ required: true, message: "参数键值不能为空", trigger: "blur" }]
+    configName: [{ required: true, message: proxy.$t("page.参数名称不能为空"), trigger: "blur" }],
+    configKey: [{ required: true, message: proxy.$t("page.参数键名不能为空"), trigger: "blur" }],
+    configValue: [{ required: true, message: proxy.$t("page.参数键值不能为空"), trigger: "blur" }]
   }
 })
 
@@ -253,7 +253,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加参数"
+  title.value = proxy.$t("page.添加参数")
 }
 
 /** 修改按钮操作 */
@@ -263,7 +263,7 @@ function handleUpdate(row) {
   getConfig(configId).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改参数"
+    title.value = proxy.$t("page.修改参数")
   })
 }
 
@@ -273,13 +273,13 @@ function submitForm() {
     if (valid) {
       if (form.value.configId != undefined) {
         updateConfig(form.value).then(response => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         })
       } else {
         addConfig(form.value).then(response => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         })
@@ -291,11 +291,11 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const configIds = row.configId || ids.value
-  proxy.$modal.confirm('是否确认删除参数编号为"' + configIds + '"的数据项？').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除参数编号为“”{0}“”的数据项？', [configIds])).then(function () {
     return delConfig(configIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
@@ -309,7 +309,7 @@ function handleExport() {
 /** 刷新缓存按钮操作 */
 function handleRefreshCache() {
   refreshCache().then(() => {
-    proxy.$modal.msgSuccess("刷新缓存成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.刷新缓存成功"))
   })
 }
 

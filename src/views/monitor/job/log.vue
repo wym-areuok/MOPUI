@@ -105,21 +105,21 @@
                <dict-tag :options="sys_job_group" :value="scope.row.jobGroup" />
             </template>
          </el-table-column>
-         <el-table-column label="调用目标字符串" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
-         <el-table-column label="日志信息" align="center" prop="jobMessage" :show-overflow-tooltip="true" />
-         <el-table-column label="执行状态" align="center" prop="status">
+         <el-table-column :label="$t('page.调用目标字符串')" align="center" prop="invokeTarget" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.日志信息')" align="center" prop="jobMessage" :show-overflow-tooltip="true" />
+         <el-table-column :label="$t('page.执行状态')" align="center" prop="status">
             <template #default="scope">
                <dict-tag :options="sys_common_status" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="执行时间" align="center" prop="createTime" width="180">
+         <el-table-column :label="$t('page.执行时间')" align="center" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('page.操作')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['monitor:job:query']">详细</el-button>
+               <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['monitor:job:query']">{{ $t('page.详细') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -211,21 +211,21 @@ function handleView(row) {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  proxy.$modal.confirm('是否确认删除调度日志编号为"' + ids.value + '"的数据项?').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除调度日志编号为“”{0}“”的数据项?', [ids.value])).then(function () {
     return delJobLog(ids.value)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
 /** 清空按钮操作 */
 function handleClean() {
-  proxy.$modal.confirm("是否确认清空所有调度日志数据项?").then(function () {
+  proxy.$modal.confirm(proxy.$t("page.是否确认清空所有调度日志数据项?")).then(function () {
     return cleanJobLog()
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("清空成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.清空成功"))
   }).catch(() => {})
 }
 

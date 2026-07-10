@@ -171,9 +171,9 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    postName: [{ required: true, message: "岗位名称不能为空", trigger: "blur" }],
-    postCode: [{ required: true, message: "岗位编码不能为空", trigger: "blur" }],
-    postSort: [{ required: true, message: "岗位顺序不能为空", trigger: "blur" }],
+    postName: [{ required: true, message: proxy.$t("page.岗位名称不能为空"), trigger: "blur" }],
+    postCode: [{ required: true, message: proxy.$t("page.岗位编码不能为空"), trigger: "blur" }],
+    postSort: [{ required: true, message: proxy.$t("page.岗位顺序不能为空"), trigger: "blur" }],
   }
 })
 
@@ -232,7 +232,7 @@ function handleSelectionChange(selection) {
 function handleAdd() {
   reset()
   open.value = true
-  title.value = "添加岗位"
+  title.value = proxy.$t("page.添加岗位")
 }
 
 /** 修改按钮操作 */
@@ -242,7 +242,7 @@ function handleUpdate(row) {
   getPost(postId).then(response => {
     form.value = response.data
     open.value = true
-    title.value = "修改岗位"
+    title.value = proxy.$t("page.修改岗位")
   })
 }
 
@@ -253,7 +253,7 @@ function submitForm() {
       submitting.value = true
       if (form.value.postId != undefined) {
         updatePost(form.value).then(() => {
-          proxy.$modal.msgSuccess("修改成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -261,7 +261,7 @@ function submitForm() {
         })
       } else {
         addPost(form.value).then(() => {
-          proxy.$modal.msgSuccess("新增成功")
+          proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
         }).finally(() => {
@@ -275,11 +275,11 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const postIds = row.postId || ids.value
-  proxy.$modal.confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？').then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除岗位编号为“”{0}“”的数据项？', [postIds])).then(function() {
     return delPost(postIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
