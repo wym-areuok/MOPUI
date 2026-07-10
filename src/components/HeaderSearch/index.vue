@@ -80,6 +80,7 @@
 import Fuse from 'fuse.js'
 import { getNormalPath } from '@/utils/mop'
 import { isHttp } from '@/utils/validate'
+import { sanitizeHtml } from '@/utils/html-sanitize'
 import useSettingsStore from '@/store/modules/settings'
 import usePermissionStore from '@/store/modules/permission'
 
@@ -121,7 +122,7 @@ function change(val) {
   if (isHttp(p)) {
     // http(s):// 路径新窗口打开
     const pindex = p.indexOf("http")
-    window.open(p.substr(pindex, p.length), "_blank")
+    window.open(p.substr(pindex, p.length), "_blank", "noopener,noreferrer")
   } else {
     if (query) {
       router.push({ path: p, query: JSON.parse(query) })
@@ -226,10 +227,10 @@ function selectActiveResult() {
 
 function highlightText(text) {
   if (!text) return ''
-  if (!search.value) return text
+  if (!search.value) return sanitizeHtml(text)
   const keyword = escapeRegExp(search.value)
   const reg = new RegExp(`(${keyword})`, 'gi')
-  return text.replace(reg, '<span class="highlight">$1</span>')
+  return sanitizeHtml(text.replace(reg, '<span class="highlight">$1</span>'))
 }
 
 function escapeRegExp(str) {

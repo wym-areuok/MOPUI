@@ -13,7 +13,7 @@
 import cache from '@/plugins/cache'
 
 // 密码限制类型
-const pwdChrType = ref(cache.session.get('pwrChrtype') || '0')
+const pwdChrType = ref(cache.session.get('pwdChrtype') || '0')
 
 // 各类型对应的正则、错误提示
 const PWD_RULES = {

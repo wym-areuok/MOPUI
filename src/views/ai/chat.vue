@@ -204,6 +204,7 @@ import {
   Warning, MagicStick, Cpu, DocumentChecked
 } from '@element-plus/icons-vue'
 import { getToken } from '@/utils/auth'
+import { sanitizeHtml } from '@/utils/html-sanitize'
 import {
   listConversations,
   createConversation,
@@ -508,7 +509,8 @@ function renderMarkdown(text) {
   html = html.replace(/^---+$/gm, '<hr>')
   // 换行
   html = html.replace(/\n/g, '<br>')
-  return html
+  // 最终安全过滤：通过 DOMPurify 白名单确保无 XSS 注入
+  return sanitizeHtml(html)
 }
 
 // ──────────────────────────────────────────

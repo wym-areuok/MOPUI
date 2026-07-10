@@ -54,6 +54,7 @@
 
 <script setup>
 import { getNotice } from '@/api/system/notice'
+import { sanitizeHtml } from '@/utils/html-sanitize'
 
 const visible = ref(false)
 const loading = ref(false)
@@ -111,24 +112,6 @@ function handleClose() {
   visible.value = false
   detail.value = null
   loading.value = false
-}
-
-/**
- * 简单的 HTML XSS 过滤
- * 移除 script/iframe/object/embed 标签、on* 事件属性、javascript: 伪协议
- */
-function sanitizeHtml(html) {
-  // 移除危险标签及其内容
-  html = html.replace(/<script[\s\S]*?<\/script>/gi, '')
-  html = html.replace(/<iframe[\s\S]*?<\/iframe>/gi, '')
-  html = html.replace(/<object[\s\S]*?<\/object>/gi, '')
-  html = html.replace(/<embed[\s\S]*?>/gi, '')
-  // 移除事件处理器属性
-  html = html.replace(/\son\w+\s*=\s*["'][^"']*["']/gi, '')
-  html = html.replace(/\son\w+\s*=\s*[^\s>]*/gi, '')
-  // 移除 javascript: 伪协议
-  html = html.replace(/javascript\s*:/gi, '')
-  return html
 }
 
 defineExpose({

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import i18n from '@/lang'
 import { ElNotification , ElMessageBox, ElMessage, ElLoading } from 'element-plus'
 import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
@@ -24,7 +25,7 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   // 是否需要设置 token
   const isToken = (config.headers || {}).isToken === false
-  // 是否需要防止数据重复提交
+  // 是否需要防止数据重复提交（前端辅助机制，后端 @RepeatSubmit 拦截器为真正防护）
   const isRepeatSubmit = (config.headers || {}).repeatSubmit === false
   // 间隔时间(ms)，小于此时间视为重复提交
   const interval = (config.headers || {}).interval || 1000
@@ -47,22 +48,22 @@ service.interceptors.request.use(config => {
     const requestSize = Object.keys(JSON.stringify(requestObj)).length // 请求数据大小
     const limitSize = 5 * 1024 * 1024 // 限制存放数据5M
     if (requestSize >= limitSize) {
-      console.warn(`[${config.url}]: ` + '请求数据大小超出允许的5M限制，无法进行防重复提交验证。')
+      console.warn(`[${config.url}]: ` + i18n.global.t('request.sizeLimitExceeded'))
       return config
     }
-    const sessionObj = cache.session.getJSON('sessionObj')
+    const cacheKey = 'repeatSubmit_' + config.url
+    const sessionObj = cache.session.getJSON(cacheKey)
     if (sessionObj === undefined || sessionObj === null || sessionObj === '') {
-      cache.session.setJSON('sessionObj', requestObj)
+      cache.session.setJSON(cacheKey, requestObj)
     } else {
-      const s_url = sessionObj.url                // 请求地址
       const s_data = sessionObj.data              // 请求数据
       const s_time = sessionObj.time              // 请求时间
-      if (s_data === requestObj.data && requestObj.time - s_time < interval && s_url === requestObj.url) {
-        const message = '数据正在处理，请勿重复提交'
-        console.warn(`[${s_url}]: ` + message)
+      if (s_data === requestObj.data && requestObj.time - s_time < interval) {
+        const message = i18n.global.t('request.repeatSubmit')
+        console.warn(`[${config.url}]: ` + message)
         return Promise.reject(new Error(message))
       } else {
-        cache.session.setJSON('sessionObj', requestObj)
+        cache.session.setJSON(cacheKey, requestObj)
       }
     }
   }
@@ -85,7 +86,15 @@ service.interceptors.response.use(res => {
     if (code === 401) {
       if (!isRelogin.show) {
         isRelogin.show = true
-        ElMessageBox.confirm('登录状态已过期，您可以继续留在该页面，或者重新登录', '系统提示', { confirmButtonText: '重新登录', cancelButtonText: '取消', type: 'warning' }).then(() => {
+        ElMessageBox.confirm(
+          i18n.global.t('request.sessionExpired'),
+          i18n.global.t('page.系统提示'),
+          {
+            confirmButtonText: i18n.global.t('request.relogin'),
+            cancelButtonText: i18n.global.t('common.cancel'),
+            type: 'warning'
+          }
+        ).then(() => {
           isRelogin.show = false
           useUserStore().logOut().then(() => {
             location.href = '/index'
@@ -94,7 +103,7 @@ service.interceptors.response.use(res => {
         isRelogin.show = false
       })
       }
-      return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+      return Promise.reject(new Error(i18n.global.t('request.invalidSession')))
     } else if (code === 500) {
       ElMessage({ message: msg, type: 'error' })
       return Promise.reject(new Error(msg))
@@ -103,20 +112,22 @@ service.interceptors.response.use(res => {
       return Promise.reject(new Error(msg))
     } else if (code !== 200) {
       ElNotification.error({ title: msg })
-      return Promise.reject('error')
+      return Promise.reject(new Error(msg))
     } else {
       return  Promise.resolve(res.data)
     }
   },
   error => {
-    console.error('[Response Error]', error)
+    if (import.meta.env.DEV) {
+      console.error('[Response Error]', error)
+    }
     let { message } = error
     if (message == "Network Error") {
-      message = "后端接口连接异常"
+      message = i18n.global.t('request.networkError')
     } else if (message.includes("timeout")) {
-      message = "系统接口请求超时"
+      message = i18n.global.t('request.timeout')
     } else if (message.includes("Request failed with status code")) {
-      message = "系统接口" + message.slice(-3) + "异常"
+      message = i18n.global.t('request.apiError')
     }
     ElMessage({ message: message, type: 'error', duration: 5 * 1000 })
     return Promise.reject(error)
@@ -125,7 +136,7 @@ service.interceptors.response.use(res => {
 
 // 通用下载方法
 export function download(url, params, filename, config) {
-  downloadLoadingInstance = ElLoading.service({ text: "正在下载数据，请稍候", background: "rgba(0, 0, 0, 0.7)", })
+  downloadLoadingInstance = ElLoading.service({ text: i18n.global.t('common.downloading'), background: "rgba(0, 0, 0, 0.7)", })
   return service.post(url, params, {
     transformRequest: [(params) => { return tansParams(params) }],
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -145,7 +156,7 @@ export function download(url, params, filename, config) {
     downloadLoadingInstance.close()
   }).catch((r) => {
     console.error(r)
-    ElMessage.error('下载文件出现错误，请联系管理员！')
+    ElMessage.error(i18n.global.t('common.downloadError'))
     downloadLoadingInstance.close()
   })
 }

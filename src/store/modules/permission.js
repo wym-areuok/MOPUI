@@ -32,16 +32,15 @@ const usePermissionStore = defineStore(
       setSidebarRouters(routes) {
         this.sidebarRouters = routes
       },
-      generateRoutes(roles) {
+      generateRoutes() {
         return new Promise((resolve, reject) => {
           // 向后端请求路由数据
           getRouters().then(res => {
             const sdata = structuredClone(res.data)
             const rdata = structuredClone(res.data)
-            const defaultData = structuredClone(res.data)
             const sidebarRoutes = filterAsyncRouter(sdata)
             const rewriteRoutes = filterAsyncRouter(rdata, false, true)
-            const defaultRoutes = filterAsyncRouter(defaultData)
+            const defaultRoutes = filterAsyncRouter(structuredClone(res.data), false, false)
             const asyncRoutes = filterDynamicRoutes(dynamicRoutes)
             asyncRoutes.forEach(route => { router.addRoute(route) })
             this.setRoutes(rewriteRoutes)
@@ -116,14 +115,8 @@ export function filterDynamicRoutes(routes) {
 }
 
 export const loadView = (view) => {
-  let res
-  for (const path in modules) {
-    const dir = path.split('views/')[1].split('.vue')[0]
-    if (dir === view) {
-      res = () => modules[path]()
-    }
-  }
-  return res
+  const key = Object.keys(modules).find(k => k.endsWith(`views/${view}.vue`))
+  return key ? () => modules[key]() : null
 }
 
 export default usePermissionStore

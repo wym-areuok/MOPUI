@@ -47,7 +47,7 @@ export function delType(dictId) {
 export function refreshCache() {
   return request({
     url: '/system/dict/type/refreshCache',
-    method: 'delete'
+    method: 'post'
   })
 }
 

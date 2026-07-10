@@ -55,6 +55,6 @@ export function delConfig(configId) {
 export function refreshCache() {
   return request({
     url: '/system/config/refreshCache',
-    method: 'delete'
+    method: 'post'
   })
 }

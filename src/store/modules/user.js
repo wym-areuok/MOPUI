@@ -27,7 +27,7 @@ const useUserStore = defineStore(
         return login(username, password, code, uuid).then(res => {
           setToken(res.token)
           this.token = res.token
-          useLockStore().unlockScreen()
+          useLockStore().isLock && useLockStore().unlockScreen()
         })
       },
       // 获取用户信息（纯数据操作，不处理 UI 弹窗）
@@ -49,13 +49,19 @@ const useUserStore = defineStore(
           this.name = user.userName
           this.nickName = user.nickName
           this.avatar = avatar
-          cache.session.set('pwrChrtype', res.pwdChrtype)
+          cache.session.set('pwdChrtype', res.pwdChrtype)
           return res
         })
       },
       // 退出系统
       logOut() {
         return logout(this.token).then(() => {
+          this.token = ''
+          this.roles = []
+          this.permissions = []
+          removeToken()
+        }).catch(() => {
+          // 即使后端登出失败，前端也要清空状态
           this.token = ''
           this.roles = []
           this.permissions = []

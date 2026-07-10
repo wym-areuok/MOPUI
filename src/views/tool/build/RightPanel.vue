@@ -5,7 +5,7 @@
       <el-tab-pane label="表单属性" name="form" />
     </el-tabs>
     <div class="field-box">
-      <a class="document-link" target="_blank" :href="documentLink" title="查看组件文档">
+      <a class="document-link" target="_blank" :href="documentLink" title="查看组件文档" rel="noopener noreferrer">
         <el-icon>
           <Link />
         </el-icon>
