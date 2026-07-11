@@ -196,7 +196,7 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ref, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {
@@ -214,6 +214,38 @@ import {
 } from '@/api/ai/chat'
 
 const { t } = useI18n()
+
+// ──────────────────────────────────────────
+// localStorage 持久化 key
+// ──────────────────────────────────────────
+const STORAGE_KEY = 'mop_ai_chat_state'
+
+function saveState() {
+  try {
+    const state = {
+      conversations: conversations.value,
+      currentConvId: currentConvId.value
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+  } catch { /* 存储空间不足时静默忽略 */ }
+}
+
+function restoreState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (!raw) return false
+    const state = JSON.parse(raw)
+    if (state.conversations && Array.isArray(state.conversations)) {
+      conversations.value = state.conversations
+    }
+    if (state.currentConvId) {
+      currentConvId.value = state.currentConvId
+    }
+    return state.conversations && state.conversations.length > 0
+  } catch {
+    return false
+  }
+}
 
 // ──────────────────────────────────────────
 // 响应式状态
@@ -243,8 +275,26 @@ const renameInputRef   = ref(null)
 // ──────────────────────────────────────────
 // 生命周期
 // ──────────────────────────────────────────
-onMounted(() => loadConvList(true))
+onMounted(async () => {
+  // 先从 localStorage 恢复上次的会话列表和选中状态，避免页面刷新后空白
+  const restored = restoreState()
+  if (restored) {
+    // 已有本地缓存：直接显示，有选中会话则加载消息
+    if (currentConvId.value && conversations.value.length > 0) {
+      const exists = conversations.value.some(c => c.id === currentConvId.value)
+      if (!exists) {
+        currentConvId.value = conversations.value[0].id
+      }
+      await selectConversation(currentConvId.value)
+    }
+  }
+  // 再从 API 获取最新数据（覆盖本地缓存）
+  await loadConvList(true)
+})
 onBeforeUnmount(() => abortStream())
+
+// 监听 currentConvId 变化，自动持久化
+watch(currentConvId, () => saveState())
 
 // ──────────────────────────────────────────
 // 会话管理
@@ -255,6 +305,7 @@ async function loadConvList(autoSelect = false) {
     const res = await listConversations()
     if (res.code === 200) {
       conversations.value = res.data || []
+      saveState()  // 持久化到 localStorage
       if (autoSelect && conversations.value.length > 0 && !currentConvId.value) {
         await selectConversation(conversations.value[0].id)
       }

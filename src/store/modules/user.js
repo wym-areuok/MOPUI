@@ -55,7 +55,7 @@ const useUserStore = defineStore(
       },
       // 退出系统
       logOut() {
-        return logout(this.token).then(() => {
+        return logout().then(() => {
           this.token = ''
           this.roles = []
           this.permissions = []
