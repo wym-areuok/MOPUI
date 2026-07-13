@@ -18,7 +18,7 @@ const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: import.meta.env.VITE_APP_BASE_API,
   // 超时
-  timeout: 10000
+  timeout: 30000
 })
 
 // request拦截器
@@ -77,8 +77,10 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(res => {
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200
-    // 获取错误信息
-    const msg = errorCode[code] || res.data.msg || errorCode['default']
+    // 获取错误信息：优先从 errorCode 映射查 i18n key，其次用后端返回的 msg，最后用默认错误
+    const msg = (errorCode[code] ? i18n.global.t(errorCode[code]) : null)
+      || res.data.msg
+      || i18n.global.t(errorCode['default'])
     // 二进制数据则直接返回
     if (res.request.responseType ===  'blob' || res.request.responseType ===  'arraybuffer') {
       return res.data
@@ -150,7 +152,9 @@ export function download(url, params, filename, config) {
     } else {
       const resText = await data.text()
       const rspObj = JSON.parse(resText)
-      const errMsg = errorCode[rspObj.code] || rspObj.msg || errorCode['default']
+      const errMsg = (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
+        || rspObj.msg
+        || i18n.global.t(errorCode['default'])
       ElMessage.error(errMsg)
     }
     downloadLoadingInstance.close()

@@ -204,6 +204,11 @@ export default {
     '显示顺序': 'Display Order',
     '菜单权限': 'Menu Permission',
     '数据权限': 'Data Permission',
+    '全部数据权限': 'All Data',
+    '自定数据权限': 'Custom Data',
+    '本部门数据权限': 'Department Data',
+    '本部门及以下数据权限': 'Department & Subordinate',
+    '仅本人数据权限': 'Personal Data Only',
     '请输入角色名称': 'Please Enter Role Name',
     '请输入权限字符': 'Please Enter Permission Key',
     '分配用户': 'Assign Users',
@@ -621,6 +626,18 @@ export default {
     '是否确认删除用户编号为“”{0}“”的数据项？': 'Confirm to delete user ID "{0}"?',
     '修改成功，新密码是：{0}': 'Updated successfully, new password: {0}',
     '请输入「{0}」的新密码': 'Please enter new password for {0}',
+    // Code Generation
+    '同步成功': 'Synchronization Successful',
+    '复制成功': 'Copy Successful',
+    '确认要强制同步""{0}""表结构吗？': 'Confirm to force sync table "{0}" structure?',
+    '是否确认删除表编号为""{0}""的数据项？': 'Confirm to delete table ID "{0}"?',
+    '请选择要生成的数据': 'Please select data to generate',
+    '成功生成到自定义路径：{0}': 'Successfully generated to custom path: {0}',
+    '修改{0}生成配置': 'Edit [{0}] Generation Config',
+    // Role Auth User
+    '取消授权成功': 'Revocation Successful',
+    '确认要取消该用户""{0}""角色吗？': 'Confirm to revoke role from user "{0}"?',
+    '是否取消选中用户授权数据项?': 'Confirm to revoke selected user authorizations?',
   },
   // Request interceptor (request.js)
   request: {
@@ -632,6 +649,11 @@ export default {
     networkError: 'Backend connection error',
     timeout: 'Request timeout',
     apiError: 'API error',
+    // HTTP error code mappings
+    error401: 'Authentication failed, unable to access system resources',
+    error403: 'No permission for this operation',
+    error404: 'The requested resource does not exist',
+    errorDefault: 'Unknown system error, please contact administrator',
   },
   // Route guard (permission.js)
   permission: {

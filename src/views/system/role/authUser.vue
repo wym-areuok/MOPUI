@@ -68,12 +68,12 @@
                <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
             </template>
          </el-table-column>
-         <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+         <el-table-column :label="$t('page.创建时间')" align="center" prop="createTime" width="180">
             <template #default="scope">
                <span>{{ parseTime(scope.row.createTime) }}</span>
             </template>
          </el-table-column>
-         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+         <el-table-column :label="$t('page.操作')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
                <el-button link type="primary" icon="CircleClose" @click="cancelAuthUser(scope.row)" v-hasPermi="['system:role:remove']">取消授权</el-button>
             </template>
@@ -156,11 +156,11 @@ function openSelectUser() {
 
 /** 取消授权按钮操作 */
 function cancelAuthUser(row) {
-  proxy.$modal.confirm('确认要取消该用户"' + row.userName + '"角色吗？').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.确认要取消该用户""{0}""角色吗？', [row.userName])).then(function () {
     return authUserCancel({ userId: row.userId, roleId: queryParams.roleId })
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("取消授权成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.取消授权成功"))
   }).catch(() => {})
 }
 
@@ -168,11 +168,11 @@ function cancelAuthUser(row) {
 function cancelAuthUserAll() {
   const roleId = queryParams.roleId
   const uIds = userIds.value.join(",")
-  proxy.$modal.confirm("是否取消选中用户授权数据项?").then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否取消选中用户授权数据项?')).then(function () {
     return authUserCancelAll({ roleId: roleId, userIds: uIds })
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("取消授权成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.取消授权成功"))
   }).catch(() => {})
 }
 

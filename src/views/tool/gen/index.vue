@@ -216,12 +216,12 @@ function handleQuery() {
 function handleGenTable(row) {
   const tbNames = row.tableName || tableNames.value
   if (tbNames == "") {
-    proxy.$modal.msgError("请选择要生成的数据")
+    proxy.$modal.msgError(proxy.$t("page.请选择要生成的数据"))
     return
   }
   if (row.genType === "1") {
     genCode(row.tableName).then(response => {
-      proxy.$modal.msgSuccess("成功生成到自定义路径：" + row.genPath)
+      proxy.$modal.msgSuccess(proxy.$t("page.成功生成到自定义路径：{0}", [row.genPath]))
     })
   } else {
     const zipName = Array.isArray(tbNames) ? "mop.zip" : tbNames + ".zip"
@@ -232,10 +232,10 @@ function handleGenTable(row) {
 /** 同步数据库操作 */
 function handleSynchDb(row) {
   const tableName = row.tableName
-  proxy.$modal.confirm('确认要强制同步"' + tableName + '"表结构吗？').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.确认要强制同步""{0}""表结构吗？', [tableName])).then(function () {
     return synchDb(tableName)
   }).then(() => {
-    proxy.$modal.msgSuccess("同步成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.同步成功"))
   }).catch(() => {})
 }
 
@@ -268,7 +268,7 @@ function handlePreview(row) {
 
 /** 复制代码成功 */
 function copyTextSuccess() {
-  proxy.$modal.msgSuccess("复制成功")
+  proxy.$modal.msgSuccess(proxy.$t("page.复制成功"))
 }
 
 // 多选框选中数据
@@ -291,17 +291,17 @@ function handleEditTable(row) {
   const tableId = row.tableId || ids.value[0]
   const tableName = row.tableName || tableNames.value[0]
   const params = { pageNum: queryParams.value.pageNum }
-  proxy.$tab.openPage("修改[" + tableName + "]生成配置", '/tool/gen-edit/index/' + tableId, params)
+  proxy.$tab.openPage(proxy.$t("page.修改{0}生成配置", [tableName]), '/tool/gen-edit/index/' + tableId, params)
 }
 
 /** 删除按钮操作 */
 function handleDelete(row) {
   const tableIds = row.tableId || ids.value
-  proxy.$modal.confirm('是否确认删除表编号为"' + tableIds + '"的数据项？').then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除表编号为""{0}""的数据项？', [tableIds])).then(function () {
     return delTable(tableIds)
   }).then(() => {
     getList()
-    proxy.$modal.msgSuccess("删除成功")
+    proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))
   }).catch(() => {})
 }
 
