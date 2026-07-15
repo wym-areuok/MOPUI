@@ -3,7 +3,7 @@ import i18n from '@/lang'
 import { ElNotification , ElMessageBox, ElMessage, ElLoading } from 'element-plus'
 import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
-import { tansParams, blobValidate } from '@/utils/mop'
+import { tansParams, blobValidate, resolveErrorMsg } from '@/utils/mop'
 import cache from '@/plugins/cache'
 import { saveAs } from 'file-saver'
 import useUserStore from '@/store/modules/user'
@@ -45,7 +45,8 @@ service.interceptors.request.use(config => {
       data: typeof config.data === 'object' ? JSON.stringify(config.data) : config.data,
       time: new Date().getTime()
     }
-    const requestSize = Object.keys(JSON.stringify(requestObj)).length // 请求数据大小
+    const requestStr = JSON.stringify(requestObj)
+    const requestSize = new Blob([requestStr]).size // 请求数据真实字节大小
     const limitSize = 5 * 1024 * 1024 // 限制存放数据5M
     if (requestSize >= limitSize) {
       console.warn(`[${config.url}]: ` + i18n.global.t('request.sizeLimitExceeded'))
@@ -81,9 +82,7 @@ service.interceptors.response.use(res => {
     const code = res.data.code || 200
     // 获取错误信息：后端 msg 已通过 MessageUtils.message() 做了 i18n，优先使用
     // errorCode 映射作为兜底（后端未返回 msg 时使用）
-    const msg = res.data.msg
-      || (errorCode[code] ? i18n.global.t(errorCode[code]) : null)
-      || i18n.global.t(errorCode['default'])
+    const msg = resolveErrorMsg(res.data)
     // 二进制数据则直接返回
     if (res.request.responseType ===  'blob' || res.request.responseType ===  'arraybuffer') {
       return res.data
@@ -154,10 +153,13 @@ export function download(url, params, filename, config) {
       saveAs(blob, filename)
     } else {
       const resText = await data.text()
-      const rspObj = JSON.parse(resText)
-      const errMsg = rspObj.msg
-        || (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
-        || i18n.global.t(errorCode['default'])
+      let rspObj
+      try {
+        rspObj = JSON.parse(resText)
+      } catch {
+        rspObj = { msg: resText || i18n.global.t(errorCode['default']) }
+      }
+      const errMsg = resolveErrorMsg(rspObj)
       ElMessage.error(errMsg)
     }
     downloadLoadingInstance.close()

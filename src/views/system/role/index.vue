@@ -435,14 +435,12 @@ function handleUpdate(row) {
     form.value = response.data
     form.value.roleSort = Number(form.value.roleSort)
     open.value = true
-    nextTick(() => {
-      roleMenu.then((res) => {
-        let checkedKeys = res.checkedKeys
-        checkedKeys.forEach((v) => {
-          nextTick(() => {
-            menuRef.value.setChecked(v, true, false)
-          })
-        })
+    nextTick(async () => {
+      const res = await roleMenu
+      nextTick(() => {
+        if (menuRef.value && res.checkedKeys) {
+          menuRef.value.setCheckedKeys(res.checkedKeys)
+        }
       })
     })
   })

@@ -43,7 +43,7 @@
 <script setup>
 import { getToken } from "@/utils/auth"
 import { isExternal } from "@/utils/validate"
-import errorCode from '@/utils/errorCode'
+import { resolveErrorMsg } from '@/utils/mop'
 import i18n from '@/lang'
 import Sortable from 'sortablejs'
 
@@ -182,9 +182,7 @@ function handleUploadSuccess(res, file) {
   } else {
     number.value--
     proxy.$modal.closeLoading()
-    const msg = res.msg
-      || (errorCode[res.code] ? i18n.global.t(errorCode[res.code]) : null)
-      || i18n.global.t(errorCode['default'])
+    const msg = resolveErrorMsg(res)
     proxy.$modal.msgError(msg)
     proxy.$refs.imageUpload.handleRemove(file)
     uploadedSuccessfully()

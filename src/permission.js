@@ -88,6 +88,7 @@ router.beforeEach(async (to, from) => {
         return { ...to, replace: true }
       } catch (err) {
         await useUserStore().logOut()
+        isRelogin.show = false
         ElMessage.error(i18n.global.t('permission.routeLoadError'))
         return { path: '/' }
       }

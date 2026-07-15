@@ -4,6 +4,7 @@
  */
 
 import i18n from '@/lang'
+import errorCode from '@/utils/errorCode'
 
 // 日期格式化
 export function parseTime(time, pattern) {
@@ -226,7 +227,14 @@ export function getNormalPath(p) {
   return res
 }
 
-// 验证是否为blob格式
+// 验证是否为blob格式（非 JSON/HTML 错误响应）
 export function blobValidate(data) {
-  return data.type !== 'application/json'
+  return data.type !== 'application/json' && data.type !== 'text/html'
+}
+
+// 从后端响应对象中解析错误消息（三级 fallback：msg → errorCode 映射 → default）
+export function resolveErrorMsg(rspObj) {
+  return rspObj.msg
+    || (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
+    || i18n.global.t(errorCode['default'])
 }

@@ -4,10 +4,9 @@ import { saveAs } from 'file-saver'
 import i18n from '@/lang'
 import { getToken } from '@/utils/auth'
 import errorCode from '@/utils/errorCode'
-import { blobValidate } from '@/utils/mop'
+import { blobValidate, resolveErrorMsg } from '@/utils/mop'
 
 const baseURL = import.meta.env.VITE_APP_BASE_API
-let downloadLoadingInstance
 
 export default {
   name(name, isDelete = true) {
@@ -50,7 +49,7 @@ export default {
   },
   zip(url, name) {
     var url = baseURL + url
-    downloadLoadingInstance = ElLoading.service({ text: i18n.global.t('common.downloading'), background: "rgba(0, 0, 0, 0.7)", })
+    const loadingInstance = ElLoading.service({ text: i18n.global.t('common.downloading'), background: "rgba(0, 0, 0, 0.7)", })
     axios({
       method: 'get',
       url: url,
@@ -64,13 +63,13 @@ export default {
       } else {
         this.printErrMsg(res.data)
       }
-      downloadLoadingInstance.close()
+      loadingInstance.close()
     }).catch((r) => {
       if (import.meta.env.DEV) {
         console.error(r)
       }
       ElMessage.error(i18n.global.t('common.downloadError'))
-      downloadLoadingInstance.close()
+      loadingInstance.close()
     })
   },
   saveAs(text, name, opts) {
@@ -78,12 +77,13 @@ export default {
   },
   async printErrMsg(data) {
     const resText = await data.text()
-    const rspObj = JSON.parse(resText)
-    // 后端 msg 已通过 MessageUtils.message() 做了 i18n，优先使用
-    const errMsg = rspObj.msg
-      || (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
-      || i18n.global.t(errorCode['default'])
-    ElMessage.error(errMsg)
+    let rspObj
+    try {
+      rspObj = JSON.parse(resText)
+    } catch {
+      rspObj = { msg: resText || i18n.global.t(errorCode['default']) }
+    }
+    ElMessage.error(resolveErrorMsg(rspObj))
   }
 }
 

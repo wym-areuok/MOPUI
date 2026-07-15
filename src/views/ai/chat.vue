@@ -267,8 +267,9 @@ const renameTitle      = ref('')
 const renameTargetId   = ref(null)
 
 // SSE 相关
-let currentReader      = null
-let sseEventBuffer     = null   // 暂存 event: 行
+let currentReader       = null
+let currentAbortController = null
+let sseEventBuffer      = null   // 暂存 event: 行
 
 // DOM refs
 const messagesAreaRef  = ref(null)
@@ -452,11 +453,18 @@ async function handleSendMessage() {
   const url = `${baseUrl}/ai/chat/stream?conversationId=${currentConvId.value}&message=${encodeURIComponent(text)}`
   const token = getToken()
 
+  // 创建 AbortController 用于超时和组件卸载时中止请求
+  const controller = new AbortController()
+  currentAbortController = controller
+  const timeoutId = setTimeout(() => controller.abort(), 60000)
+
   try {
     const response = await fetch(url, {
       method: 'GET',
-      headers: { Authorization: 'Bearer ' + token }
+      headers: { Authorization: 'Bearer ' + token },
+      signal: controller.signal
     })
+    clearTimeout(timeoutId)
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
@@ -508,15 +516,25 @@ async function handleSendMessage() {
     }
 
   } catch (e) {
-    if (e.name === 'AbortError') return
+    if (e.name === 'AbortError') {
+      // 组件卸载触发的 abort（isStreaming 已被 abortStream 设为 false），不设置错误
+      if (!isStreaming.value) return
+      messages.value[aiIndex] = {
+        role: 'assistant', content: '', loading: false, streaming: false,
+        error: '连接超时，请重试'
+      }
+      return
+    }
     const errMsg = e.message || '服务异常，请重试'
     messages.value[aiIndex] = {
       role: 'assistant', content: '', loading: false, streaming: false, error: errMsg
     }
     ElMessage.error(t('page.AI 响应失败：') + (e.message || t('common.errorTip')))
   } finally {
+    clearTimeout(timeoutId)
     isStreaming.value = false
     currentReader = null
+    currentAbortController = null
     nextTick(() => focusInput())
   }
 }
@@ -525,6 +543,10 @@ function abortStream() {
   if (currentReader) {
     try { currentReader.cancel() } catch (_) {}
     currentReader = null
+  }
+  if (currentAbortController) {
+    currentAbortController.abort()
+    currentAbortController = null
   }
   isStreaming.value = false
 }
