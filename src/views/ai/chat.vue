@@ -1,5 +1,5 @@
 <template>
-  <div class="ai-chat-wrapper">
+  <div class="ai-chat-wrapper" :class="'size-' + appSize">
 
     <!-- ========== 左侧会话栏 ========== -->
     <aside class="sidebar">
@@ -196,9 +196,10 @@
 </template>
 
 <script setup>
-import { ref, nextTick, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, nextTick, onMounted, onBeforeUnmount, watch, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import useAppStore from '@/store/modules/app'
 import {
   EditPen, ChatDotRound, Edit, Delete, Loading,
   Warning, MagicStick, Cpu, DocumentChecked
@@ -214,6 +215,8 @@ import {
 } from '@/api/ai/chat'
 
 const { t } = useI18n()
+const appStore = useAppStore()
+const appSize = computed(() => appStore.size)
 
 // ──────────────────────────────────────────
 // localStorage 持久化 key
@@ -579,54 +582,70 @@ function focusInput() {
 </script>
 
 <style scoped>
+/* ===== Size 自适应 ===== */
+.size-large .sidebar { width: 240px; min-width: 240px; }
+.size-large .btn-new-chat { height: 44px !important; font-size: 14px !important; }
+.size-large .conv-item { padding: 10px 12px; font-size: 14px; }
+.size-large .bubble { padding: 14px 18px; font-size: 15px; }
+.size-large .msg-row { padding: 8px 48px; }
+.size-large .welcome-title { font-size: 26px; }
+
+.size-small .sidebar { width: 180px; min-width: 180px; }
+.size-small .btn-new-chat { height: 32px !important; font-size: 12px !important; }
+.size-small .conv-item { padding: 5px 8px; font-size: 12px; }
+.size-small .bubble { padding: 8px 12px; font-size: 13px; }
+.size-small .msg-row { padding: 3px 36px; }
+.size-small .welcome-title { font-size: 20px; }
+
 /* ===== 整体布局 ===== */
 .ai-chat-wrapper {
   display: flex;
-  /* 顶部 navbar 50px + tabs-nav 34px + 内边距 */
   height: calc(100vh - 84px);
-  background: #f5f7fa;
+  background: var(--el-bg-color-page, #f5f7fa);
   overflow: hidden;
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB',
                'Microsoft YaHei', sans-serif;
+  font-size: var(--el-font-size-base, 14px);
+  color: var(--el-text-color-regular, #606266);
 }
 
 /* ===== 侧边栏 ===== */
 .sidebar {
-  width: 226px;
-  min-width: 226px;
-  background: #ffffff;
-  border-right: 1px solid #ebeef5;
+  width: 220px;
+  min-width: 220px;
+  background: var(--el-bg-color, #ffffff);
+  border-right: 1px solid var(--el-border-color-light, #ebeef5);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .sidebar-header {
-  padding: 14px 12px 10px;
-  border-bottom: 1px solid #f2f4f7;
+  padding: 12px 10px 10px;
+  border-bottom: 1px solid var(--el-border-color-lighter, #f2f4f7);
 }
 
 .btn-new-chat {
   width: 100% !important;
-  background: #f0f7ff !important;
-  border: 1.5px dashed #409eff !important;
-  color: #409eff !important;
-  border-radius: 9px !important;
+  background: var(--current-color-light, #f0f7ff) !important;
+  border: 1px dashed var(--current-color, #409eff) !important;
+  color: var(--current-color, #409eff) !important;
+  border-radius: var(--el-border-radius-base, 4px) !important;
   font-size: 13px !important;
   font-weight: 500 !important;
-  gap: 6px !important;
-  height: 38px !important;
+  gap: 5px !important;
+  height: 36px !important;
   transition: all 0.2s !important;
 }
 .btn-new-chat:hover:not(:disabled) {
-  background: #d9ecff !important;
-  border-color: #66b1ff !important;
+  background: var(--el-color-primary-light-8, #d9ecff) !important;
+  border-color: var(--el-color-primary-light-3, #66b1ff) !important;
 }
 
 .conv-list {
   flex: 1;
   overflow-y: auto;
-  padding: 6px 8px 8px;
+  padding: 5px 8px 8px;
   min-height: 0;
 }
 
@@ -642,20 +661,20 @@ function focusInput() {
   display: flex;
   align-items: center;
   padding: 8px 10px;
-  border-radius: 8px;
+  border-radius: var(--el-border-radius-base, 4px);
   cursor: pointer;
   font-size: 13px;
-  color: #606266;
+  color: var(--el-text-color-regular, #606266);
   transition: background 0.15s;
   user-select: none;
-  gap: 7px;
-  margin-bottom: 2px;
+  gap: 8px;
+  margin-bottom: 1px;
   position: relative;
 }
-.conv-item:hover { background: #f5f7fa; }
+.conv-item:hover { background: var(--el-fill-color-light, #f5f7fa); }
 .conv-item.active {
-  background: #ecf5ff;
-  color: #409eff;
+  background: var(--current-color-light, #ecf5ff);
+  color: var(--current-color, #409eff);
   font-weight: 500;
 }
 
@@ -687,10 +706,10 @@ function focusInput() {
 .conv-action-btn {
   padding: 3px 4px !important;
   height: auto !important;
-  color: #909399 !important;
+  color: var(--el-text-color-secondary, #909399) !important;
   font-size: 13px !important;
 }
-.conv-action-btn:hover { color: #409eff !important; }
+.conv-action-btn:hover { color: var(--current-color, #409eff) !important; }
 .conv-action-btn.danger:hover { color: #f56c6c !important; }
 
 /* 侧栏列表过渡 */
@@ -706,7 +725,7 @@ function focusInput() {
   flex-direction: column;
   overflow: hidden;
   min-width: 0;
-  background: #f5f7fa;
+  background: var(--el-bg-color-page, #f5f7fa);
   position: relative;
 }
 
@@ -718,7 +737,7 @@ function focusInput() {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   z-index: 1;
 }
 
@@ -732,30 +751,29 @@ function focusInput() {
 }
 
 .welcome-avatar {
-  width: 68px;
-  height: 68px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6c3be4 0%, #409eff 100%);
+  background: linear-gradient(135deg, #6c3be4 0%, var(--current-color, #409eff) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 30px;
+  font-size: 28px;
   color: #fff;
-  box-shadow: 0 8px 32px rgba(64, 158, 255, 0.25);
-  margin-bottom: 6px;
+  box-shadow: 0 4px 20px rgba(64, 158, 255, 0.25);
+  margin-bottom: 8px;
 }
 
 .welcome-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 600;
-  color: #1a1a2e;
+  color: var(--el-text-color-primary, #303133);
   margin: 0;
-  letter-spacing: -0.3px;
 }
 
 .welcome-subtitle {
   font-size: 14px;
-  color: #909399;
+  color: var(--el-text-color-secondary, #909399);
   margin: 0;
 }
 
@@ -768,21 +786,21 @@ function focusInput() {
 .tip-card {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 9px 16px;
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 10px;
+  gap: 8px;
+  padding: 10px 16px;
+  background: var(--el-bg-color, #fff);
+  border: 1px solid var(--el-border-color-light, #ebeef5);
+  border-radius: var(--el-border-radius-base, 4px);
   font-size: 13px;
-  color: #606266;
+  color: var(--el-text-color-regular, #606266);
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 .tip-card:hover {
-  border-color: #409eff;
-  color: #409eff;
-  box-shadow: 0 2px 12px rgba(64, 158, 255, 0.12);
+  border-color: var(--current-color, #409eff);
+  color: var(--current-color, #409eff);
+  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.1);
   transform: translateY(-1px);
 }
 
@@ -794,7 +812,7 @@ function focusInput() {
 .messages-area {
   flex: 1;
   overflow-y: auto;
-  padding: 20px 0 10px;
+  padding: 16px 0 8px;
   min-height: 0;
 }
 
@@ -809,9 +827,9 @@ function focusInput() {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: #909399;
+  color: var(--el-text-color-secondary, #909399);
   font-size: 13px;
-  padding: 48px 0;
+  padding: 40px 0;
 }
 
 /* 消息行过渡 */
@@ -823,8 +841,8 @@ function focusInput() {
   display: flex;
   align-items: flex-start;
   padding: 5px 44px;
-  gap: 12px;
-  max-width: 900px;
+  gap: 10px;
+  max-width: 880px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
@@ -833,8 +851,8 @@ function focusInput() {
 
 /* 头像 */
 .avatar {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   flex-shrink: 0;
   display: flex;
@@ -844,27 +862,27 @@ function focusInput() {
   font-weight: 600;
 }
 .user-av {
-  background: #409eff;
+  background: var(--current-color, #409eff);
   color: #fff;
   font-size: 12px;
 }
 .ai-av {
-  background: linear-gradient(135deg, #6c3be4 0%, #409eff 100%);
+  background: linear-gradient(135deg, #6c3be4 0%, var(--current-color, #409eff) 100%);
   color: #fff;
-  font-size: 16px;
+  font-size: 15px;
 }
 
 /* 气泡 */
 .bubble {
   max-width: 70%;
-  padding: 11px 16px;
-  border-radius: 14px;
+  padding: 10px 16px;
+  border-radius: var(--el-border-radius-base, 4px);
   font-size: 14px;
-  line-height: 1.75;
+  line-height: 1.7;
   word-break: break-word;
 }
 .user-bubble {
-  background: #409eff;
+  background: var(--current-color, #409eff);
   color: #fff;
   border-bottom-right-radius: 4px;
 }
@@ -872,11 +890,11 @@ function focusInput() {
   background: #fff;
   color: #303133;
   border-bottom-left-radius: 4px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 .has-error {
-  background: #fff5f5;
-  border: 1px solid #fde2e2;
+  background: var(--el-color-danger-light-9, #fff5f5);
+  border: 1px solid var(--el-color-danger-light-7, #fde2e2);
 }
 
 /* 打字光标 */
@@ -885,7 +903,7 @@ function focusInput() {
   font-size: 12px;
   animation: blink 0.8s step-start infinite;
   margin-left: 2px;
-  color: #409eff;
+  color: var(--current-color, #409eff);
   vertical-align: baseline;
 }
 @keyframes blink { 50% { opacity: 0; } }
@@ -956,28 +974,27 @@ function focusInput() {
 
 /* ===== 输入区域 ===== */
 .input-area {
-  padding: 10px 44px 14px;
-  background: #f5f7fa;
+  padding: 8px 44px 12px;
+  background: var(--el-bg-color-page, #f5f7fa);
   flex-shrink: 0;
 }
 
 .input-box {
-  max-width: 812px;
+  max-width: 800px;
   margin: 0 auto;
-  background: #fff;
-  border: 1.5px solid #dcdfe6;
-  border-radius: 14px;
-  padding: 8px 10px 8px 16px;
+  background: var(--el-bg-color, #fff);
+  border: 1px solid var(--el-border-color, #dcdfe6);
+  border-radius: var(--el-border-radius-base, 4px);
+  padding: 4px 6px 2px 10px;
   display: flex;
   align-items: flex-end;
-  gap: 10px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  gap: 6px;
   transition: border-color 0.2s, box-shadow 0.2s;
   box-sizing: border-box;
 }
 .input-box.focused {
-  border-color: #409eff;
-  box-shadow: 0 0 0 2px rgba(64, 158, 255, 0.08);
+  border-color: var(--current-color, #409eff);
+  box-shadow: 0 0 0 2px var(--current-color-light, rgba(64, 158, 255, 0.08));
 }
 
 /* 覆盖 el-input el-textarea 样式 */
@@ -985,10 +1002,10 @@ function focusInput() {
   border: none !important;
   box-shadow: none !important;
   background: transparent !important;
-  padding: 5px 0 !important;
+  padding: 4px 0 !important;
   font-size: 14px !important;
-  line-height: 1.65 !important;
-  color: #303133 !important;
+  line-height: 1.6 !important;
+  color: var(--el-text-color-primary, #303133) !important;
   font-family: inherit !important;
   resize: none !important;
 }
@@ -997,13 +1014,13 @@ function focusInput() {
 }
 
 .btn-send {
-  width: 36px !important;
-  height: 36px !important;
-  min-width: 36px !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
   padding: 0 !important;
   border-radius: 50% !important;
-  background: #409eff !important;
-  border-color: #409eff !important;
+  background: var(--current-color, #409eff) !important;
+  border-color: var(--current-color, #409eff) !important;
   color: #fff !important;
   display: flex !important;
   align-items: center !important;
@@ -1013,8 +1030,8 @@ function focusInput() {
   margin-bottom: 1px;
 }
 .btn-send:hover:not(:disabled) {
-  background: #66b1ff !important;
-  box-shadow: 0 2px 10px rgba(64, 158, 255, 0.3) !important;
+  background: var(--el-color-primary-light-3, #66b1ff) !important;
+  box-shadow: 0 2px 8px var(--current-color-light, rgba(64, 158, 255, 0.3)) !important;
 }
 .btn-send:active:not(:disabled) { transform: scale(0.91) !important; }
 .btn-send:disabled {

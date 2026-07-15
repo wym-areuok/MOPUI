@@ -21,12 +21,13 @@ const defaultOptions = {
     'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
     'span', 'div', 'pre', 'code', 'blockquote',
     'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'caption',
-    'abbr', 'cite', 'del', 'ins', 'mark', 'small'
+    'abbr', 'cite', 'del', 'ins', 'mark', 'small',
+    'iframe'
   ],
-  ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'style', 'target', 'rel', 'width', 'height', 'colspan', 'rowspan'],
+  ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'style', 'target', 'rel', 'width', 'height', 'colspan', 'rowspan', 'frameborder', 'allowfullscreen'],
   ALLOW_DATA_ATTR: false,
   ADD_ATTR: ['target'],
-  FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select', 'option', 'link', 'meta', 'style'],
+  FORBID_TAGS: ['script', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select', 'option', 'link', 'meta', 'style'],
   FORBID_ATTR: [],
   KEEP_CONTENT: true,
   ALLOW_UNKNOWN_PROTOCOLS: false,

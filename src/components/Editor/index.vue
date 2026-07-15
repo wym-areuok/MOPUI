@@ -19,7 +19,7 @@
       ref="quillEditorRef"
       v-model:content="content"
       contentType="html"
-      @textChange="(e) => $emit('update:modelValue', content)"
+      @textChange="(e) => $emit('update:modelValue', sanitizeHtml(content))"
       :options="options"
       :style="styles"
     />
@@ -31,10 +31,12 @@ import axios from 'axios'
 import { QuillEditor } from "@vueup/vue-quill"
 import "@vueup/vue-quill/dist/vue-quill.snow.css"
 import { getToken } from "@/utils/auth"
+import { sanitizeHtml } from '@/utils/html-sanitize'
 
 const { proxy } = getCurrentInstance()
 
 const quillEditorRef = ref()
+let quillInstance = null
 const uploadUrl = ref(import.meta.env.VITE_APP_BASE_API + "/common/upload") // 上传的图片服务器地址
 const headers = ref({
   Authorization: "Bearer " + getToken()
@@ -116,16 +118,23 @@ watch(() => props.modelValue, (v) => {
 // 如果设置了上传地址则自定义图片上传事件
 onMounted(() => {
   if (props.type == 'url') {
-    let quill = quillEditorRef.value.getQuill()
-    let toolbar = quill.getModule("toolbar")
+    quillInstance = quillEditorRef.value.getQuill()
+    let toolbar = quillInstance.getModule("toolbar")
     toolbar.addHandler("image", (value) => {
       if (value) {
         proxy.$refs.uploadRef.click()
       } else {
-        quill.format("image", false)
+        quillInstance.format("image", false)
       }
     })
-    quill.root.addEventListener('paste', handlePasteCapture, true)
+    quillInstance.root.addEventListener('paste', handlePasteCapture, true)
+  }
+})
+
+onBeforeUnmount(() => {
+  if (quillInstance) {
+    quillInstance.root.removeEventListener('paste', handlePasteCapture, true)
+    quillInstance = null
   }
 })
 
@@ -152,7 +161,7 @@ function handleBeforeUpload(file) {
 // 上传成功处理
 function handleUploadSuccess(res, file) {
   // 如果上传成功
-  if (res.code == 200) {
+  if (res.code === 200) {
     // 获取富文本实例
     let quill = toRaw(quillEditorRef.value).getQuill()
     // 获取光标位置

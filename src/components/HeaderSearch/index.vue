@@ -79,6 +79,7 @@
 <script setup>
 import Fuse from 'fuse.js'
 import { getNormalPath } from '@/utils/mop'
+import { debounce } from '@/utils/index'
 import { isHttp } from '@/utils/validate'
 import { sanitizeHtml } from '@/utils/html-sanitize'
 import useSettingsStore from '@/store/modules/settings'
@@ -183,7 +184,7 @@ function generateRoutes(routes, basePath = '', prefixTitle = []) {
   return res
 }
 
-function querySearch(query) {
+const querySearch = debounce(function(query) {
   activeIndex.value = -1
   if (query !== '') {
     const q = query.toLowerCase()
@@ -201,7 +202,7 @@ function querySearch(query) {
   } else {
     options.value = searchPool.value
   }
-}
+}, 300)
 
 function activeStyle(index) {
   if (index !== activeIndex.value) return {}
@@ -239,6 +240,10 @@ function escapeRegExp(str) {
 
 onMounted(() => {
   searchPool.value = generateRoutes(routes.value)
+})
+
+onBeforeUnmount(() => {
+  querySearch.cancel()
 })
 
 watch(searchPool, (list) => {

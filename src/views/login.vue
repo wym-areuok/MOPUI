@@ -89,7 +89,7 @@ const loginForm = ref({
 const loginRules = {
   username: [{ required: true, trigger: "blur", message: () => proxy.$t('page.请输入您的账号') }],
   password: [{ required: true, trigger: "blur", message: () => proxy.$t('page.请输入您的密码') }],
-  code: [{ required: true, trigger: "change", message: () => proxy.$t('page.验证码') }]
+  code: [{ required: true, trigger: "blur", message: () => proxy.$t('page.验证码') }]
 }
 
 const codeUrl = ref("")
@@ -105,8 +105,10 @@ watch(route, (newRoute) => {
 }, { immediate: true })
 
 function handleLogin() {
-  proxy.$refs.loginRef.validate(valid => {
-    if (valid) {
+  // 使用 Promise 风格 + .catch 避免未处理的 Promise rejection 警告
+  proxy.$refs.loginRef.validate()
+    .then(valid => {
+      if (!valid) return
       loading.value = true
       // 勾选了需要记住密码设置在 cookie 中设置记住用户名和密码
       if (loginForm.value.rememberMe) {
@@ -136,8 +138,10 @@ function handleLogin() {
           getCode()
         }
       })
-    }
-  })
+    })
+    .catch(() => {
+      // 验证失败，错误信息已由 el-form 自动显示在表单上
+    })
 }
 
 function getCode() {

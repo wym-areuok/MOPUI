@@ -63,6 +63,10 @@ export default {
     '分配角色': 'Assign Role',
     '分配用户': 'Assign User',
     '字典数据': 'Dict Data',
+    '暂无字典数据': 'No Dict Data',
+    '共计条目': 'Total Items',
+    '标签': 'Label',
+    '键值': 'Value',
     '调度日志': 'Job Log',
     '修改生成配置': 'Edit Gen Config',
     '注册用户': 'Register User',
@@ -101,7 +105,7 @@ export default {
     '保存': 'Save',
     '请选择': 'Please Select',
     '请输入': 'Please Enter',
-    '请输入内容': 'Please Enter',
+    '请输入内容': 'Please Enter Content',
     // Editor
     '图片格式错误': 'Invalid image format!',
     '上传文件大小限制': 'File size cannot exceed {size} MB!',
@@ -114,7 +118,6 @@ export default {
     '导入结果': 'Import Result',
     '请选择xls文件': 'Please select a .xls or .xlsx file.',
     // Upload Components
-    '预览': 'Preview',
     '选取文件': 'Select File',
     '上传图片提示完整': 'Please upload files up to {size}MB in {type} format',
     '上传图片提示大小': 'Please upload files up to {size}MB',
@@ -154,7 +157,7 @@ export default {
     '确 定': 'OK',
     '取 消': 'Cancel',
     '提 交': 'Submit',
-    '删除成功': 'Delete Successful',
+    '删除成功': 'Deleted Successfully',
     '系统提示': 'System Notification',
     '单机': 'Standalone',
     '集群': 'Cluster',
@@ -350,7 +353,6 @@ export default {
     // Avatar
     '点击上传头像': 'Click to Upload Avatar',
     // Role Auth User
-    '添加用户': 'Add User',
     '取消授权': 'Revoke',
     '批量取消授权': 'Batch Revoke',
     '选择用户': 'Select Users',
@@ -395,7 +397,6 @@ export default {
     '请输入表名称': 'Please Enter Table Name',
     '请输入表描述': 'Please Enter Table Description',
     // Generation Config
-    '上级菜单': 'Parent Menu',
     '实体类名称': 'Entity Class Name',
     '作者': 'Author',
     '请输入仓库名称': 'Please Enter Repository Name',
@@ -403,10 +404,8 @@ export default {
     '字段信息': 'Field Info',
     '字段列名': 'Column Name',
     '字段描述': 'Field Description',
-    '字典类型': 'Dict Type',
     // Login/Register
     '账号': 'Account',
-    '确认密码': 'Confirm Password',
     // Error Pages
     '您没有访问权限！': 'Access Denied!',
     '对不起，您没有访问权限，请不要进行非法操作！您可以返回主页面': 'Sorry, you do not have access. Please return to the homepage.',
@@ -421,7 +420,6 @@ export default {
     '重命名失败：': 'Rename Failed: ',
     '重命名失败，请重试': 'Rename Failed, Please Retry',
     '确认删除该对话及所有消息？': 'Confirm to Delete This Conversation and All Messages?',
-    '删除成功': 'Deleted Successfully',
     '删除失败：': 'Delete Failed: ',
     '删除失败，请重试': 'Delete Failed, Please Retry',
     'AI 响应失败：': 'AI Response Failed: ',
@@ -457,7 +455,7 @@ export default {
     '菜单权限字符说明': "Permission key defined in controller, e.g.: {'@'}PreAuthorize({'@'}ss.hasPermi(system:user:list))",
     // Login
     '密码': 'Password',
-    '验证码': 'Captcha',
+    '验证码': 'Please Enter Captcha',
     '记住密码': 'Remember Me',
     '登 录': 'Login',
     '登 录 中…': 'Logging in...',
@@ -465,7 +463,6 @@ export default {
     '请输入您的账号': 'Please Enter Your Account',
     '请输入您的密码': 'Please Enter Your Password',
     // Register
-    '确认密码': 'Confirm Password',
     '注 册': 'Register',
     '注 册 中…': 'Registering...',
     '使用已有账户登录': 'Login with Existing Account',
@@ -575,6 +572,7 @@ export default {
     '启用': 'Enable',
     '停用': 'Disable',
     '成功': 'Success',
+    '{action}成功': '{action} Successful',
     // Weekdays
     '星期日': 'Sunday',
     '星期一': 'Monday',
@@ -670,8 +668,16 @@ export default {
     '修改字典数据': 'Edit Dict Data',
     '刷新成功': 'Refresh Successful',
     '字典数据': 'Dict Data',
+    '暂无字典数据': 'No Dict Data',
+    '共计条目': 'Total Items',
+    '标签': 'Label',
+    '键值': 'Value',
     '是否确认删除字典编号为“”{0}“”的数据项？': 'Confirm to delete dict ID "{0}"?',
     '是否确认删除字典编码为“”{0}“”的数据项？': 'Confirm to delete dict code "{0}"?',
+    '暂无字典数据': 'No Dict Data',
+    '共计条目': 'Total Items',
+    '标签': 'Label',
+    '键值': 'Value',
     // Post Management Dialog
     '添加岗位': 'Add Post',
     '修改岗位': 'Edit Post',
@@ -723,8 +729,8 @@ export default {
     'cron号最近工作日': ' nearest weekday',
     'cron本月最后一天': 'Last day of month',
     'cron本月最后一个': 'Last of this month',
-    'cron第': '',
-    'cron周的': '',
+    'cron第': '#',
+    'cron周的': ' of the week',
     'cron每年': 'Every year',
     'cron年开始每': ', every ',
     'cron年执行一次': ' years',
@@ -761,7 +767,6 @@ export default {
     '修改头像': 'Edit Avatar',
     '文件格式错误，请上传图片类型': 'Invalid file format, please upload image files (e.g., JPG, PNG).',
     '上传头像图片大小不能超过10MB': 'Avatar image size cannot exceed 10MB',
-    '修改成功': 'Update Successful',
     '上传失败，未获取到图片地址': 'Upload failed, image URL not received',
     '上传头像失败': 'Avatar upload failed',
     '修改密码失败': 'Password Change Failed',
@@ -1058,7 +1063,29 @@ export default {
     // Dict type tooltip
     '字典类型Key说明': 'Key value in storage, e.g.: sys_user_sex',
     // Scheduled task invoke method description
-    '调用方法使用说明': 'Bean: mopTask.mopParams("mop")\nClass: com.mop.quartz.task.mopTask.mopParams("mop")\nParams: supports String, Boolean, Long, Float, Integer',
+    '调用方法使用说明': 'Bean: mopTask.mopParams(\u201cmop\u201d)\nClass: com.mop.quartz.task.mopTask.mopParams(\u201cmop\u201d)\nParams: supports String, Boolean, Long, Float, Integer',
+    // Role Authorization Page
+    '角色信息': 'Role Info',
+    '提交': 'Submit',
+    // Notice Components
+    '通知公告': 'Notifications',
+    '全部已读': 'Mark All Read',
+    '暂无公告': 'No Notice',
+    '通知': 'Notice',
+    '公告': 'Announcement',
+    '公告详情': 'Notice Details',
+    '消息': 'Message',
+    '已关闭': 'Closed',
+    '暂无内容': 'No Content',
+    // Tab Operations
+    '关闭当前': 'Close Current',
+    '关闭其他': 'Close Others',
+    '关闭左侧': 'Close Left',
+    '关闭右侧': 'Close Right',
+    '全部关闭': 'Close All',
+    '全屏显示': 'Fullscreen',
+    '退出全屏': 'Exit Fullscreen',
+    '刷新页面': 'Refresh Page',
   },
   // Request interceptor (request.js)
   request: {
@@ -1077,6 +1104,19 @@ export default {
     error500: 'Internal server error, please contact administrator',
     error601: 'Request warning, please check and try again',
     errorDefault: 'Unknown system error, please contact administrator',
+  },
+  // Password validation (passwordRule.js)
+  password: {
+    notEmpty: 'Password cannot be empty',
+    lengthBetween6And20: 'Password must be between 6 and 20 characters',
+    newNotEmpty: 'New password cannot be empty',
+    noIllegalChar: 'Password must not contain illegal characters: < > " \' \\ ｜',
+    digitOnly: 'Password must contain only digits (0-9)',
+    letterOnly: 'Password must contain only letters (a-z, A-Z)',
+    letterAndDigit: 'Password must contain both letters and numbers',
+    letterDigitSpecial: 'Password must contain letters, numbers, and special characters (~!@#$%^&*()-=_+)',
+    enterYourPassword: 'Please enter your password',
+    userPwdLength: 'User password must be between 6 and 20 characters',
   },
   // Route guard (permission.js)
   permission: {

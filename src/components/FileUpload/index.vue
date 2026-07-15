@@ -39,6 +39,8 @@
 
 <script setup>
 import { getToken } from "@/utils/auth"
+import errorCode from '@/utils/errorCode'
+import i18n from '@/lang'
 import Sortable from 'sortablejs'
 
 const props = defineProps({
@@ -173,7 +175,10 @@ function handleUploadSuccess(res, file) {
   } else {
     number.value--
     proxy.$modal.closeLoading()
-    proxy.$modal.msgError(res.msg)
+    const msg = res.msg
+      || (errorCode[res.code] ? i18n.global.t(errorCode[res.code]) : null)
+      || i18n.global.t(errorCode['default'])
+    proxy.$modal.msgError(msg)
     proxy.$refs.fileUpload.handleRemove(file)
     uploadedSuccessfully()
   }

@@ -79,10 +79,11 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(res => {
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200
-    // 获取错误信息：优先从 errorCode 映射查 i18n key，其次用默认错误，最后用后端返回的 msg
-    const msg = (errorCode[code] ? i18n.global.t(errorCode[code]) : null)
+    // 获取错误信息：后端 msg 已通过 MessageUtils.message() 做了 i18n，优先使用
+    // errorCode 映射作为兜底（后端未返回 msg 时使用）
+    const msg = res.data.msg
+      || (errorCode[code] ? i18n.global.t(errorCode[code]) : null)
       || i18n.global.t(errorCode['default'])
-      || res.data.msg
     // 二进制数据则直接返回
     if (res.request.responseType ===  'blob' || res.request.responseType ===  'arraybuffer') {
       return res.data
@@ -154,9 +155,9 @@ export function download(url, params, filename, config) {
     } else {
       const resText = await data.text()
       const rspObj = JSON.parse(resText)
-      const errMsg = (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
+      const errMsg = rspObj.msg
+        || (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
         || i18n.global.t(errorCode['default'])
-        || rspObj.msg
       ElMessage.error(errMsg)
     }
     downloadLoadingInstance.close()

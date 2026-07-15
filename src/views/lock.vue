@@ -57,6 +57,7 @@ const particleCanvas = ref(null)
 let timer = null
 let animationId = null
 let particles = []
+let onResize = null
 
 const onAvatarError = (e) => {
   e.target.src = defAva
@@ -121,12 +122,12 @@ const initParticles = () => {
   const canvas = particleCanvas.value
   if (!canvas) return
   const ctx = canvas.getContext('2d')
-  const resize = () => {
+  onResize = () => {
     canvas.width = window.innerWidth
     canvas.height = window.innerHeight
   }
-  resize()
-  window.addEventListener('resize', resize)
+  onResize()
+  window.addEventListener('resize', onResize)
 
   particles = Array.from({ length: 80 }, () => ({
     x: Math.random() * canvas.width,
@@ -177,6 +178,10 @@ onMounted(() => {
 onBeforeUnmount(() => {
   clearInterval(timer)
   cancelAnimationFrame(animationId)
+  if (onResize) {
+    window.removeEventListener('resize', onResize)
+    onResize = null
+  }
 })
 </script>
 

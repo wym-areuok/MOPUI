@@ -230,7 +230,7 @@ export function debounce(func, wait, immediate) {
     }
   }
 
-  return function(...args) {
+  const debounced = function(...args) {
     context = this
     timestamp = +new Date()
     const callNow = immediate && !timeout
@@ -243,6 +243,11 @@ export function debounce(func, wait, immediate) {
 
     return result
   }
+  debounced.cancel = function() {
+    clearTimeout(timeout)
+    timeout = null
+  }
+  return debounced
 }
 
 /**
@@ -254,7 +259,7 @@ export function debounce(func, wait, immediate) {
  */
 export function deepClone(source) {
   if (!source && typeof source !== 'object') {
-    throw new Error('error arguments', 'deepClone')
+    throw new TypeError('deepClone: invalid arguments, expected object or array')
   }
   const targetObj = source.constructor === Array ? [] : {}
   Object.keys(source).forEach(keys => {

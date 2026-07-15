@@ -112,7 +112,7 @@ const registerRules = {
     { required: true, trigger: "blur", message: () => proxy.$t('page.请再次输入您的密码') },
     { required: true, validator: equalToPassword, trigger: "blur" }
   ],
-  code: [{ required: true, trigger: "change", message: () => proxy.$t('page.验证码') }]
+  code: [{ required: true, trigger: "blur", message: () => proxy.$t('page.验证码') }]
 }
 
 const codeUrl = ref("")

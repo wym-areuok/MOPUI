@@ -258,7 +258,7 @@ function getList() {
 function getDeptTree() {
   deptTreeSelect().then(response => {
     deptOptions.value = response.data
-    enabledDeptOptions.value = filterDisabledDept(JSON.parse(JSON.stringify(response.data)))
+    enabledDeptOptions.value = filterDisabledDept(structuredClone(response.data))
   })
 }
 
@@ -320,7 +320,7 @@ function handleStatusChange(row) {
   proxy.$modal.confirm(proxy.$t('page.确认要“”{0}“”“”{1}“”用户吗?', [text, row.userName])).then(function () {
     return changeUserStatus(row.userId, row.status)
   }).then(() => {
-    proxy.$modal.msgSuccess(text + proxy.$t("page.成功"))
+    proxy.$modal.msgSuccess(proxy.$t("page.{action}成功", { action: text }))
   }).catch(function () {
     row.status = row.status === "0" ? "1" : "0"
   })

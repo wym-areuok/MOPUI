@@ -50,6 +50,19 @@ import DictTag from '@/components/DictTag'
 
 const app = createApp(App)
 
+// 抑制 Element Plus async-validator 内部未 catch 的 Promise rejection 警告
+// 原因：Element Plus 2.x 的 el-form 内部在 blur 触发校验时，async-validator 产生的
+// Promise rejection 未被内部 chain catch，导致 Vue 运行时警告。
+// 这是 Element Plus 已知问题，不影响功能。
+app.config.warnHandler = (msg, instance, trace) => {
+  // 只过滤 async-validator 的 validation 错误对象特征：同时包含 field: 和 fieldValue:
+  if (msg.includes('field:') && msg.includes('fieldValue:')) return
+  // 其他警告保持默认行为
+  if (typeof console !== 'undefined') {
+    console.warn(`[Vue warn]: ${msg}${trace ? `\n${trace}` : ''}`)
+  }
+}
+
 // 全局方法挂载
 app.config.globalProperties.useDict = useDict
 app.config.globalProperties.download = download

@@ -72,6 +72,8 @@
 </template>
 
 <script setup>
+import { debounce } from '@/utils/index'
+
 const props = defineProps({
   // 树形数据
   treeData: {
@@ -240,12 +242,16 @@ watch(expandedAll, (newVal) => {
   emit('expanded-all-change', newVal)
 })
 
-// 监听搜索关键词
-watch(searchKeyword, (val) => {
+// 监听搜索关键词（300ms 防抖）
+const debouncedFilter = debounce((val) => {
   if (treeRef.value) {
     treeRef.value.filter(val)
     emit('search', val)
   }
+}, 300)
+
+watch(searchKeyword, (val) => {
+  debouncedFilter(val)
 })
 
 // 清理定时器和动画帧
@@ -543,6 +549,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  debouncedFilter.cancel()
   cleanup()
 })
 </script>

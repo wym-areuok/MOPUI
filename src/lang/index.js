@@ -43,6 +43,7 @@ const i18n = createI18n({
   fallbackLocale: 'zh-CN',
   messages,
   globalInjection: true, // 全局注入 $t 方法
+  warnHtmlMessage: false, // 关闭 HTML 字符警告：password.noIllegalChar 等消息中的 < > 是文本内容（密码非法字符清单），不是 HTML，Element Plus 以纯文本渲染验证消息，无 XSS 风险
 })
 
 export default i18n

@@ -79,9 +79,10 @@ export default {
   async printErrMsg(data) {
     const resText = await data.text()
     const rspObj = JSON.parse(resText)
-    const errMsg = (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
+    // 后端 msg 已通过 MessageUtils.message() 做了 i18n，优先使用
+    const errMsg = rspObj.msg
+      || (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
       || i18n.global.t(errorCode['default'])
-      || rspObj.msg
     ElMessage.error(errMsg)
   }
 }
