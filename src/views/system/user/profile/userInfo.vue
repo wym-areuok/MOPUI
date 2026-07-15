@@ -47,13 +47,13 @@ function submit() {
     if (valid) {
       submitting.value = true
       updateUserProfile(form.value).then(() => {
-        proxy.$modal.msgSuccess("修改成功")
+        proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
         props.user.nickName = form.value.nickName
         props.user.phonenumber = form.value.phonenumber
         props.user.email = form.value.email
         props.user.sex = form.value.sex
       }).catch(() => {
-        proxy.$modal.msgError("修改失败")
+        proxy.$modal.msgError(proxy.$t("page.修改失败"))
       }).finally(() => {
         submitting.value = false
       })

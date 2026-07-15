@@ -2,49 +2,49 @@
     <el-form>
         <el-form-item>
             <el-radio v-model='radioValue' :value="1">
-                日，允许的通配符[, - * ? / L W]
+                {{ $t('page.cron日通配符说明') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="2">
-                不指定
+                {{ $t('page.cron不指定') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="3">
-                周期从
+                {{ $t('page.cron周期从') }}
                 <el-input-number v-model='cycle01' :min="1" :max="30" /> -
-                <el-input-number v-model='cycle02' :min="cycle01 + 1" :max="31" /> 日
+                <el-input-number v-model='cycle02' :min="cycle01 + 1" :max="31" /> {{ $t('page.cron日') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="4">
-                从
-                <el-input-number v-model='average01' :min="1" :max="30" /> 号开始，每
-                <el-input-number v-model='average02' :min="1" :max="31 - average01" /> 日执行一次
+                {{ $t('page.cron从') }}
+                <el-input-number v-model='average01' :min="1" :max="30" /> {{ $t('page.cron号开始每') }}
+                <el-input-number v-model='average02' :min="1" :max="31 - average01" /> {{ $t('page.cron日') }}{{ $t('page.cron执行一次') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="5">
-                每月
-                <el-input-number v-model='workday' :min="1" :max="31" /> 号最近的那个工作日
+                {{ $t('page.cron每月') }}
+                <el-input-number v-model='workday' :min="1" :max="31" /> {{ $t('page.cron号最近工作日') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="6">
-                本月最后一天
+                {{ $t('page.cron本月最后一天') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="7">
-                指定
-                <el-select clearable v-model="checkboxList" placeholder="可多选" multiple :multiple-limit="10">
+                {{ $t('page.cron指定') }}
+                <el-select clearable v-model="checkboxList" :placeholder="$t('page.cron可多选')" multiple :multiple-limit="10">
                     <el-option v-for="item in 31" :key="item" :label="item" :value="item" />
                 </el-select>
             </el-radio>
@@ -81,18 +81,17 @@ const workday = ref(1)
 const checkboxList = ref([])
 const checkCopy = ref([1])
 const cycleTotal = computed(() => {
-    cycle01.value = props.check(cycle01.value, 1, 30)
-    cycle02.value = props.check(cycle02.value, cycle01.value + 1, 31)
-    return cycle01.value + '-' + cycle02.value
+    const c1 = props.check(cycle01.value, 1, 30)
+    const c2 = props.check(cycle02.value, c1 + 1, 31)
+    return c1 + '-' + c2
 })
 const averageTotal = computed(() => {
-    average01.value = props.check(average01.value, 1, 30)
-    average02.value = props.check(average02.value, 1, 31 - average01.value)
-    return average01.value + '/' + average02.value
+    const a1 = props.check(average01.value, 1, 30)
+    const a2 = props.check(average02.value, 1, 31 - a1)
+    return a1 + '/' + a2
 })
 const workdayTotal = computed(() => {
-    workday.value = props.check(workday.value, 1, 31)
-    return workday.value + 'W'
+    return props.check(workday.value, 1, 31) + 'W'
 })
 const checkboxString = computed(() => {
     return checkboxList.value.join(',')

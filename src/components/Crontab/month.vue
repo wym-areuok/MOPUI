@@ -2,30 +2,30 @@
     <el-form>
         <el-form-item>
             <el-radio v-model='radioValue' :value="1">
-                月，允许的通配符[, - * /]
+                {{ $t('page.cron月通配符说明') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="2">
-                周期从
+                {{ $t('page.cron周期从') }}
                 <el-input-number v-model='cycle01' :min="1" :max="11" /> -
-                <el-input-number v-model='cycle02' :min="cycle01 + 1" :max="12" /> 月
+                <el-input-number v-model='cycle02' :min="cycle01 + 1" :max="12" /> {{ $t('page.cron月') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="3">
-                从
-                <el-input-number v-model='average01' :min="1" :max="11" /> 月开始，每
-                <el-input-number v-model='average02' :min="1" :max="12 - average01" /> 月月执行一次
+                {{ $t('page.cron从') }}
+                <el-input-number v-model='average01' :min="1" :max="11" /> {{ $t('page.cron月开始每') }}
+                <el-input-number v-model='average02' :min="1" :max="12 - average01" /> {{ $t('page.cron月月执行一次') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="4">
-                指定
-                <el-select clearable v-model="checkboxList" placeholder="可多选" multiple :multiple-limit="8">
+                {{ $t('page.cron指定') }}
+                <el-select clearable v-model="checkboxList" :placeholder="$t('page.cron可多选')" multiple :multiple-limit="8">
                     <el-option v-for="item in monthList" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
             </el-radio>
@@ -61,29 +61,17 @@ const average01 = ref(1)
 const average02 = ref(1)
 const checkboxList = ref([])
 const checkCopy = ref([1])
-const monthList = ref([
-    {key: 1, value: '一月'},
-    {key: 2, value: '二月'},
-    {key: 3, value: '三月'},
-    {key: 4, value: '四月'},
-    {key: 5, value: '五月'},
-    {key: 6, value: '六月'},
-    {key: 7, value: '七月'},
-    {key: 8, value: '八月'},
-    {key: 9, value: '九月'},
-    {key: 10, value: '十月'},
-    {key: 11, value: '十一月'},
-    {key: 12, value: '十二月'}
-])
+const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+const monthList = computed(() => monthNames.map((name, i) => ({ key: i + 1, value: i18n.global.t('page.' + name) })))
 const cycleTotal = computed(() => {
-    cycle01.value = props.check(cycle01.value, 1, 11)
-    cycle02.value = props.check(cycle02.value, cycle01.value + 1, 12)
-    return cycle01.value + '-' + cycle02.value
+    const c1 = props.check(cycle01.value, 1, 11)
+    const c2 = props.check(cycle02.value, c1 + 1, 12)
+    return c1 + '-' + c2
 })
 const averageTotal = computed(() => {
-    average01.value = props.check(average01.value, 1, 11)
-    average02.value = props.check(average02.value, 1, 12 - average01.value)
-    return average01.value + '/' + average02.value
+    const a1 = props.check(average01.value, 1, 11)
+    const a2 = props.check(average02.value, 1, 12 - a1)
+    return a1 + '/' + a2
 })
 const checkboxString = computed(() => {
     return checkboxList.value.join(',')

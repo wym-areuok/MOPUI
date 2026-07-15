@@ -167,7 +167,7 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">{{ $t('page.确 定') }}</el-button>
+               <el-button type="primary" :loading="submitting" @click="submitForm">{{ $t('page.确 定') }}</el-button>
                <el-button @click="cancel">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
@@ -179,6 +179,7 @@
 import useDictStore from '@/store/modules/dict'
 import { optionselect as getDictOptionselect, getType } from "@/api/system/dict/type"
 import { listData, getData, delData, addData, updateData } from "@/api/system/dict/data"
+import i18n from '@/lang'
 
 const { proxy } = getCurrentInstance()
 const { sys_normal_disable } = useDict("sys_normal_disable")
@@ -190,19 +191,20 @@ const showSearch = ref(true)
 const ids = ref([])
 const single = ref(true)
 const multiple = ref(true)
+const submitting = ref(false)
 const total = ref(0)
 const title = ref("")
 const defaultDictType = ref("")
 const typeOptions = ref([])
 const route = useRoute()
 // 数据标签回显样式
-const listClassOptions = ref([
-  { value: "default", label: "默认" }, 
-  { value: "primary", label: "主要" }, 
-  { value: "success", label: "成功" },
-  { value: "info", label: "信息" },
-  { value: "warning", label: "警告" },
-  { value: "danger", label: "危险" }
+const listClassOptions = computed(() => [
+  { value: "default", label: i18n.global.t("page.默认") }, 
+  { value: "primary", label: i18n.global.t("page.主要") }, 
+  { value: "success", label: i18n.global.t("page.成功") },
+  { value: "info", label: i18n.global.t("page.信息") },
+  { value: "warning", label: i18n.global.t("page.警告") },
+  { value: "danger", label: i18n.global.t("page.危险") }
 ])
 
 const data = reactive({
@@ -320,12 +322,15 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["dataRef"].validate(valid => {
     if (valid) {
+      submitting.value = true
       if (form.value.dictCode != undefined) {
         updateData(form.value).then(response => {
           useDictStore().removeDict(queryParams.value.dictType)
           proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       } else {
         addData(form.value).then(response => {
@@ -333,6 +338,8 @@ function submitForm() {
           proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       }
     }
@@ -358,6 +365,8 @@ function handleExport() {
   }, `dict_data_${new Date().getTime()}.xlsx`)
 }
 
-getTypes(route.params && route.params.dictId)
+if (route.params && route.params.dictId) {
+  getTypes(route.params.dictId)
+}
 getTypeList()
 </script>

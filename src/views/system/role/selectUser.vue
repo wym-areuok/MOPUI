@@ -37,7 +37,7 @@
                   <dict-tag :options="sys_normal_disable" :value="scope.row.status" />
                </template>
             </el-table-column>
-            <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+            <el-table-column :label="$t('page.创建时间')" align="center" prop="createTime" width="180">
                <template #default="scope">
                   <span>{{ parseTime(scope.row.createTime) }}</span>
                </template>
@@ -53,8 +53,8 @@
       </el-row>
       <template #footer>
          <div class="dialog-footer">
-            <el-button type="primary" @click="handleSelectUser">确 定</el-button>
-            <el-button @click="visible = false">取 消</el-button>
+            <el-button type="primary" @click="handleSelectUser">{{ $t('page.确 定') }}</el-button>
+            <el-button @click="visible = false">{{ $t('page.取 消') }}</el-button>
          </div>
       </template>
    </el-dialog>
@@ -128,11 +128,11 @@ function handleSelectUser() {
   const roleId = queryParams.roleId
   const uIds = userIds.value.join(",")
   if (uIds == "") {
-    proxy.$modal.msgError("请选择要分配的用户")
+    proxy.$modal.msgError(proxy.$t("page.请选择要分配的用户"))
     return
   }
   authUserSelectAll({ roleId: roleId, userIds: uIds }).then(res => {
-    proxy.$modal.msgSuccess(res.msg)
+    proxy.$modal.msgSuccess(proxy.$t("page.授权成功"))
     visible.value = false
     emit("ok")
   })

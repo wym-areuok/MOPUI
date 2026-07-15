@@ -1,4 +1,5 @@
 import { parseTime } from './mop'
+import i18n from '@/lang'
 
 /**
  * 表格时间格式化
@@ -32,29 +33,23 @@ export function formatTime(time, option) {
   const diff = (now - d) / 1000
 
   if (diff < 30) {
-    return '刚刚'
+    return i18n.global.t('page.刚刚')
   } else if (diff < 3600) {
-    // less 1 hour
-    return Math.ceil(diff / 60) + '分钟前'
+    return i18n.global.t('page.{n}分钟前', { n: Math.ceil(diff / 60) })
   } else if (diff < 3600 * 24) {
-    return Math.ceil(diff / 3600) + '小时前'
+    return i18n.global.t('page.{n}小时前', { n: Math.ceil(diff / 3600) })
   } else if (diff < 3600 * 24 * 2) {
-    return '1天前'
+    return i18n.global.t('page.{n}天前', { n: 1 })
   }
   if (option) {
     return parseTime(time, option)
   } else {
-    return (
-      d.getMonth() +
-      1 +
-      '月' +
-      d.getDate() +
-      '日' +
-      d.getHours() +
-      '时' +
-      d.getMinutes() +
-      '分'
-    )
+    return i18n.global.t('page.简短日期格式', {
+      m: d.getMonth() + 1,
+      d: d.getDate(),
+      h: d.getHours(),
+      min: d.getMinutes()
+    })
   }
 }
 

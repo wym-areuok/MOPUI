@@ -25,6 +25,8 @@ export default {
       } else {
         this.printErrMsg(res.data)
       }
+    }).catch(() => {
+      ElMessage.error(i18n.global.t('common.downloadError'))
     })
   },
   resource(resource) {
@@ -42,6 +44,8 @@ export default {
       } else {
         this.printErrMsg(res.data)
       }
+    }).catch(() => {
+      ElMessage.error(i18n.global.t('common.downloadError'))
     })
   },
   zip(url, name) {
@@ -62,7 +66,9 @@ export default {
       }
       downloadLoadingInstance.close()
     }).catch((r) => {
-      console.error(r)
+      if (import.meta.env.DEV) {
+        console.error(r)
+      }
       ElMessage.error(i18n.global.t('common.downloadError'))
       downloadLoadingInstance.close()
     })
@@ -74,8 +80,8 @@ export default {
     const resText = await data.text()
     const rspObj = JSON.parse(resText)
     const errMsg = (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
-      || rspObj.msg
       || i18n.global.t(errorCode['default'])
+      || rspObj.msg
     ElMessage.error(errMsg)
   }
 }

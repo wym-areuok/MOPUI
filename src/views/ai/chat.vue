@@ -328,7 +328,7 @@ async function handleNewConversation() {
       await loadConvList()
       nextTick(() => focusInput())
     } else {
-      ElMessage.error(t('page.新建失败：') + (res.msg || res.code))
+      ElMessage.error(t('page.新建失败，请重试'))
     }
   } catch {
     ElMessage.error(t('page.新建失败，请重试'))
@@ -385,7 +385,7 @@ async function submitRename() {
       await loadConvList()
       ElMessage.success(t('page.重命名成功'))
     } else {
-      ElMessage.error(t('page.重命名失败：') + (res.msg || res.code))
+      ElMessage.error(t('page.重命名失败，请重试'))
     }
   } catch {
     ElMessage.error(t('page.重命名失败，请重试'))
@@ -412,7 +412,7 @@ async function handleDeleteConversation(id) {
       await loadConvList()
       ElMessage.success(t('page.删除成功'))
     } else {
-      ElMessage.error(t('page.删除失败：') + (res.msg || res.code))
+      ElMessage.error(t('page.删除失败，请重试'))
     }
   } catch {
     ElMessage.error(t('page.删除失败，请重试'))
@@ -510,7 +510,7 @@ async function handleSendMessage() {
     messages.value[aiIndex] = {
       role: 'assistant', content: '', loading: false, streaming: false, error: errMsg
     }
-    ElMessage.error(t('page.AI 响应失败：') + errMsg)
+    ElMessage.error(t('page.AI 响应失败：') + (e.message || t('common.errorTip')))
   } finally {
     isStreaming.value = false
     currentReader = null

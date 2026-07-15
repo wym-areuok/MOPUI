@@ -9,34 +9,28 @@
  * 使用方式：
  *   import { sanitizeHtml } from '@/utils/html-sanitize'
  *   const safe = sanitizeHtml(unsafeContent)
- *
- * 依赖：需安装 dompurify（npm install dompurify）
  */
 
-// 延迟引用，避免构建时模块未安装
-let DOMPurify = null
+import DOMPurify from 'dompurify'
 
-function getDOMPurify() {
-  if (DOMPurify) return DOMPurify
-  try {
-    // 动态 import 兜底：若静态 import 失败，构建不会中断
-    DOMPurify = require('dompurify').default || require('dompurify')
-  } catch {
-    // 回退：若生产环境未安装 dompurify，使用保守的纯字符串方案
-    console.warn('[Security] DOMPurify 未安装，将使用字符串转义作为回退。请安装: npm install dompurify')
-  }
-  return DOMPurify
-}
-
-/**
- * 回退清理方案：完整的 HTML 转义（只生成纯文本，完全不保留 HTML 标签）
- * 当 DOMPurify 不可用时启用，确保安全优先
- */
-function fallbackEscape(html) {
-  if (!html) return ''
-  const div = document.createElement('div')
-  div.textContent = String(html)
-  return div.innerHTML // 使用浏览器内置转义，确保所有特殊字符安全
+const defaultOptions = {
+  ALLOWED_TAGS: [
+    'b', 'i', 'em', 'strong', 'u', 's', 'sub', 'sup',
+    'a', 'p', 'br', 'hr',
+    'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+    'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+    'span', 'div', 'pre', 'code', 'blockquote',
+    'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'caption',
+    'abbr', 'cite', 'del', 'ins', 'mark', 'small'
+  ],
+  ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'style', 'target', 'rel', 'width', 'height', 'colspan', 'rowspan'],
+  ALLOW_DATA_ATTR: false,
+  ADD_ATTR: ['target'],
+  FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select', 'option', 'link', 'meta', 'style'],
+  FORBID_ATTR: [],
+  KEEP_CONTENT: true,
+  ALLOW_UNKNOWN_PROTOCOLS: false,
+  ALLOWED_URI_REGEXP: /^(?:(?:https?|ftp|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.-:]|$))/i
 }
 
 /**
@@ -47,34 +41,7 @@ function fallbackEscape(html) {
  */
 export function sanitizeHtml(html, options) {
   if (!html) return ''
-  const dp = getDOMPurify()
-  if (!dp) return fallbackEscape(html)
-
-  const defaultOptions = {
-    ALLOWED_TAGS: [
-      'b', 'i', 'em', 'strong', 'u', 's', 'sub', 'sup',
-      'a', 'p', 'br', 'hr',
-      'ul', 'ol', 'li', 'dl', 'dt', 'dd',
-      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-      'span', 'div', 'pre', 'code', 'blockquote',
-      'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'caption',
-      'abbr', 'cite', 'del', 'ins', 'mark', 'small'
-    ],
-    ALLOWED_ATTR: ['href', 'src', 'alt', 'title', 'class', 'id', 'style', 'target', 'rel', 'width', 'height', 'colspan', 'rowspan'],
-    ALLOW_DATA_ATTR: false,
-    ADD_ATTR: ['target'],
-    FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select', 'option', 'link', 'meta', 'style'],
-    FORBID_ATTR: [],
-    KEEP_CONTENT: true,
-    ALLOW_UNKNOWN_PROTOCOLS: false,
-    ALLOWED_URI_REGEXP: /^(?:(?:https?|ftp|mailto|tel):|[^a-z]|[a-z+.-]+(?:[^a-z+.-:]|$))/i
-  }
-
-  return dp.sanitize(String(html), options || defaultOptions)
+  return DOMPurify.sanitize(String(html), options || defaultOptions)
 }
 
-/**
- * 简化版：仅保留纯文本渲染的安全 HTML（用于富文本公告等场景，需要保留基础格式）
- * 实际使用 DOMPurify 白名单，与 sanitizeHtml 等效
- */
 export default sanitizeHtml

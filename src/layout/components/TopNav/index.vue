@@ -5,8 +5,8 @@
     @select="handleSelect"
     :ellipsis="false"
   >
-    <template v-for="(item, index) in topMenus">
-      <el-menu-item :style="{'--theme': theme}" :index="item.path" :key="index" v-if="index < visibleNumber">
+    <template v-for="(item, index) in topMenus" :key="item.path">
+      <el-menu-item :style="{'--theme': theme}" :index="item.path" v-if="index < visibleNumber">
         <svg-icon
         v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
         :icon-class="item.meta.icon"/>
@@ -17,10 +17,9 @@
     <!-- 顶部菜单超出数量折叠 -->
     <el-sub-menu :style="{'--theme': theme}" index="more" v-if="topMenus.length > visibleNumber">
       <template #title>{{ $t('navbar.moreMenu') }}</template>
-      <template v-for="(item, index) in topMenus">
+      <template v-for="(item, index) in topMenus" :key="item.path">
         <el-menu-item
           :index="item.path"
-          :key="index"
           v-if="index >= visibleNumber">
         <svg-icon
           v-if="item.meta && item.meta.icon && item.meta.icon !== '#'"
@@ -97,20 +96,29 @@ const childrenMenus = computed(() => {
 // 默认激活的菜单
 const activeMenu = computed(() => {
   const path = route.path
-  let activePath = path
   if (path !== undefined && path.lastIndexOf("/") > 0 && hideList.indexOf(path) === -1) {
     const tmpPath = path.substring(1, path.length)
     if (!route.meta.link) {
-      activePath = "/" + tmpPath.substring(0, tmpPath.indexOf("/"))
+      return "/" + tmpPath.substring(0, tmpPath.indexOf("/"))
+    }
+  } else if (!route.children) {
+    return path
+  }
+  return path
+})
+
+// 将原先在 computed 中的副作用移到 watch 中
+watch(activeMenu, (newPath) => {
+  const path = route.path
+  if (path !== undefined && path.lastIndexOf("/") > 0 && hideList.indexOf(path) === -1) {
+    if (!route.meta.link) {
       appStore.toggleSideBarHide(false)
     }
-  } else if(!route.children) {
-    activePath = path
+  } else if (!route.children) {
     appStore.toggleSideBarHide(true)
   }
-  activeRoutes(activePath)
-  return activePath
-})
+  activeRoutes(newPath)
+}, { immediate: true })
 
 function setVisibleNumber() {
   const width = document.body.getBoundingClientRect().width / 3

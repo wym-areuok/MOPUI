@@ -2,19 +2,19 @@
     <el-form>
         <el-form-item>
             <el-radio v-model='radioValue' :value="1">
-                周，允许的通配符[, - * ? / L #]
+                {{ $t('page.cron周通配符说明') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="2">
-                不指定
+                {{ $t('page.cron不指定') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="3">
-                周期从
+                {{ $t('page.cron周期从') }}
                 <el-select clearable v-model="cycle01">
                     <el-option
                         v-for="(item,index) of weekList"
@@ -39,8 +39,8 @@
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="4">
-                第
-                <el-input-number v-model='average01' :min="1" :max="4" /> 周的
+                {{ $t('page.cron第') }}
+                <el-input-number v-model='average01' :min="1" :max="4" /> {{ $t('page.cron周的') }}
                 <el-select clearable v-model="average02">
                     <el-option v-for="item in weekList" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
@@ -49,7 +49,7 @@
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="5">
-                本月最后一个
+                {{ $t('page.cron本月最后一个') }}
                 <el-select clearable v-model="weekday">
                     <el-option v-for="item in weekList" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
@@ -58,8 +58,8 @@
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="6">
-                指定
-                <el-select class="multiselect" clearable v-model="checkboxList" placeholder="可多选" multiple :multiple-limit="6">
+                {{ $t('page.cron指定') }}
+                <el-select class="multiselect" clearable v-model="checkboxList" :placeholder="$t('page.cron可多选')" multiple :multiple-limit="6">
                     <el-option v-for="item in weekList" :key="item.key" :label="item.value" :value="item.key" />
                 </el-select>
             </el-radio>
@@ -97,28 +97,20 @@ const average02 = ref(2)
 const weekday = ref(2)
 const checkboxList = ref([])
 const checkCopy = ref([2])
-const weekList = ref([
-    {key: 1, value: '星期日'},
-    {key: 2, value: '星期一'},
-    {key: 3, value: '星期二'},
-    {key: 4, value: '星期三'},
-    {key: 5, value: '星期四'},
-    {key: 6, value: '星期五'},
-    {key: 7, value: '星期六'}
-])
+const weekNames = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+const weekList = computed(() => weekNames.map((name, i) => ({ key: i + 1, value: i18n.global.t('page.' + name) })))
 const cycleTotal = computed(() => {
-    cycle01.value = props.check(cycle01.value, 1, 6)
-    cycle02.value = props.check(cycle02.value, cycle01.value + 1, 7)
-    return cycle01.value + '-' + cycle02.value
+    const c1 = props.check(cycle01.value, 1, 6)
+    const c2 = props.check(cycle02.value, c1 + 1, 7)
+    return c1 + '-' + c2
 })
 const averageTotal = computed(() => {
-    average01.value = props.check(average01.value, 1, 4)
-    average02.value = props.check(average02.value, 1, 7)
-    return average02.value + '#' + average01.value
+    const a1 = props.check(average01.value, 1, 4)
+    const a2 = props.check(average02.value, 1, 7)
+    return a2 + '#' + a1
 })
 const weekdayTotal = computed(() => {
-    weekday.value = props.check(weekday.value, 1, 7)
-    return weekday.value + 'L'
+    return props.check(weekday.value, 1, 7) + 'L'
 })
 const checkboxString = computed(() => {
     return checkboxList.value.join(',')

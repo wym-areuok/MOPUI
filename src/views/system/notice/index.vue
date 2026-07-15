@@ -150,7 +150,7 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">{{ $t('page.确 定') }}</el-button>
+               <el-button type="primary" :loading="submitting" @click="submitForm">{{ $t('page.确 定') }}</el-button>
                <el-button @click="cancel">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
@@ -175,6 +175,7 @@ const showSearch = ref(true)
 const ids = ref([])
 const single = ref(true)
 const multiple = ref(true)
+const submitting = ref(false)
 const total = ref(0)
 const title = ref("")
 
@@ -265,17 +266,22 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["noticeRef"].validate(valid => {
     if (valid) {
+      submitting.value = true
       if (form.value.noticeId != undefined) {
         updateNotice(form.value).then(response => {
           proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       } else {
         addNotice(form.value).then(response => {
           proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       }
     }

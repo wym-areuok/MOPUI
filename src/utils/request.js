@@ -69,7 +69,9 @@ service.interceptors.request.use(config => {
   }
   return config
 }, error => {
-    console.error('[Request Error]', error)
+    if (import.meta.env.DEV) {
+      console.error('[Request Error]', error)
+    }
     return Promise.reject(error)
 })
 
@@ -77,10 +79,10 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(res => {
     // 未设置状态码则默认成功状态
     const code = res.data.code || 200
-    // 获取错误信息：优先从 errorCode 映射查 i18n key，其次用后端返回的 msg，最后用默认错误
+    // 获取错误信息：优先从 errorCode 映射查 i18n key，其次用默认错误，最后用后端返回的 msg
     const msg = (errorCode[code] ? i18n.global.t(errorCode[code]) : null)
-      || res.data.msg
       || i18n.global.t(errorCode['default'])
+      || res.data.msg
     // 二进制数据则直接返回
     if (res.request.responseType ===  'blob' || res.request.responseType ===  'arraybuffer') {
       return res.data
@@ -113,7 +115,7 @@ service.interceptors.response.use(res => {
       ElMessage({ message: msg, type: 'warning' })
       return Promise.reject(new Error(msg))
     } else if (code !== 200) {
-      ElNotification.error({ title: msg })
+      ElNotification.error({ title: i18n.global.t('common.errorTip'), message: msg })
       return Promise.reject(new Error(msg))
     } else {
       return  Promise.resolve(res.data)
@@ -153,13 +155,15 @@ export function download(url, params, filename, config) {
       const resText = await data.text()
       const rspObj = JSON.parse(resText)
       const errMsg = (errorCode[rspObj.code] ? i18n.global.t(errorCode[rspObj.code]) : null)
-        || rspObj.msg
         || i18n.global.t(errorCode['default'])
+        || rspObj.msg
       ElMessage.error(errMsg)
     }
     downloadLoadingInstance.close()
   }).catch((r) => {
-    console.error(r)
+    if (import.meta.env.DEV) {
+      console.error(r)
+    }
     ElMessage.error(i18n.global.t('common.downloadError'))
     downloadLoadingInstance.close()
   })

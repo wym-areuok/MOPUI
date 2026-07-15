@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-for="(item, index) in options">
+    <template v-for="(item, index) in options" :key="item.value">
       <template v-if="isValueMatch(item.value)">
         <span
           v-if="(item.elTagType == 'default' || item.elTagType == '') && (item.elTagClass == '' || item.elTagClass == null)"

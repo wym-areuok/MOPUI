@@ -136,6 +136,7 @@
          <el-table-column :label="$t('page.操作')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
                <el-button link type="primary" icon="View" @click="handleDetail(scope.row, scope.index)" v-hasPermi="['monitor:operlog:query']">{{ $t('page.详细') }}</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['monitor:operlog:remove']">{{ $t('page.删除') }}</el-button>
             </template>
          </el-table-column>
       </el-table>

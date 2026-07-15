@@ -1,18 +1,18 @@
 <template>
-  <el-drawer title="用户信息详情" v-model="visible" direction="rtl" size="68%" append-to-body :before-close="handleClose" class="detail-drawer">
+  <el-drawer :title="$t('page.用户信息详情')" v-model="visible" direction="rtl" size="68%" append-to-body :before-close="handleClose" class="detail-drawer">
     <div v-loading="loading" class="drawer-content">
       <!-- 基本信息 -->
-      <h4 class="section-header">基本信息</h4>
+      <h4 class="section-header">{{ $t('page.基本信息') }}</h4>
       <el-row :gutter="20" class="mb8">
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">用户名称：</label>
+            <label class="info-label">{{ $t('page.用户名称') }}：</label>
             <span class="info-value plaintext">{{ info.nickName }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">归属部门：</label>
+            <label class="info-label">{{ $t('page.归属部门') }}：</label>
             <span class="info-value plaintext">{{ (info.dept && info.dept.deptName) }}</span>
           </div>
         </el-col>
@@ -20,13 +20,13 @@
       <el-row :gutter="20" class="mb8">
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">手机号码：</label>
+            <label class="info-label">{{ $t('page.手机号码标记') }}</label>
             <span class="info-value plaintext">{{ info.phonenumber }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">邮箱：</label>
+            <label class="info-label">{{ $t('page.邮箱') }}：</label>
             <span class="info-value plaintext">{{ info.email }}</span>
           </div>
         </el-col>
@@ -34,15 +34,15 @@
       <el-row :gutter="20" class="mb8">
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">登录账号：</label>
+            <label class="info-label">{{ $t('page.登录账号') }}：</label>
             <span class="info-value plaintext">{{ info.userName }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">用户状态：</label>
+            <label class="info-label">{{ $t('page.用户状态') }}：</label>
             <span class="info-value plaintext">
-              <el-tag size="small" :type="info.status === '0' ? 'success' : 'danger'">{{ info.status === '0' ? '正常' : '停用' }}</el-tag>
+              <el-tag size="small" :type="info.status === '0' ? 'success' : 'danger'">{{ info.status === '0' ? $t('page.正常') : $t('page.停用') }}</el-tag>
             </span>
           </div>
         </el-col>
@@ -50,13 +50,13 @@
       <el-row :gutter="20" class="mb8">
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">岗位：</label>
-            <span class="info-value plaintext">{{ postNames || '无岗位' }}</span>
+            <label class="info-label">{{ $t('page.岗位') }}：</label>
+            <span class="info-value plaintext">{{ postNames || $t('page.无岗位') }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">用户性别：</label>
+            <label class="info-label">{{ $t('page.用户性别') }}：</label>
             <span class="info-value plaintext">{{ sexLabel }}</span>
           </div>
         </el-col>
@@ -64,23 +64,23 @@
       <el-row :gutter="20" class="mb8">
         <el-col :span="24">
           <div class="info-item full-width">
-            <label class="info-label">角色：</label>
-            <span class="info-value plaintext">{{ roleNames || '无角色' }}</span>
+            <label class="info-label">{{ $t('page.角色') }}：</label>
+            <span class="info-value plaintext">{{ roleNames || $t('page.无角色') }}</span>
           </div>
         </el-col>
       </el-row>
       <!-- 其他信息 -->
-      <h4 class="section-header">其他信息</h4>
+      <h4 class="section-header">{{ $t('page.其他信息') }}</h4>
       <el-row :gutter="20" class="mb8">
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">创建者：</label>
+            <label class="info-label">{{ $t('page.创建者') }}：</label>
             <span class="info-value plaintext">{{ info.createBy }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">创建时间：</label>
+            <label class="info-label">{{ $t('page.创建时间') }}：</label>
             <span class="info-value plaintext">{{ info.createTime }}</span>
           </div>
         </el-col>
@@ -88,13 +88,13 @@
       <el-row :gutter="20" class="mb8">
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">更新者：</label>
+            <label class="info-label">{{ $t('page.更新者') }}：</label>
             <span class="info-value plaintext">{{ info.updateBy }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">更新时间：</label>
+            <label class="info-label">{{ $t('page.更新时间') }}：</label>
             <span class="info-value plaintext">{{ info.updateTime }}</span>
           </div>
         </el-col>
@@ -102,13 +102,13 @@
       <el-row :gutter="20" class="mb8">
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">最后登录IP：</label>
+            <label class="info-label">{{ $t('page.最后登录IP') }}：</label>
             <span class="info-value plaintext">{{ info.loginIp }}</span>
           </div>
         </el-col>
         <el-col :span="12">
           <div class="info-item">
-            <label class="info-label">最后登录时间：</label>
+            <label class="info-label">{{ $t('page.最后登录时间') }}：</label>
             <span class="info-value plaintext">{{ info.loginDate }}</span>
           </div>
         </el-col>
@@ -116,7 +116,7 @@
       <el-row :gutter="20" class="mb8">
         <el-col :span="24">
           <div class="info-item full-width">
-            <label class="info-label">备注：</label>
+            <label class="info-label">{{ $t('page.备注') }}：</label>
             <span class="info-value plaintext">{{ info.remark }}</span>
           </div>
         </el-col>
@@ -162,7 +162,7 @@ const open = async (userId) => {
     info.postIds = res.postIds || []
     info.roleIds = res.roleIds || []
   } catch (error) {
-    proxy.$modal.msgError('获取用户信息失败')
+    proxy.$modal.msgError(proxy.$t('page.获取用户信息失败'))
   } finally {
     loading.value = false
   }

@@ -120,6 +120,7 @@
          <el-table-column :label="$t('page.操作')" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
                <el-button link type="primary" icon="View" @click="handleView(scope.row)" v-hasPermi="['monitor:job:query']">{{ $t('page.详细') }}</el-button>
+               <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['monitor:job:remove']">{{ $t('page.删除') }}</el-button>
             </template>
          </el-table-column>
       </el-table>
@@ -160,13 +161,13 @@ const data = reactive({
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    dictName: undefined,
-    dictType: undefined,
+    jobName: undefined,
+    jobGroup: undefined,
     status: undefined
   }
 })
 
-const { queryParams, form, rules } = toRefs(data)
+const { queryParams, form } = toRefs(data)
 
 /** 查询调度日志列表 */
 function getList() {
@@ -174,6 +175,7 @@ function getList() {
   listJobLog(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
     jobLogList.value = response.rows
     total.value = response.total
+  }).finally(() => {
     loading.value = false
   })
 }
@@ -211,8 +213,9 @@ function handleView(row) {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除调度日志编号为“”{0}“”的数据项?', [ids.value])).then(function () {
-    return delJobLog(ids.value)
+  const jobLogIds = row.jobLogId || ids.value
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除调度日志编号为“”{0}“”的数据项?', [jobLogIds])).then(function () {
+    return delJobLog(jobLogIds)
   }).then(() => {
     getList()
     proxy.$modal.msgSuccess(proxy.$t("page.删除成功"))

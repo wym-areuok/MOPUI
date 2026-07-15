@@ -166,11 +166,7 @@
                            {{ $t('page.调用方法') }}
                            <el-tooltip placement="top">
                               <template #content>
-                                 <div>
-                                    Bean调用示例：mopTask.mopParams('mop')
-                                    <br />Class类调用示例：com.mop.quartz.task.mopTask.mopParams('mop')
-                                    <br />参数说明：支持字符串，布尔类型，长整型，浮点型，整型
-                                 </div>
+                                 <div style="white-space: pre-line">{{ $t('page.调用方法使用说明') }}</div>
                               </template>
                               <el-icon><question-filled /></el-icon>
                            </el-tooltip>
@@ -223,7 +219,7 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">{{ $t('page.确 定') }}</el-button>
+               <el-button type="primary" :loading="submitting" @click="submitForm">{{ $t('page.确 定') }}</el-button>
                <el-button @click="cancel">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
@@ -254,6 +250,7 @@ const showSearch = ref(true)
 const ids = ref([])
 const single = ref(true)
 const multiple = ref(true)
+const submitting = ref(false)
 const total = ref(0)
 const title = ref("")
 const openView = ref(false)
@@ -284,6 +281,7 @@ function getList() {
   listJob(queryParams.value).then(response => {
     jobList.value = response.rows
     total.value = response.total
+  }).finally(() => {
     loading.value = false
   })
 }
@@ -354,7 +352,7 @@ function handleView(row) {
   getJob(row.jobId).then(response => {
     form.value = response.data
     openView.value = true
-  })
+  }).catch(() => {})
 }
 
 /** cron表达式按钮操作 */
@@ -389,24 +387,29 @@ function handleUpdate(row) {
     form.value = response.data
     open.value = true
     title.value = proxy.$t("page.修改任务")
-  })
+  }).catch(() => {})
 }
 
 /** 提交按钮 */
 function submitForm() {
   proxy.$refs["jobRef"].validate(valid => {
     if (valid) {
+      submitting.value = true
       if (form.value.jobId != undefined) {
         updateJob(form.value).then(response => {
           proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       } else {
         addJob(form.value).then(response => {
           proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       }
     }

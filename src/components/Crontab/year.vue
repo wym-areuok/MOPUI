@@ -2,19 +2,19 @@
     <el-form>
         <el-form-item>
             <el-radio :value="1" v-model='radioValue'>
-                不填，允许的通配符[, - * /]
+                {{ $t('page.cron年通配符说明') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio :value="2" v-model='radioValue'>
-                每年
+                {{ $t('page.cron每年') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio :value="3" v-model='radioValue'>
-                周期从
+                {{ $t('page.cron周期从') }}
                 <el-input-number v-model='cycle01' :min='fullYear' :max="2098"/> -
                 <el-input-number v-model='cycle02' :min="cycle01 ? cycle01 + 1 : fullYear + 1" :max="2099"/>
             </el-radio>
@@ -22,17 +22,17 @@
 
         <el-form-item>
             <el-radio :value="4" v-model='radioValue'>
-                从
-                <el-input-number v-model='average01' :min='fullYear' :max="2098"/> 年开始，每
-                <el-input-number v-model='average02' :min="1" :max="2099 - average01 || fullYear"/> 年执行一次
+                {{ $t('page.cron从') }}
+                <el-input-number v-model='average01' :min='fullYear' :max="2098"/> {{ $t('page.cron年开始每') }}
+                <el-input-number v-model='average02' :min="1" :max="2099 - average01 || fullYear"/> {{ $t('page.cron年执行一次') }}
             </el-radio>
 
         </el-form-item>
 
         <el-form-item>
             <el-radio :value="5" v-model='radioValue'>
-                指定
-                <el-select clearable v-model="checkboxList" placeholder="可多选" multiple :multiple-limit="8">
+                {{ $t('page.cron指定') }}
+                <el-select clearable v-model="checkboxList" :placeholder="$t('page.cron可多选')" multiple :multiple-limit="8">
                     <el-option v-for="item in 9" :key="item" :value="item - 1 + fullYear" :label="item -1 + fullYear" />
                 </el-select>
             </el-radio>
@@ -73,14 +73,14 @@ const checkboxList = ref([])
 const checkCopy = ref([fullYear])
 
 const cycleTotal = computed(() => {
-    cycle01.value = props.check(cycle01.value, fullYear, maxFullYear - 1)
-    cycle02.value = props.check(cycle02.value, cycle01.value + 1, maxFullYear)
-    return cycle01.value + '-' + cycle02.value
+    const c1 = props.check(cycle01.value, fullYear, maxFullYear - 1)
+    const c2 = props.check(cycle02.value, c1 + 1, maxFullYear)
+    return c1 + '-' + c2
 })
 const averageTotal = computed(() => {
-    average01.value = props.check(average01.value, fullYear, maxFullYear - 1)
-    average02.value = props.check(average02.value, 1, 10)
-    return average01.value + '/' + average02.value
+    const a1 = props.check(average01.value, fullYear, maxFullYear - 1)
+    const a2 = props.check(average02.value, 1, 10)
+    return a1 + '/' + a2
 })
 const checkboxString = computed(() => {
     return checkboxList.value.join(',')

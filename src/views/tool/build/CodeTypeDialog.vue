@@ -1,26 +1,27 @@
 <template>
-  <el-dialog v-model="open" width="500px" title="选择生成类型" @open="onOpen" @close="onClose">
+  <el-dialog v-model="open" width="500px" :title="$t('page.选择生成类型')" @open="onOpen" @close="onClose">
     <el-form ref="codeTypeForm" :model="formData" :rules="rules" label-width="100px">
-      <el-form-item label="生成类型" prop="type">
+      <el-form-item :label="$t('page.生成类型')" prop="type">
         <el-radio-group v-model="formData.type">
           <el-radio-button v-for="(item, index) in typeOptions" :key="index" :label="item.value">
             {{ item.label }}
           </el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item v-if="showFileName" label="文件名" prop="fileName">
-        <el-input v-model="formData.fileName" placeholder="请输入文件名" clearable />
+      <el-form-item v-if="showFileName" :label="$t('page.文件名')" prop="fileName">
+        <el-input v-model="formData.fileName" :placeholder="$t('page.请输入文件名')" clearable />
       </el-form-item>
     </el-form>
 
     <template #footer>
-      <el-button @click="onClose">取消</el-button>
-      <el-button type="primary" @click="handelConfirm">确定</el-button>
+      <el-button @click="onClose">{{ $t('page.取消') }}</el-button>
+      <el-button type="primary" @click="handelConfirm">{{ $t('page.确定') }}</el-button>
     </template>
   </el-dialog>
 </template>
 
 <script setup>
+const { proxy } = getCurrentInstance()
 const open = defineModel()
 const props = defineProps({
   showFileName: Boolean
@@ -31,25 +32,25 @@ const formData = ref({
   type: 'file'
 })
 const codeTypeForm = ref()
-const rules = {
+const rules = computed(() => ({
   fileName: [{
     required: true,
-    message: '请输入文件名',
+    message: proxy.$t('page.请输入文件名'),
     trigger: 'blur'
   }],
   type: [{
     required: true,
-    message: '生成类型不能为空',
+    message: proxy.$t('page.生成类型不能为空'),
     trigger: 'change'
   }]
-}
-const typeOptions = ref([
+}))
+const typeOptions = computed(() => [
   {
-    label: '页面',
+    label: proxy.$t('page.页面'),
     value: 'file'
   },
   {
-    label: '弹窗',
+    label: proxy.$t('page.弹窗'),
     value: 'dialog'
   }
 ])

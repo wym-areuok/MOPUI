@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-tabs type="border-card">
-            <el-tab-pane label="秒" v-if="shouldHide('second')">
+            <el-tab-pane :label="$t('page.cron秒')" v-if="shouldHide('second')">
                 <CrontabSecond
                     @update="updateCrontabValue"
                     :check="checkNumber"
@@ -10,7 +10,7 @@
                 />
             </el-tab-pane>
 
-            <el-tab-pane label="分钟" v-if="shouldHide('min')">
+            <el-tab-pane :label="$t('page.cron分钟')" v-if="shouldHide('min')">
                 <CrontabMin
                     @update="updateCrontabValue"
                     :check="checkNumber"
@@ -19,7 +19,7 @@
                 />
             </el-tab-pane>
 
-            <el-tab-pane label="小时" v-if="shouldHide('hour')">
+            <el-tab-pane :label="$t('page.cron时')" v-if="shouldHide('hour')">
                 <CrontabHour
                     @update="updateCrontabValue"
                     :check="checkNumber"
@@ -28,7 +28,7 @@
                 />
             </el-tab-pane>
 
-            <el-tab-pane label="日" v-if="shouldHide('day')">
+            <el-tab-pane :label="$t('page.cron日')" v-if="shouldHide('day')">
                 <CrontabDay
                     @update="updateCrontabValue"
                     :check="checkNumber"
@@ -37,7 +37,7 @@
                 />
             </el-tab-pane>
 
-            <el-tab-pane label="月" v-if="shouldHide('month')">
+            <el-tab-pane :label="$t('page.cron月')" v-if="shouldHide('month')">
                 <CrontabMonth
                     @update="updateCrontabValue"
                     :check="checkNumber"
@@ -46,7 +46,7 @@
                 />
             </el-tab-pane>
 
-            <el-tab-pane label="周" v-if="shouldHide('week')">
+            <el-tab-pane :label="$t('page.cron周')" v-if="shouldHide('week')">
                 <CrontabWeek
                     @update="updateCrontabValue"
                     :check="checkNumber"
@@ -55,7 +55,7 @@
                 />
             </el-tab-pane>
 
-            <el-tab-pane label="年" v-if="shouldHide('year')">
+            <el-tab-pane :label="$t('page.cron年')" v-if="shouldHide('year')">
                 <CrontabYear
                     @update="updateCrontabValue"
                     :check="checkNumber"
@@ -67,12 +67,12 @@
 
         <div class="popup-main">
             <div class="popup-result">
-                <p class="title">时间表达式</p>
+                <p class="title">{{ $t('page.时间表达式') }}</p>
                 <table>
                     <thead>
                         <tr>
-                            <th v-for="item of tabTitles" :key="item">{{item}}</th>
-                            <th>Cron 表达式</th>
+                            <th v-for="item of tabTitles" :key="item">{{ item }}</th>
+                            <th>{{ $t('page.cron 表达式') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -116,9 +116,9 @@
             <CrontabResult :ex="crontabValueString"></CrontabResult>
 
             <div class="pop_btn">
-                <el-button type="primary" @click="submitFill">确定</el-button>
-                <el-button type="warning" @click="clearCron">重置</el-button>
-                <el-button @click="hidePopup">取消</el-button>
+                <el-button type="primary" @click="submitFill">{{ $t('page.确定') }}</el-button>
+                <el-button type="warning" @click="clearCron">{{ $t('page.重置') }}</el-button>
+                <el-button @click="hidePopup">{{ $t('page.取消') }}</el-button>
             </div>
         </div>
     </div>
@@ -145,7 +145,7 @@ const props = defineProps({
         default: ""
     }
 })
-const tabTitles = ref(["秒", "分钟", "小时", "日", "月", "周", "年"])
+const tabTitles = computed(() => [proxy.$t("page.cron秒"), proxy.$t("page.cron分钟"), proxy.$t("page.cron时"), proxy.$t("page.cron日"), proxy.$t("page.cron月"), proxy.$t("page.cron周"), proxy.$t("page.cron年")])
 const tabActive = ref(0)
 const hideComponent = ref([])
 const expression = ref('')

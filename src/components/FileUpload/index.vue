@@ -17,14 +17,11 @@
       v-if="!disabled"
     >
       <!-- 上传按钮 -->
-      <el-button type="primary">选取文件</el-button>
+      <el-button type="primary">{{ $t('page.选取文件') }}</el-button>
     </el-upload>
     <!-- 上传提示 -->
     <div class="el-upload__tip" v-if="showTip && !disabled">
-      请上传
-      <template v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </template>
-      <template v-if="fileType"> 格式为 <b style="color: #f56c6c">{{ fileType.join("/") }}</b> </template>
-      的文件
+      {{ uploadFileTip }}
     </div>
     <!-- 文件列表 -->
     <transition-group ref="uploadFileList" class="upload-file-list el-upload-list el-upload-list--text" name="el-fade-in-linear" tag="ul">
@@ -33,7 +30,7 @@
           <span class="el-icon-document"> {{ getFileName(file.name) }} </span>
         </el-link>
         <div class="ele-upload-list__item-content-action">
-          <el-link underline="never" @click="handleDelete(index)" type="danger" v-if="!disabled">&nbsp;删除</el-link>
+          <el-link underline="never" @click="handleDelete(index)" type="danger" v-if="!disabled">{{ $t('page.删除') }}</el-link>
         </div>
       </li>
     </transition-group>
@@ -99,6 +96,15 @@ const showTip = computed(
   () => props.isShowTip && (props.fileType || props.fileSize)
 )
 
+const uploadFileTip = computed(() => {
+  const size = props.fileSize
+  const type = props.fileType?.length ? props.fileType.join('/') : null
+  if (size && type) return proxy.$t('page.上传文件提示完整', { size, type })
+  if (size) return proxy.$t('page.上传文件提示大小', { size })
+  if (type) return proxy.$t('page.上传文件提示格式', { type })
+  return proxy.$t('page.上传文件提示默认')
+})
+
 watch(() => props.modelValue, val => {
   if (val) {
     let temp = 1
@@ -126,36 +132,36 @@ function handleBeforeUpload(file) {
     const fileExt = fileName[fileName.length - 1]
     const isTypeOk = props.fileType.indexOf(fileExt) >= 0
     if (!isTypeOk) {
-      proxy.$modal.msgError(`文件格式不正确，请上传${props.fileType.join("/")}格式文件!`)
+      proxy.$modal.msgError(proxy.$t('page.文件格式不正确', { type: props.fileType.join('/') }))
       return false
     }
   }
   // 校检文件名是否包含特殊字符
   if (file.name.includes(',')) {
-    proxy.$modal.msgError('文件名不正确，不能包含英文逗号!')
+    proxy.$modal.msgError(proxy.$t('page.文件名包含逗号'))
     return false
   }
   // 校检文件大小
   if (props.fileSize) {
     const isLt = file.size / 1024 / 1024 < props.fileSize
     if (!isLt) {
-      proxy.$modal.msgError(`上传文件大小不能超过 ${props.fileSize} MB!`)
+      proxy.$modal.msgError(proxy.$t('page.上传文件大小限制', { size: props.fileSize }))
       return false
     }
   }
-  proxy.$modal.loading("正在上传文件，请稍候...")
+  proxy.$modal.loading(proxy.$t('page.正在上传文件'))
   number.value++
   return true
 }
 
 // 文件个数超出
 function handleExceed() {
-  proxy.$modal.msgError(`上传文件数量不能超过 ${props.limit} 个!`)
+  proxy.$modal.msgError(proxy.$t('page.上传数量限制', { limit: props.limit }))
 }
 
 // 上传失败
 function handleUploadError(err) {
-  proxy.$modal.msgError("上传文件失败")
+  proxy.$modal.msgError(proxy.$t('page.上传文件失败'))
   proxy.$modal.closeLoading()
 }
 

@@ -1,16 +1,17 @@
 <template>
 	<div class="popup-result">
-		<p class="title">最近5次运行时间</p>
+		<p class="title">{{ i18n.global.t('page.最近5次运行时间') }}</p>
 		<ul class="popup-result-scroll">
 			<template v-if='isShow'>
 				<li v-for='item in resultList' :key="item">{{item}}</li>
 			</template>
-			<li v-else>计算结果中...</li>
+			<li v-else>{{ i18n.global.t('page.计算结果中') }}</li>
 		</ul>
 	</div>
 </template>
 
 <script setup>
+import i18n from '@/lang'
 const props = defineProps({
     ex: {
         type: String,
@@ -96,15 +97,15 @@ function expressionChange() {
     if (nMonth !== MDate[MIdx]) {
         resetDay()
     }
-    // 如果当前“日”不为数组中当前值
+    // 如果当前"日"不为数组中当前值
     if (nDay !== DDate[DIdx]) {
         resetHour()
     }
-    // 如果当前“时”不为数组中当前值
+    // 如果当前"时"不为数组中当前值
     if (nHour !== hDate[hIdx]) {
         resetMin()
     }
-    // 如果当前“分”不为数组中当前值
+    // 如果当前"分"不为数组中当前值
     if (nMin !== mDate[mIdx]) {
         resetSecond()
     }
@@ -233,9 +234,9 @@ function expressionChange() {
                         DD -= 7 - (dayRuleSup.value - thisWeek)
                     }
                 }
-                // 判断时间值是否小于10置换成“05”这种格式
+                // 判断时间值是否小于10置换成"05"这种格式
                 DD = DD < 10 ? '0' + DD : DD
-                // 循环“时”数组
+                // 循环"时"数组
                 goHour: for (let hi = hIdx; hi < hDate.length; hi++) {
                     let hh = hDate[hi] < 10 ? '0' + hDate[hi] : hDate[hi]
                     // 如果到达最大值时
@@ -318,11 +319,11 @@ function expressionChange() {
     }
     // 判断100年内的结果条数
     if (resultArr.length === 0) {
-        resultList.value = ['没有达到条件的结果！']
+        resultList.value = [i18n.global.t('page.没有达到条件的结果！')]
     } else {
         resultList.value = resultArr
         if (resultArr.length !== 5) {
-            resultList.value.push('最近100年内只有上面' + resultArr.length + '条结果！')
+            resultList.value.push(i18n.global.t('page.最近100年内只有上面{n}条结果', { n: resultArr.length }))
         }
     }
     // 计算完成-显示结果
@@ -366,7 +367,7 @@ function getMonthArr(rule) {
 }
 // 获取"日"数组-主要为日期规则
 function getWeekArr(rule) {
-    // 只有当日期规则的两个值均为“”时则表达日期是有选项的
+    // 只有当日期规则的两个值均为""时则表达日期是有选项的
     if (dayRule.value === '' && dayRuleSup.value === '') {
         if (rule.indexOf('-') >= 0) {
             dayRule.value = 'weekDay'

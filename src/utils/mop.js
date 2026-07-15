@@ -3,6 +3,8 @@
  * Copyright (c) 2026 mop
  */
 
+import i18n from '@/lang'
+
 // 日期格式化
 export function parseTime(time, pattern) {
   if (arguments.length === 0 || !time) {
@@ -32,10 +34,11 @@ export function parseTime(time, pattern) {
     s: date.getSeconds(),
     a: date.getDay()
   }
+  const weekdayKeys = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
   const time_str = format.replace(/{(y|m|d|h|i|s|a)+}/g, (result, key) => {
     let value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+    if (key === 'a') { return i18n.global.t('page.' + weekdayKeys[value]) }
     if (result.length > 0 && value < 10) {
       value = '0' + value
     }
@@ -46,7 +49,7 @@ export function parseTime(time, pattern) {
 
 // 表单重置
 export function resetForm(refName) {
-  if (this.$refs[refName]) {
+  if (this && this.$refs && this.$refs[refName]) {
     this.$refs[refName].resetFields()
   }
 }

@@ -4,5 +4,7 @@ export default {
   '401': 'request.error401',
   '403': 'request.error403',
   '404': 'request.error404',
+  '500': 'request.error500',
+  '601': 'request.error601',
   'default': 'request.errorDefault'
 }

@@ -148,7 +148,7 @@
                <el-input v-model="form.dictType" :placeholder="$t('page.请输入字典类型')" />
                <template #label>
                  <span>
-                   <el-tooltip content='数据存储中的Key值，如：sys_user_sex' placement="top">
+                   <el-tooltip :content="$t('page.字典类型Key说明')" placement="top">
                      <el-icon><question-filled /></el-icon>
                    </el-tooltip>
                    {{ $t('page.字典类型') }}
@@ -170,7 +170,7 @@
          </el-form>
          <template #footer>
             <div class="dialog-footer">
-               <el-button type="primary" @click="submitForm">{{ $t('page.确 定') }}</el-button>
+               <el-button type="primary" :loading="submitting" @click="submitForm">{{ $t('page.确 定') }}</el-button>
                <el-button @click="cancel">{{ $t('page.取 消') }}</el-button>
             </div>
          </template>
@@ -195,6 +195,7 @@ const showSearch = ref(true)
 const ids = ref([])
 const single = ref(true)
 const multiple = ref(true)
+const submitting = ref(false)
 const total = ref(0)
 const title = ref("")
 const dateRange = ref([])
@@ -282,7 +283,7 @@ function handleViewData(row) {
 
 /** 字典数据列表页面 */
 function handleDataList(row) {
-  proxy.$tab.openPage("字典数据", '/system/dict-data/index/' + row.dictId)
+  proxy.$tab.openPage(proxy.$t('page.字典数据'), '/system/dict-data/index/' + row.dictId)
 }
 
 /** 修改按钮操作 */
@@ -293,24 +294,29 @@ function handleUpdate(row) {
     form.value = response.data
     open.value = true
     title.value = proxy.$t("page.修改字典类型")
-  })
+  }).catch(() => {})
 }
 
 /** 提交按钮 */
 function submitForm() {
   proxy.$refs["dictRef"].validate(valid => {
     if (valid) {
+      submitting.value = true
       if (form.value.dictId != undefined) {
         updateType(form.value).then(response => {
           proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       } else {
         addType(form.value).then(response => {
           proxy.$modal.msgSuccess(proxy.$t("page.新增成功"))
           open.value = false
           getList()
+        }).finally(() => {
+          submitting.value = false
         })
       }
     }

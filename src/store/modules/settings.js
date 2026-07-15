@@ -45,9 +45,11 @@ const useSettingsStore = defineStore(
         useDynamicTitle()
       },
       // 切换暗黑模式
+      // @vueuse/core 的 toggleDark() 负责 DOM class 切换（html.dark），Pinia state 需同步 isDark
+      // 以确保 persistence 插件能正确持久化暗黑模式状态
       toggleTheme() {
-        this.isDark = !this.isDark
         toggleDark()
+        this.isDark = isDark.value
         nextTick(() => {
           handleThemeStyle(this.theme)
         })

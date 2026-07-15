@@ -2,30 +2,30 @@
     <el-form>
         <el-form-item>
             <el-radio v-model='radioValue' :value="1">
-                小时，允许的通配符[, - * /]
+                {{ $t('page.cron小时通配符说明') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="2">
-                周期从
+                {{ $t('page.cron周期从') }}
                 <el-input-number v-model='cycle01' :min="0" :max="22" /> -
-                <el-input-number v-model='cycle02' :min="cycle01 + 1" :max="23" /> 时
+                <el-input-number v-model='cycle02' :min="cycle01 + 1" :max="23" /> {{ $t('page.cron时') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="3">
-                从
-                <el-input-number v-model='average01' :min="0" :max="22" /> 时开始，每
-                <el-input-number v-model='average02' :min="1" :max="23 - average01" /> 小时执行一次
+                {{ $t('page.cron从') }}
+                <el-input-number v-model='average01' :min="0" :max="22" /> {{ $t('page.cron时开始每') }}
+                <el-input-number v-model='average02' :min="1" :max="23 - average01" /> {{ $t('page.cron时') }}{{ $t('page.cron执行一次') }}
             </el-radio>
         </el-form-item>
 
         <el-form-item>
             <el-radio v-model='radioValue' :value="4">
-                指定
-                <el-select clearable v-model="checkboxList" placeholder="可多选" multiple :multiple-limit="10">
+                {{ $t('page.cron指定') }}
+                <el-select clearable v-model="checkboxList" :placeholder="$t('page.cron可多选')" multiple :multiple-limit="10">
                     <el-option v-for="item in 24" :key="item" :label="item - 1" :value="item - 1" />
                 </el-select>
             </el-radio>
@@ -62,14 +62,14 @@ const average02 = ref(1)
 const checkboxList = ref([])
 const checkCopy = ref([0])
 const cycleTotal = computed(() => {
-    cycle01.value = props.check(cycle01.value, 0, 22)
-    cycle02.value = props.check(cycle02.value, cycle01.value + 1, 23)
-    return cycle01.value + '-' + cycle02.value
+    const c1 = props.check(cycle01.value, 0, 22)
+    const c2 = props.check(cycle02.value, c1 + 1, 23)
+    return c1 + '-' + c2
 })
 const averageTotal = computed(() => {
-    average01.value = props.check(average01.value, 0, 22)
-    average02.value = props.check(average02.value, 1, 23 - average01.value)
-    return average01.value + '/' + average02.value
+    const a1 = props.check(average01.value, 0, 22)
+    const a2 = props.check(average02.value, 1, 23 - a1)
+    return a1 + '/' + a2
 })
 const checkboxString = computed(() => {
     return checkboxList.value.join(',')

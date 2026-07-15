@@ -51,14 +51,14 @@ function submit() {
     if (valid) {
       submitting.value = true
       updateUserPwd(user.oldPassword, user.newPassword).then(() => {
-        proxy.$modal.msgSuccess("修改成功")
+        proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
         // 清除表单数据
         user.oldPassword = undefined
         user.newPassword = undefined
         user.confirmPassword = undefined
         proxy.$refs.pwdRef.resetFields()
       }).catch(() => {
-        proxy.$modal.msgError("修改密码失败")
+        proxy.$modal.msgError(proxy.$t("page.修改密码失败"))
       }).finally(() => {
         submitting.value = false
       })

@@ -33,7 +33,7 @@
             :before-upload="beforeUpload"
           >
             <el-button>
-              选择
+              {{ $t('page.选择') }}
               <el-icon class="el-icon--right"><Upload /></el-icon>
             </el-button>
           </el-upload>
@@ -69,7 +69,7 @@ const { proxy } = getCurrentInstance()
 
 const open = ref(false)
 const visible = ref(false)
-const title = ref("修改头像")
+const title = ref(proxy.$t("page.修改头像"))
 
 //图片裁剪数据
 const options = reactive({
@@ -115,12 +115,12 @@ function changeScale(num) {
 /** 上传预处理 */
 function beforeUpload(file) {
   if (file.type.indexOf("image/") == -1) {
-    proxy.$modal.msgError("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件。")
+    proxy.$modal.msgError(proxy.$t("page.文件格式错误，请上传图片类型"))
     return false
   }
   const maxSize = 10 * 1024 * 1024
   if (file.size > maxSize) {
-    proxy.$modal.msgError("上传头像图片大小不能超过10MB")
+    proxy.$modal.msgError(proxy.$t("page.上传头像图片大小不能超过10MB"))
     return false
   }
   const reader = new FileReader()
@@ -141,13 +141,13 @@ function uploadImg() {
         open.value = false
         options.img = import.meta.env.VITE_APP_BASE_API + response.imgUrl
         userStore.avatar = options.img
-        proxy.$modal.msgSuccess("修改成功")
+        proxy.$modal.msgSuccess(proxy.$t("page.修改成功"))
         visible.value = false
       } else {
-        proxy.$modal.msgError("上传失败，未获取到图片地址")
+        proxy.$modal.msgError(proxy.$t("page.上传失败，未获取到图片地址"))
       }
     }).catch(() => {
-      proxy.$modal.msgError("上传头像失败")
+      proxy.$modal.msgError(proxy.$t("page.上传头像失败"))
     })
   })
 }

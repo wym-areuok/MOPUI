@@ -270,8 +270,8 @@ const menuRef = ref(null)
 const deptRef = ref(null)
 const submitting = ref(false)
 
-/** 数据范围选项*/
-const dataScopeOptions = ref([
+/** 数据范围选项（computed 确保语言切换时响应式更新）*/
+const dataScopeOptions = computed(() => [
   { value: "1", label: proxy.$t("page.全部数据权限") },
   { value: "2", label: proxy.$t("page.自定数据权限") },
   { value: "3", label: proxy.$t("page.本部门数据权限") },
@@ -289,9 +289,9 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    roleName: [{ required: true, message: proxy.$t("page.角色名称不能为空"), trigger: "blur" }],
-    roleKey: [{ required: true, message: proxy.$t("page.权限字符不能为空"), trigger: "blur" }],
-    roleSort: [{ required: true, message: proxy.$t("page.角色顺序不能为空"), trigger: "blur" }]
+    roleName: [{ required: true, message: () => proxy.$t("page.角色名称不能为空"), trigger: "blur" }],
+    roleKey: [{ required: true, message: () => proxy.$t("page.权限字符不能为空"), trigger: "blur" }],
+    roleSort: [{ required: true, message: () => proxy.$t("page.角色顺序不能为空"), trigger: "blur" }]
   },
 })
 

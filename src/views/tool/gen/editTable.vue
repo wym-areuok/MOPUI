@@ -14,12 +14,12 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="物理类型"
+            :label="$t('page.物理类型')"
             prop="columnType"
             min-width="10%"
             :show-overflow-tooltip="true"
           />
-          <el-table-column label="Java类型" min-width="11%">
+          <el-table-column :label="$t('page.Java类型')" min-width="11%">
             <template #default="scope">
               <el-select v-model="scope.row.javaType">
                 <el-option label="Long" value="Long" />
@@ -32,33 +32,33 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="java属性" min-width="10%">
+          <el-table-column :label="$t('page.java属性')" min-width="10%">
             <template #default="scope">
               <el-input v-model="scope.row.javaField"></el-input>
             </template>
           </el-table-column>
 
-          <el-table-column label="插入" min-width="5%">
+          <el-table-column :label="$t('page.插入')" min-width="5%">
             <template #default="scope">
               <el-checkbox true-value="1" false-value="0" v-model="scope.row.isInsert"></el-checkbox>
             </template>
           </el-table-column>
-          <el-table-column label="编辑" min-width="5%">
+          <el-table-column :label="$t('page.编辑')" min-width="5%">
             <template #default="scope">
               <el-checkbox true-value="1" false-value="0" v-model="scope.row.isEdit"></el-checkbox>
             </template>
           </el-table-column>
-          <el-table-column label="列表" min-width="5%">
+          <el-table-column :label="$t('page.列表')" min-width="5%">
             <template #default="scope">
               <el-checkbox true-value="1" false-value="0" v-model="scope.row.isList"></el-checkbox>
             </template>
           </el-table-column>
-          <el-table-column label="查询" min-width="5%">
+          <el-table-column :label="$t('page.查询')" min-width="5%">
             <template #default="scope">
               <el-checkbox true-value="1" false-value="0" v-model="scope.row.isQuery"></el-checkbox>
             </template>
           </el-table-column>
-          <el-table-column label="查询方式" min-width="10%">
+          <el-table-column :label="$t('page.查询方式')" min-width="10%">
             <template #default="scope">
               <el-select v-model="scope.row.queryType">
                 <el-option label="=" value="EQ" />
@@ -72,29 +72,29 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="必填" min-width="5%">
+          <el-table-column :label="$t('page.必填')" min-width="5%">
             <template #default="scope">
               <el-checkbox true-value="1" false-value="0" v-model="scope.row.isRequired"></el-checkbox>
             </template>
           </el-table-column>
-          <el-table-column label="显示类型" min-width="12%">
+          <el-table-column :label="$t('page.显示类型')" min-width="12%">
             <template #default="scope">
               <el-select v-model="scope.row.htmlType">
-                <el-option label="文本框" value="input" />
-                <el-option label="文本域" value="textarea" />
-                <el-option label="下拉框" value="select" />
-                <el-option label="单选框" value="radio" />
-                <el-option label="复选框" value="checkbox" />
-                <el-option label="日期控件" value="datetime" />
-                <el-option label="图片上传" value="imageUpload" />
-                <el-option label="文件上传" value="fileUpload" />
-                <el-option label="富文本控件" value="editor" />
+                <el-option :label="$t('page.文本框')" value="input" />
+                <el-option :label="$t('page.文本域')" value="textarea" />
+                <el-option :label="$t('page.下拉框')" value="select" />
+                <el-option :label="$t('page.单选框')" value="radio" />
+                <el-option :label="$t('page.复选框')" value="checkbox" />
+                <el-option :label="$t('page.日期控件')" value="datetime" />
+                <el-option :label="$t('page.图片上传')" value="imageUpload" />
+                <el-option :label="$t('page.文件上传')" value="fileUpload" />
+                <el-option :label="$t('page.富文本控件')" value="editor" />
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column label="字典类型" min-width="12%">
+          <el-table-column :label="$t('page.字典类型')" min-width="12%">
             <template #default="scope">
-              <el-select v-model="scope.row.dictType" clearable filterable placeholder="请选择">
+              <el-select v-model="scope.row.dictType" clearable filterable :placeholder="$t('page.请选择')">
                 <el-option
                   v-for="dict in dictOptions"
                   :key="dict.dictType"
@@ -108,14 +108,14 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="生成信息" name="genInfo">
+      <el-tab-pane :label="$t('page.生成信息')" name="genInfo">
         <gen-info-form ref="genInfo" :info="info" :tables="tables" />
       </el-tab-pane>
     </el-tabs>
     <el-form label-width="100px">
       <div style="text-align: center;margin-left:-100px;margin-top:10px;">
-        <el-button type="primary" @click="submitForm()">提交</el-button>
-        <el-button @click="close()">返回</el-button>
+        <el-button type="primary" @click="submitForm()">{{ $t('page.提 交') }}</el-button>
+        <el-button @click="close()">{{ $t('page.返回') }}</el-button>
       </div>
     </el-form>
   </el-card>
@@ -161,7 +161,7 @@ function submitForm() {
         }
       })
     } else {
-      proxy.$modal.msgError("表单校验未通过，请重新检查提交内容")
+      proxy.$modal.msgError(proxy.$t("page.表单校验未通过，请重新检查提交内容"))
     }
   })
 }
