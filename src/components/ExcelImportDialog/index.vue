@@ -24,6 +24,7 @@
 
 <script setup>
 import { getToken } from '@/utils/auth'
+import i18n from '@/lang'
 
 const { proxy } = getCurrentInstance()
 
@@ -31,7 +32,7 @@ const props = defineProps({
   // 对话框标题
   title: {
     type: String,
-    default: '数据导入'
+    default: i18n.global.t('page.数据导入')
   },
   // 对话框宽度
   width: {
@@ -56,7 +57,7 @@ const props = defineProps({
   // 覆盖更新勾选框的说明文字
   updateSupportLabel: {
     type: String,
-    default: '是否更新已经存在的数据'
+    default: i18n.global.t('page.是否更新已存在数据')
   }
 })
 

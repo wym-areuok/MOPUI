@@ -214,7 +214,7 @@ function handleView(row) {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const jobLogIds = row.jobLogId || ids.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除调度日志编号为“”{0}“”的数据项?', [jobLogIds])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除调度日志编号为“{0}”的数据项?', [jobLogIds])).then(function () {
     return delJobLog(jobLogIds)
   }).then(() => {
     getList()

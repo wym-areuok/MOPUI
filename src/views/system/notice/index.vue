@@ -301,7 +301,7 @@ function handleReadUsers(row) {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const noticeIds = row.noticeId || ids.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除公告编号为“”{0}“”的数据项？', [noticeIds])).then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除公告编号为“{0}”的数据项？', [noticeIds])).then(function() {
     return delNotice(noticeIds)
   }).then(() => {
     getList()

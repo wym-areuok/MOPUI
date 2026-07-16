@@ -324,7 +324,7 @@ function resetQuery() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const roleIds = row.roleId || ids.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除角色编号为“”{0}“”的数据项?', [roleIds])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除角色编号为“{0}”的数据项?', [roleIds])).then(function () {
     return delRole(roleIds)
   }).then(() => {
     getList()
@@ -349,7 +349,7 @@ function handleSelectionChange(selection) {
 /** 角色状态修改 */
 function handleStatusChange(row) {
   let text = row.status === "0" ? proxy.$t("page.启用") : proxy.$t("page.停用")
-  proxy.$modal.confirm(proxy.$t('page.确认要“”{0}“”“”{1}“”角色吗?', [text, row.roleName])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.确认要{0}“{1}”角色吗?', [text, row.roleName])).then(function () {
     return changeRoleStatus(row.roleId, row.status)
   }).then(() => {
     proxy.$modal.msgSuccess(proxy.$t("page.{action}成功", { action: text }))

@@ -326,7 +326,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const dictIds = row.dictId || ids.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除字典编号为“”{0}“”的数据项？', [dictIds])).then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除字典编号为“{0}”的数据项？', [dictIds])).then(function() {
     return delType(dictIds)
   }).then(() => {
     getList()

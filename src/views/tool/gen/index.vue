@@ -135,7 +135,7 @@
           :name="key.substring(key.lastIndexOf('/')+1,key.indexOf('.vm'))"
           :key="value"
         >
-          <el-link underline="never" icon="DocumentCopy" v-copyText="value" v-copyText:callback="copyTextSuccess" style="float:right">&nbsp;复制</el-link>
+          <el-link underline="never" icon="DocumentCopy" v-copyText="value" v-copyText:callback="copyTextSuccess" style="float:right">&nbsp;{{ $t('page.复制') }}</el-link>
           <pre>{{ value }}</pre>
         </el-tab-pane>
       </el-tabs>
@@ -150,6 +150,7 @@ import { listTable, previewTable, delTable, genCode, synchDb } from "@/api/tool/
 import router from "@/router"
 import importTable from "./importTable"
 import createTable from "./createTable"
+import i18n from '@/lang'
 
 const route = useRoute()
 const { proxy } = getCurrentInstance()
@@ -177,7 +178,7 @@ const data = reactive({
   },
   preview: {
     open: false,
-    title: "代码预览",
+    title: i18n.global.t('page.代码预览'),
     data: {},
     activeName: "domain.java"
   }
@@ -232,7 +233,7 @@ function handleGenTable(row) {
 /** 同步数据库操作 */
 function handleSynchDb(row) {
   const tableName = row.tableName
-  proxy.$modal.confirm(proxy.$t('page.确认要强制同步""{0}""表结构吗？', [tableName])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.确认要强制同步“{0}”表结构吗？', [tableName])).then(function () {
     return synchDb(tableName)
   }).then(() => {
     proxy.$modal.msgSuccess(proxy.$t("page.同步成功"))
@@ -297,7 +298,7 @@ function handleEditTable(row) {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const tableIds = row.tableId || ids.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除表编号为""{0}""的数据项？', [tableIds])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除表编号为“{0}”的数据项？', [tableIds])).then(function () {
     return delTable(tableIds)
   }).then(() => {
     getList()

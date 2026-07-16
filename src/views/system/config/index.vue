@@ -297,7 +297,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const configIds = row.configId || ids.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除参数编号为“”{0}“”的数据项？', [configIds])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除参数编号为“{0}”的数据项？', [configIds])).then(function () {
     return delConfig(configIds)
   }).then(() => {
     getList()

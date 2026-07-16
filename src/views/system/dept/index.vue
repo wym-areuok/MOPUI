@@ -329,7 +329,7 @@ function handleSaveSort() {
 
 /** 删除按钮操作 */
 function handleDelete(row) {
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除名称为“”{0}“”的数据项?', [row.deptName])).then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除名称为“{0}”的数据项?', [row.deptName])).then(function() {
     return delDept(row.deptId)
   }).then(() => {
     getList()

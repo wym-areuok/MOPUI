@@ -156,7 +156,7 @@ function openSelectUser() {
 
 /** 取消授权按钮操作 */
 function cancelAuthUser(row) {
-  proxy.$modal.confirm(proxy.$t('page.确认要取消该用户""{0}""角色吗？', [row.userName])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.确认要取消该用户“{0}”角色吗？', [row.userName])).then(function () {
     return authUserCancel({ userId: row.userId, roleId: queryParams.roleId })
   }).then(() => {
     getList()

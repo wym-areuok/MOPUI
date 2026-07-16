@@ -97,7 +97,7 @@ function resetQuery() {
 
 /** 强退按钮操作 */
 function handleForceLogout(row) {
-  proxy.$modal.confirm(proxy.$t('page.是否确认强退名称为“”{0}“”的用户?', [row.userName])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认强退名称为“{0}”的用户?', [row.userName])).then(function () {
     return forceLogout(row.tokenId)
   }).then(() => {
     getList()

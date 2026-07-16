@@ -1,4 +1,4 @@
-﻿import axios from 'axios'
+import axios from 'axios'
 import { ElLoading, ElMessage } from 'element-plus'
 import { saveAs } from 'file-saver'
 import i18n from '@/lang'

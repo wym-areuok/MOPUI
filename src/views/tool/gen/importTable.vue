@@ -108,7 +108,7 @@ function resetQuery() {
 function handleImportTable() {
   const tableNames = tables.value.join(",")
   if (tableNames == "") {
-    proxy.$modal.msgError("请选择要导入的表")
+    proxy.$modal.msgError(proxy.$t("page.请选择要导入的表"))
     return
   }
   importTable({ tables: tableNames, tplWebType: 'element-plus' }).then(res => {

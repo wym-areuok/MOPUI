@@ -194,7 +194,7 @@ function handleSortChange(column, prop, order) {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const infoIds = row.infoId || ids.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除访问编号为“”{0}“”的数据项?', [infoIds])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除访问编号为“{0}”的数据项?', [infoIds])).then(function () {
     return delLogininfor(infoIds)
   }).then(() => {
     getList()
@@ -215,7 +215,7 @@ function handleClean() {
 /** 解锁按钮操作 */
 function handleUnlock() {
   const username = selectName.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认解锁用户“”{0}“”数据项?', [username])).then(function () {
+  proxy.$modal.confirm(proxy.$t('page.是否确认解锁用户“{0}”数据项?', [username])).then(function () {
     return unlockLogininfor(username)
   }).then(() => {
     proxy.$modal.msgSuccess(proxy.$t("page.用户{0}解锁成功", [username]))

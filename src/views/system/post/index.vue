@@ -275,7 +275,7 @@ function submitForm() {
 /** 删除按钮操作 */
 function handleDelete(row) {
   const postIds = row.postId || ids.value
-  proxy.$modal.confirm(proxy.$t('page.是否确认删除岗位编号为“”{0}“”的数据项？', [postIds])).then(function() {
+  proxy.$modal.confirm(proxy.$t('page.是否确认删除岗位编号为“{0}”的数据项？', [postIds])).then(function() {
     return delPost(postIds)
   }).then(() => {
     getList()
